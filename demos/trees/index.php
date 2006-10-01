@@ -70,6 +70,7 @@ class  tx_trees_demos_trees extends t3lib_SCbase {
 		$this->MOD_MENU['controller'] = array(
 			't3lib_treeview'  => $LANG->getLL('t3lib_treeviewController'),
 			't3lib_browsetree'  => $LANG->getLL('t3lib_browsetreeController'),
+			'plainPageModel'  => $LANG->getLL('plainPageModelController'),
 			'modelAsTree'  => $LANG->getLL('modelAsTreeController'),
 			'modelAsList'  => $LANG->getLL('modelAsListController'),
 			'viewAsNestedList'  => $LANG->getLL('viewAsNestedListController'),
@@ -105,7 +106,7 @@ class  tx_trees_demos_trees extends t3lib_SCbase {
 			$this->errors[] = 'Access denied.';
 		} 
 		
-		tx_trees_div::tt('Controller Start');
+		tx_trees_div::tt('Controller start');
 		// Controller
 		if(!$this->errors) {
 			$controller = $this->MOD_SETTINGS['controller'] . 'Controller';
@@ -115,7 +116,7 @@ class  tx_trees_demos_trees extends t3lib_SCbase {
 				$this->errors[] = 'Unknown controller.';
 			}
 		}
-		$durationMessage = tx_trees_div::tt('Controller End');
+		$durationMessage = tx_trees_div::tt('Controller end');
 		
 		
 		// View
@@ -145,6 +146,16 @@ class  tx_trees_demos_trees extends t3lib_SCbase {
 			$mounts = ($this->MOD_SETTINGS['webmounts'] == 'all') 
 				? $GLOBALS['WEBMOUNTS'] : array($this->MOD_SETTINGS['webmounts']) ;
 			$out .= tx_trees_demos_trees_t3lib_browsetree::example('index.php', $mounts);
+		}
+		return $out;
+	}
+	
+	function plainPageModelController()	{
+		require_once(t3lib_extMgm::extPath('trees', 'library/') . 'class.tx_trees_treeModelForPageTree.php');
+		if($this->MOD_SETTINGS['webmounts'] != 'none') {
+			$mounts = ($this->MOD_SETTINGS['webmounts'] == 'all') 
+				? $GLOBALS['WEBMOUNTS'] : array($this->MOD_SETTINGS['webmounts']) ;
+			$out .= tx_trees_treeModelForPageTree::usageExampleDumpPageTree('index.php', $mounts);
 		}
 		return $out;
 	}

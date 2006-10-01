@@ -9,8 +9,9 @@
 			<label index="title">Usage examples for Trees</label>
 			<label index="t3lib_treeviewController">t3lib_ treeview</label>
 			<label index="t3lib_browsetreeController">t3lib_ browsetree</label>
-			<label index="modelAsTreeController">Tree Model</label>
-			<label index="modelAsListController">List Model</label>
+			<label index="plainPageModelController">Plain Page Tree</label>
+			<label index="modelAsTreeController">Tree Model with tt_content</label>
+			<label index="modelAsListController">List Model with tt_content</label>
 			<label index="viewAsNestedListController">Nested List</label>
 			<label index="multiTypeViewController">Different Node Types</label>
 			<label index="selectController">Selects</label>

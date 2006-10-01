@@ -68,10 +68,12 @@ class tx_trees_nodeModelForTables extends tx_trees_nodeModelAbstract {
 		$this->_init();
 		$return = array();
 		$this->_findTableArray(&$tableArray);
-		if(is_array($tableArray['.parentIndex'][$parentNodeType][$parentId])){
-			foreach($tableArray['.parentIndex'][$parentNodeType][$parentId] as $id){
-				$current['.nodeType'] = $this->get('table');
-				$current['.idField'] = $this->get('idField');
+		$table = $this->get('table');
+		$idField = $this->get('idField');		
+		if(is_array($array = $tableArray['.parentIndex'][$parentNodeType][$parentId])){
+			foreach($array as $id){
+				$current['.nodeType'] = $table;
+				$current['.idField'] = $idField;
 				$return[] = t3lib_div::array_merge((array) $tableArray[$id], (array) $current);
 			}
 		}
@@ -90,8 +92,13 @@ class tx_trees_nodeModelForTables extends tx_trees_nodeModelAbstract {
 		return $return;
 	}
 	
-	function getType(){
-		return $this->get('table');
+	function get($key){
+		switch($key){
+			case 'type': 
+				$key = 'table';
+			break;
+		}
+		return parent::get($key);
 	}
 	
 	//---------------------------------------------------------------------------
@@ -146,26 +153,25 @@ class tx_trees_nodeModelForTables extends tx_trees_nodeModelAbstract {
 			}
 			array_unshift($this->get('fields'), $this->get('idField'), $this->get('parentIdField'));
 		}
-		$this->set('fields', array_unique($this->get('fields')));
+		$this->set('fields', array_unique((array) $this->get('fields')));
 		$this->set('type',  'Just a dummy to satisfy the checks of parent::_init(). We use $this->settings[table] instead.');
 		parent::_init();
 	}
 	
 	function _loadFromDatabase(&$array){
 		$idField = $this->get('idField');
-		$parentIdField = $this->get('parentIdField');
 		$parentTable = $this->get('parentTable');
+		$parentIdField = $this->get('parentIdField');
 		$parentTableField = $this->get('parentTableField');
 		$query = $this->_buildQuery();
-//		$this->view($query);
 		$result = $GLOBALS['TYPO3_DB']->sql(TYPO3_db, $query);
-		$this->tt('PreLoad');
+		$this->tt('Pre query "' . $this->get('table') .'"');
 		while($row = $GLOBALS['TYPO3_DB']->sql_fetch_assoc($result)){
-			$parentTable = $parentTable	? $parentTable : $row[$parentTableField];
-			$array['.parentIndex'][$parentTable][$row[$parentIdField]][$row[$idField]] = $row[$idField];
+			$tempParentTable = $parentTable	? $parentTable : $row[$parentTableField];
+			$array['.parentIndex'][$tempParentTable][$row[$parentIdField]][$row[$idField]] = $row[$idField];
 			$array[$row[$idField]] = $row;
 		}
-		$this->tt('PostLoad');
+		$this->tt('Post query "' . $this->get('table') .'"');
 	}
 	
 }

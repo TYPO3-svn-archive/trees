@@ -65,7 +65,7 @@ class tx_trees_common{
 	}
 
 	function tt($marker = 'Timestamp', $display=false){
-		return tx_trees_div::tt($marker = 'Timestamp', $display=false);
+		return tx_trees_div::tt($marker, $display);
 	}
 	
 	function view($par){
@@ -75,7 +75,7 @@ class tx_trees_common{
 }
 
 if (defined('TYPO3_MODE') && $TYPO3_CONF_VARS[TYPO3_MODE]['XCLASS']['ext/trees/library/class.tx_trees_common.php'])	{
-	include_once($TYPO3_CONF_VARS[TYPO3_MODE]['XCLASS']['ext/trees/library/class.tx_trees_commmon.php']);
+	include_once($TYPO3_CONF_VARS[TYPO3_MODE]['XCLASS']['ext/trees/library/class.tx_trees_common.php']);
 }
 
 ?>

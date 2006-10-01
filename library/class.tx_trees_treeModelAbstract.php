@@ -35,6 +35,7 @@ class tx_trees_treeModelAbstract  extends tx_trees_common{
 	var $listArray = array();
 	var $singleton = array();
 	var $isInitialized = false;
+	var $nodeModels = array();
 	
 	//---------------------------------------------------------------------------
 	// public functions
@@ -124,8 +125,9 @@ class tx_trees_treeModelAbstract  extends tx_trees_common{
 	function _linearizeTreeArray(&$treeArray, &$listArray, $level = 0){
 		$position = 0;
 		array_push($listArray, array('.nodeType' => '.LEVEL_BEGIN', '.level' =>	$level));
-		foreach($treeArray as $key => $entry){
-			if(is_integer($key)){
+		for($key = 0; $key < count($treeArray); $key++){ // foreach would make  copies in PHP4
+			if(isset($treeArray[$key])){
+				$entry = $treeArray[$key];
 				$tmp['.level'] = $level;
 				$tmp['.position'] = $position++;
 				$entry = t3lib_div::array_merge((array) $entry, (array) $tmp);
@@ -140,10 +142,11 @@ class tx_trees_treeModelAbstract  extends tx_trees_common{
 		array_push($listArray, array('.nodeType' => '.LEVEL_END', '.level' => $level));
 	}
 	
-	function _recur($parentNodeType, $parentId){		
+	function _recur($parentNodeType, $parentId){
 		$return  = array();
 		$counter = 0;
-		foreach($this->nodeModels as $nodeModel){
+		for($i = 0; $i < count($this->nodeModels); $i++){  // foreach would make copies in PHP4
+			$nodeModel =& $this->nodeModels[$i];
 			$siblings = $nodeModel->findAsChildren($parentNodeType, $parentId);
 			foreach($siblings as $sibling){
 				$return[$counter] =  $sibling;

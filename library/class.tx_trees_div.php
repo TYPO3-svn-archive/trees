@@ -36,7 +36,7 @@ class tx_trees_div{
 	}
 	
 	function tt($marker = 'Timestamp', $display=false){
-		$time = microtime(1);
+		$time = tx_trees_div::_microtime();
 		$GLOBALS['tx_trees_div'][][(string) $time] = $marker;
 		$array = $GLOBALS['tx_trees_div'];
 		$start = key($array[0]);
@@ -52,7 +52,7 @@ class tx_trees_div{
 			} else {
 				$percent = '--';
 			}
-			$last = sprintf('<p><span style="display:block; width:15em; float:left;">%s :</span> %01.2f (%s %%)</p>', 
+			$last = sprintf('<p><span style="display:block; width:20em; float:left;">%s :</span> %01.2f (%s %%)</p>', 
 							$marker, $duration, $percent);		
 			$out .= $last;
 		}
@@ -64,6 +64,11 @@ class tx_trees_div{
 	
 	function view($par){
 		print tx_trees_div::dump($par);
+	}
+	
+	function _microtime(){
+	   list($msec, $sec) = explode(' ', microtime());
+	   return ((float)$sec + (float)$msec);
 	}
 	
 }

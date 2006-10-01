@@ -48,8 +48,9 @@ class tx_trees_nodeModelAbstract extends tx_trees_common{
 	// protected functions
 	//---------------------------------------------------------------------------
 	
-	function _init(){
+	function _init(){				
 		if($this->isInitialized){
+			tx_trees_div::view($this->isInitialized);
 			return;
 		}
 		if(empty($this->settings['type'])){

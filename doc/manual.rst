@@ -132,10 +132,10 @@ Known Problems
 TODO
 ==== 
 
+* Moving linecreation to nodes for abstract and derived
 * zweite selectbox anpassen
 * Popup information 
 * Selecttypen: Vollpfad, Abgekürzter Pfad, Baum mit Icons, Baum nested UL
-* Moving linecreation to nodes for abstract and derived
 * Query Zugriffsrechte
 * Tutor vollenden
 * Dokumentation

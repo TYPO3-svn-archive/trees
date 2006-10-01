@@ -24,66 +24,72 @@
 
 class tx_trees_configuration{
 
-	var $currentFocus = null;
-	var $validFoci = array('tx_trees__selectWizard');
+	var $focusCounter = 0;
+	var $currentFocusMethod = null;
 	var $localConfiguration = array();
+	var $currentConfiguration = array();
 	
+	//--------------------------------------------------------------------------
+	// Public functions
+	//--------------------------------------------------------------------------
+
 	function setFocus($classMethod, $localConfiguration = array()){
-			$focus = str_replace('->', '__', $classMethod);
-			if(!in_array($focus, $this->validFoci)){
-				tx_trees_div::end('setFocus', 'No valid focus.' . $classMethod);
-			} else{
-				$this->currentFocus = $focus;
-				$this->localConfiguration = $localConfiguration;
-			}
+		$method = '_' . str_replace('->', '__', $classMethod) . 'Get';
+		if(method_exists($this, $method)){
+			$this->currentConfiguration = array(); // clear it
+			$this->currentFocusMethod = $method;
+			$this->localConfiguration = $localConfiguration;
+		} else{
+			tx_trees_div::end('setFocus', 'No valid focus: ' . $method);
+		}
 	}
 	
 	function get($key){
-		$function = $this->currentFocus . 'Get';
-		if(method_exists($this, $function)){
-			return $this->$function($key);
+		$method = $this->currentFocusMethod;
+		if(method_exists($this, $method)){
+			return $this->$method($key);			
 		}else{
-			tx_trees_div::end('get', 'No function ' . $function);
+			tx_trees_div::end('get', 'Please set a valid focus with the setFocus(...) method first.');
 		}		
 	}
 	
-	function tx_trees__selectWizardGet($key){
-		// get defaults
-		$defaults = array(
-			'table' 			=> 'pages',
-			'idField' 			=> 'uid',
-			'titleField'		=> 'title',
-			'parentIdField' 	=> 'pid',
-			'parentTableField'	=> '',
-			'nodeModelClass' 	=> 'tx_trees_nodeModelForTables',
-			'nodeViewClass' 	=> 'tx_trees_nodeViewAbstract',
-			'treeModelClass' 	=> 'tx_trees_treeModelAbstract',
-			'treeViewClass' 	=> 'tx_trees_treeViewForSelects',
-			'inputSize'				=> 10,
-		);
-		// get locals
-		$local = $this->localConfiguration['params'];
-		
-		// merge it
-		$result = $defaults[$key];
-		$result = isset($local[$key]) ?  $local[$key] : $result;
+	//--------------------------------------------------------------------------
+	// Protected functions
+	//--------------------------------------------------------------------------
+ 
+	function _tx_trees__selectWizardGet($key){
+		if(empty($this->currentConfiguration)) {
+			// get defaults
+			$defaults = array(
+				'table' 			=> 'pages',
+				'idField' 			=> 'uid',
+				'titleField'		=> 'title',
+				'parentIdField' 	=> 'pid',
+				'parentTableField'	=> '',
+				'nodeModelClass' 	=> 'tx_trees_nodeModelForTables',
+				'nodeViewClass' 	=> 'tx_trees_nodeViewAbstract',
+				'treeModelClass' 	=> 'tx_trees_treeModelAbstract',
+				'treeViewClass' 	=> 'tx_trees_treeViewForSelects',
+				'inputSize'			=> 10,
+			);
+	
+			// get locals
+			$local = $this->localConfiguration['params'];
+			
+			// merge it
+			$results = t3lib_div::array_merge((array) $local, (array) $defaults);
+	
+			// evaluate the rest
+			$results['rootNodeType'] = $results['table'];
+			$results['parentTable'] = $results['table'];
+			$results['type'] = $results['table'];
+			$results['fields'] = $results['titleField'];
+			$results['inputId'] =$results['inputName'] = rand();
 
-		// evaluate some specials 
-		switch($key){
-			case 'inputName':
-			case 'inputId':
-				$result = rand();
-			break;
-			case 'rootNodeType':
-			case 'parentTable':
-			case 'type':
-				$result = isset($local['table']) ? $local['table'] : $defaults['table'];
-				break; 
-			case 'fields':
-				$result = isset($local['titleField']) ? $local['titleField'] : $defaults['titleField'];
-				break; 
+			// store to singleton
+			$this->currentConfiguration = $results;
 		}
-		return $result;		
+		return $this->currentConfiguration[$key];
 	}
 	
 }

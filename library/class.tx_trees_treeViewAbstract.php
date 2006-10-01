@@ -132,8 +132,8 @@ class tx_trees_treeViewAbstract extends tx_trees_common{
 		
 		$nodeModel2->set('table', 'tx_trees_leaf1');
 		$nodeModel2->set('idField', 'uid');
-		$nodeModel2->set('parentIdField', 'parentid');
 		$nodeModel2->set('parentTableField', 'parenttable');
+		$nodeModel2->set('parentIdField', 'parentid');
 		$nodeModel2->set('fields', 'header');		
 		
 		$nodeModel3->set('table', 'tx_trees_trunk2');
@@ -144,8 +144,8 @@ class tx_trees_treeViewAbstract extends tx_trees_common{
 		
 		$nodeModel4->set('table', 'tx_trees_leaf2');
 		$nodeModel4->set('idField', 'uid');
-		$nodeModel4->set('parentIdField', 'parentid');
 		$nodeModel4->set('parentTableField', 'parenttable');
+		$nodeModel4->set('parentIdField', 'parentid');
 		$nodeModel4->set('fields', 'header');		
 		
 		$nodeView1->set('type', 'tx_trees_trunk1');

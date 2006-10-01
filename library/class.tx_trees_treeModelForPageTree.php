@@ -53,15 +53,16 @@ class tx_trees_treeModelForPageTree extends tx_trees_treeModelAbstract{
 			$nodeType = $mount['nodeType'];
 			$array[$counter]['.mountType'] = $mount['mountType'];
 			$array[$counter]['.nodeType'] = $nodeType;
-			foreach($this->nodeModels as $nodeModel){
-				if($nodeModel->getType() === $nodeType){
+			for($i = 0; $i < count($this->nodeModels); $i++){
+				$nodeModel =& $this->nodeModels[$i];			
+				if($nodeModel->get('type') === $nodeType){
 					$current = $nodeModel->findById($id);
 					$array[$counter] = t3lib_div::array_merge((array)$current, (array)$array[$counter]);
 				}					
 			}
-			$this->tt('Pre recur() ' . $id );
+			$this->tt('Pre recur (' . $id .')');
 			$children =  $this->_recur($nodeType, $id);
-			$this->tt('Post recur()');			
+			$this->tt('Post recur(' . $id .')');			
 			if(is_array($children) && !empty($children)){
 				$array[$counter . '.'] = $children;
 			}
@@ -88,6 +89,22 @@ class tx_trees_treeModelForPageTree extends tx_trees_treeModelAbstract{
 	//---------------------------------------------------------------------------
 	// usage examples
 	//---------------------------------------------------------------------------
+	
+	function usageExampleDumpPageTree($script, $mounts){
+		require_once(t3lib_extMgm::extPath('trees', 'library/') . 'class.tx_trees_nodeModelForTables.php');
+		$treeModel = t3lib_div::makeInstance('tx_trees_treeModelForPageTree');
+		$nodeModel = t3lib_div::makeInstance('tx_trees_nodeModelForTables');
+		$treeModel->addNodeModel($nodeModel);
+		$nodeModel->set('table', 'pages');
+		$nodeModel->set('parentTable', 'pages');
+		$nodeModel->set('idField', 'uid');
+		$nodeModel->set('parentIdField', 'pid');
+		$nodeModel->set('fields', 'title');
+		foreach($mounts as $mount){
+			$treeModel->addMount('webMount', 'pages', $mount);
+		}
+		return $treeModel->dumpTree();
+	}	
 	
 	function usageExampleDumpTree($script, $mounts){
 		require_once(t3lib_extMgm::extPath('trees', 'library/') . 'class.tx_trees_nodeModelForTables.php');
