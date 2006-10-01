@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<T3locallang>
+	<meta type="array">
+		<type>module</type>
+		<description>Language labels for module &quot;help_txtreesTreesDemo&quot;</description>
+	</meta>
+	<data type="array">
+		<languageKey index="default" type="array">
+			<label index="title">Usage examples for Trees</label>
+			<label index="t3lib_treeviewController">t3lib_ treeview</label>
+			<label index="t3lib_browsetreeController">t3lib_ browsetree</label>
+			<label index="modelAsTreeController">Tree Model</label>
+			<label index="modelAsListController">List Model</label>
+			<label index="viewAsNestedListController">Nested List</label>
+			<label index="multiTypeViewController">Different Node Types</label>
+			<label index="selectController">Selects</label>
+		</languageKey>
+	</data>
+</T3locallang>

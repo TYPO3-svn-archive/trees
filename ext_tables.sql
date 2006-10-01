@@ -1,0 +1,142 @@
+#
+# Table structure for table 'tx_trees_mounts'
+#
+CREATE TABLE tx_trees_mounts (
+    uid int(11) NOT NULL auto_increment,
+    pid int(11) DEFAULT '0' NOT NULL,
+    tstamp int(11) DEFAULT '0' NOT NULL,
+    crdate int(11) DEFAULT '0' NOT NULL,
+    cruser_id int(11) DEFAULT '0' NOT NULL,
+    deleted tinyint(4) DEFAULT '0' NOT NULL,
+    mountpoint blob NOT NULL,    
+    PRIMARY KEY (uid),
+    KEY parent (pid)
+);
+
+#
+# Table structure for table 'be_groups_tx_trees_mounts_mm'
+# 
+#
+CREATE TABLE be_groups_tx_trees_mounts_mm (
+  uid_local int(11) DEFAULT '0' NOT NULL,
+  uid_foreign int(11) DEFAULT '0' NOT NULL,
+  tablenames varchar(30) DEFAULT '' NOT NULL,
+  sorting int(11) DEFAULT '0' NOT NULL,
+  KEY uid_local (uid_local),
+  KEY uid_foreign (uid_foreign)
+);
+
+#
+# Table structure for table 'be_groups'
+#
+CREATE TABLE be_groups (
+    tx_trees_mounts int(11) DEFAULT '0' NOT NULL
+);
+
+#
+# Table structure for table 'be_users_tx_trees_mounts_mm'
+# 
+#
+CREATE TABLE be_users_tx_trees_mounts_mm (
+  uid_local int(11) DEFAULT '0' NOT NULL,
+  uid_foreign int(11) DEFAULT '0' NOT NULL,
+  tablenames varchar(30) DEFAULT '' NOT NULL,
+  sorting int(11) DEFAULT '0' NOT NULL,
+  KEY uid_local (uid_local),
+  KEY uid_foreign (uid_foreign)
+);
+
+#
+# Table structure for table 'be_users'
+#
+CREATE TABLE be_users (
+    tx_trees_mounts int(11) DEFAULT '0' NOT NULL
+);
+
+# --------------------------------------------------------
+#  Examples
+# --------------------------------------------------------
+
+
+#
+# Table structure for table 'tx_trees_trunk1'
+#
+CREATE TABLE tx_trees_trunk1 (
+	uid int(11) NOT NULL auto_increment,
+	pid int(11) DEFAULT '0' NOT NULL,
+	tstamp int(11) DEFAULT '0' NOT NULL,
+	crdate int(11) DEFAULT '0' NOT NULL,
+	cruser_id int(11) DEFAULT '0' NOT NULL,
+	deleted tinyint(4) DEFAULT '0' NOT NULL,
+	hidden tinyint(4) DEFAULT '0' NOT NULL,
+	parentid int(11) DEFAULT '0' NOT NULL,
+	parenttable tinytext NOT NULL,
+	title tinytext NOT NULL,
+	
+	PRIMARY KEY (uid),
+	KEY parent (pid)
+);
+
+
+
+#
+# Table structure for table 'tx_trees_trunk2'
+#
+CREATE TABLE tx_trees_trunk2 (
+	uid int(11) NOT NULL auto_increment,
+	pid int(11) DEFAULT '0' NOT NULL,
+	tstamp int(11) DEFAULT '0' NOT NULL,
+	crdate int(11) DEFAULT '0' NOT NULL,
+	cruser_id int(11) DEFAULT '0' NOT NULL,
+	deleted tinyint(4) DEFAULT '0' NOT NULL,
+	hidden tinyint(4) DEFAULT '0' NOT NULL,
+	parentid int(11) DEFAULT '0' NOT NULL,
+	parenttable tinytext NOT NULL,
+	title tinytext NOT NULL,
+	
+	PRIMARY KEY (uid),
+	KEY parent (pid)
+);
+
+
+
+#
+# Table structure for table 'tx_trees_leaf1'
+#
+CREATE TABLE tx_trees_leaf1 (
+	uid int(11) NOT NULL auto_increment,
+	pid int(11) DEFAULT '0' NOT NULL,
+	tstamp int(11) DEFAULT '0' NOT NULL,
+	crdate int(11) DEFAULT '0' NOT NULL,
+	cruser_id int(11) DEFAULT '0' NOT NULL,
+	deleted tinyint(4) DEFAULT '0' NOT NULL,
+	hidden tinyint(4) DEFAULT '0' NOT NULL,
+	parentid int(11) DEFAULT '0' NOT NULL,
+	parenttable tinytext NOT NULL,
+	header tinytext NOT NULL,
+	
+	PRIMARY KEY (uid),
+	KEY parent (pid)
+);
+
+
+
+#
+# Table structure for table 'tx_trees_leaf2'
+#
+CREATE TABLE tx_trees_leaf2 (
+	uid int(11) NOT NULL auto_increment,
+	pid int(11) DEFAULT '0' NOT NULL,
+	tstamp int(11) DEFAULT '0' NOT NULL,
+	crdate int(11) DEFAULT '0' NOT NULL,
+	cruser_id int(11) DEFAULT '0' NOT NULL,
+	deleted tinyint(4) DEFAULT '0' NOT NULL,
+	hidden tinyint(4) DEFAULT '0' NOT NULL,
+	parentid int(11) DEFAULT '0' NOT NULL,
+	parenttable tinytext NOT NULL,
+	header tinytext NOT NULL,
+	
+	PRIMARY KEY (uid),
+	KEY parent (pid)
+);
+
