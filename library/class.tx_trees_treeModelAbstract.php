@@ -22,19 +22,14 @@
 *  This copyright notice MUST APPEAR in all copies of the script!
 ***************************************************************/
 
+require_once(t3lib_extMgm::extPath('trees', 'library/') . 'class.tx_trees_common.php');
+
 class tx_trees_treeModelAbstract  extends tx_trees_common{
 		
-	// no direct use, use setters and getters
-	
-	var $settings = array(
-		'rootNodeType' => null,
-		'rootId' => 0,
-	);
-	
+	var $requiredSettings = 'rootNodeType, rootId';
 	var $treeArray = array();
 	var $listArray = array();
 	var $singleton = array();
-	var $isInitialized = false;
 	var $nodeModels = array();
 	
 	//---------------------------------------------------------------------------
@@ -56,14 +51,19 @@ class tx_trees_treeModelAbstract  extends tx_trees_common{
 		return current($this->listArray);
 	}
 	
+	function countListNodes(){
+		$this->_buildList();
+		return count($this->listArray);
+	}
+	
 	function dumpTree(){
 		$this->_buildTree();
-		return tx_trees_div::dump($this->treeArray);
+		return $this->_dump($this->treeArray);
 	}
 	
 	function dumpList(){
 		$this->_buildList();
-		return tx_trees_div::dump($this->listArray);
+		return $this->_dump($this->listArray);
 	}
 	
 	function loadFromSingleton($type){
@@ -97,31 +97,30 @@ class tx_trees_treeModelAbstract  extends tx_trees_common{
 			return;
 		} else {
 			$this->_buildTree();
-			$this->tt('Pre linearization');
+			$this->_tt('Pre linearization');
 			$this->_linearizeTreeArray($this->treeArray, $this->listArray);
-			$this->tt('Post linearization');
+			$this->_tt('Post linearization');
 		}
 	}
 	
 	function _buildTree(){
-		$this->_init();
+		$this->_initialize();
 		$this->treeArray = $this->_recur($this->get('rootNodeType'), $this->get('rootId'));
-//		tx_trees_div::view($this->treeArray);
 	}
-		
-	function _init(){
+
+	function _initialize(){
 		if($this->isInitialized){
 			return;
 		}
-		if(empty($this->nodeModels)){
-			$this->end('_init', 'Please set at least one node object to read the data.');
+		if(!$this->isConfigured) {
+			$this->_end('_initialize', 'Please configure the object first.');
+		}elseif(empty($this->nodeModels)){
+			$this->_end('_initialize', 'Please set at least one nodeModel.');			
+		} else {		
+			parent::_initialize();
 		}
-		if($this->isEmpty('rootNodeType')){
-			$this->end('_init', 'Please set the rootNodeType.');
-		}
-		$this->isInitialized = true;
-	}
-
+	}			
+	
 	function _linearizeTreeArray(&$treeArray, &$listArray, $level = 0){
 		$position = 0;
 		array_push($listArray, array('.nodeType' => '.LEVEL_BEGIN', '.level' =>	$level));
@@ -138,7 +137,9 @@ class tx_trees_treeModelAbstract  extends tx_trees_common{
 				}
 			}
 		}
-		$listArray[$last] = t3lib_div::array_merge((array) $listArray[$last], array('.isLastSibling' => true));
+		if(!empty($last)){
+			$listArray[$last] = t3lib_div::array_merge((array) $listArray[$last], array('.isLastSibling' => true));
+		}
 		array_push($listArray, array('.nodeType' => '.LEVEL_END', '.level' => $level));
 	}
 	

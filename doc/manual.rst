@@ -108,6 +108,68 @@ Actual class hierarchies of the tree
 Other classes of the extension
 ------------------------------------
 
+tx_trees 
+	By this class the extension is called from external.
+tx_trees_configuration 
+	Configurations used by tx_trees.
+tx_trees_configurationAbstract
+	Generic configuration class.
+tx_trees_defaultPageTreeConfiguration
+	Settings to create pagetrees.
+tx_trees_div
+	Collection of static functions.
+
+
+Configuration objects for the classes of the pagetree
+=====================================================
+
+The main advantage of configuration objects is that you can transport all 
+configurations and the logic in one object instead of passing lots configuration 
+arrays from function to function and form class to class and calling lots of 
+setters for one object. In TYPO3 there are different configuration places 
+that have to be merged: extension configuration, userTS, pageTS, TCA. 
+All merging of configuration can be done within the configuration object instead
+of doing it in differet places.
+
+The classes of the pagetree contain no default configurations. The complete 
+configuration is passed in form of a configuration object. If you want to work 
+with default configurations, you can define default configuration objects. 
+An example for such an object is the class tx_trees_defaultPageTreeConfiguration.
+
+A class is configured by passing a configuration object to the method configure().
+
+$configurationObject = t3lib_div::makeInstance('tx_trees_defaultPageTreeConfiguration');
+$treeModel = t3lib_div::makeInstance('tx_trees_treeModelForPageTree');
+$treeModel->configure($configurationObject);
+
+The method configure() retrieves the settings from the configuration object by 
+calling the method get() for the required keys.
+
+$value = $configurationObject->get($key);
+
+The required keys of an object are defined within the internal varibale $requiredSettings
+in form of a comma separated list. There is a unusual concept with this, to assure 
+that all settings are given and that the develper quickly learns about all 
+possibile settings. For each of the required keys the get() function of the
+configuration object must answer with a value that is not null. If get() returns 
+a null value the script is terminated with an error message. 
+
+There may be situtions, where you don't want to set a value, because you don't want the 
+object to use it. In this case you can give a value like 0, false or the empty string, but
+the configuration object must answer with a value, to indicate that the setting was 
+considered.
+
+You can program your own configuration objects or fill the generic configuration 
+object tx_trees_configurationAbstract with your settings.
+
+You find examples for specialized configuration objects in:
+
+ * tx_trees_configuration
+ * tx_trees_defaultPageTreeConfiguration
+ 
+ The usageExample functions in the different classes teach you, how to work with
+ configuration objects.
+
 
 Alternative pagetree
 ====================
@@ -123,6 +185,9 @@ Configuration
 ========
 Tutorial
 ========
+
+After installation and reload of the frameset you find a tutor module "Trees" 
+below the main BE module "Help".
 
 ==============
 Known Problems

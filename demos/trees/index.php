@@ -135,7 +135,7 @@ class  tx_trees_demos_trees extends t3lib_SCbase {
 		if($this->MOD_SETTINGS['webmounts'] != 'none') {
 			$mounts = ($this->MOD_SETTINGS['webmounts'] == 'all') 
 				? $GLOBALS['WEBMOUNTS'] : array($this->MOD_SETTINGS['webmounts']) ;
-			$out .= tx_trees_demos_trees_t3lib_treeview::example('index.php', $mounts);
+			$out .= tx_trees_demos_trees_t3lib_treeview::example($mounts);
 		}
 		return $out;
 	}
@@ -145,7 +145,7 @@ class  tx_trees_demos_trees extends t3lib_SCbase {
 		if($this->MOD_SETTINGS['webmounts'] != 'none') {
 			$mounts = ($this->MOD_SETTINGS['webmounts'] == 'all') 
 				? $GLOBALS['WEBMOUNTS'] : array($this->MOD_SETTINGS['webmounts']) ;
-			$out .= tx_trees_demos_trees_t3lib_browsetree::example('index.php', $mounts);
+			$out .= tx_trees_demos_trees_t3lib_browsetree::example($mounts);
 		}
 		return $out;
 	}
@@ -155,7 +155,7 @@ class  tx_trees_demos_trees extends t3lib_SCbase {
 		if($this->MOD_SETTINGS['webmounts'] != 'none') {
 			$mounts = ($this->MOD_SETTINGS['webmounts'] == 'all') 
 				? $GLOBALS['WEBMOUNTS'] : array($this->MOD_SETTINGS['webmounts']) ;
-			$out .= tx_trees_treeModelForPageTree::usageExampleDumpPageTree('index.php', $mounts);
+			$out .= tx_trees_treeModelForPageTree::usageExampleDumpPageTree($mounts);
 		}
 		return $out;
 	}
@@ -165,7 +165,7 @@ class  tx_trees_demos_trees extends t3lib_SCbase {
 		if($this->MOD_SETTINGS['webmounts'] != 'none') {
 			$mounts = ($this->MOD_SETTINGS['webmounts'] == 'all') 
 				? $GLOBALS['WEBMOUNTS'] : array($this->MOD_SETTINGS['webmounts']) ;
-			$out .= tx_trees_treeModelForPageTree::usageExampleDumpTree('index.php', $mounts);
+			$out .= tx_trees_treeModelForPageTree::usageExampleDumpTree($mounts);
 		}
 		return $out;
 	}
@@ -175,7 +175,7 @@ class  tx_trees_demos_trees extends t3lib_SCbase {
 		if($this->MOD_SETTINGS['webmounts'] != 'none') {
 			$mounts = ($this->MOD_SETTINGS['webmounts'] == 'all') 
 				? $GLOBALS['WEBMOUNTS'] : array($this->MOD_SETTINGS['webmounts']) ;
-			$out .= tx_trees_treeModelForPageTree::usageExampleDumpList('index.php', $mounts);
+			$out .= tx_trees_treeModelForPageTree::usageExampleDumpList($mounts);
 		}
 		return $out;
 	}
@@ -185,7 +185,7 @@ class  tx_trees_demos_trees extends t3lib_SCbase {
 		if($this->MOD_SETTINGS['webmounts'] != 'none') {
 			$mounts = ($this->MOD_SETTINGS['webmounts'] == 'all') 
 				? $GLOBALS['WEBMOUNTS'] : array($this->MOD_SETTINGS['webmounts']) ;
-			$out .= tx_trees_treeViewAbstract::usageExampleNestedList('index.php', $mounts);
+			$out .= tx_trees_treeViewAbstract::usageExampleNestedList($mounts);
 		}
 		return $out;
 	}
@@ -195,7 +195,7 @@ class  tx_trees_demos_trees extends t3lib_SCbase {
 		if($this->MOD_SETTINGS['webmounts'] != 'none') {
 			$mounts = ($this->MOD_SETTINGS['webmounts'] == 'all') 
 				? $GLOBALS['WEBMOUNTS'] : array($this->MOD_SETTINGS['webmounts']) ;
-			$out .= tx_trees_treeViewAbstract::usageExampleMultiTypes('index.php', $mounts);
+			$out .= tx_trees_treeViewAbstract::usageExampleMultiTypes($mounts);
 		}
 		return $out;
 	}
@@ -207,12 +207,14 @@ class  tx_trees_demos_trees extends t3lib_SCbase {
 			$mounts = ($this->MOD_SETTINGS['webmounts'] == 'all') 
 				? $GLOBALS['WEBMOUNTS'] : array($this->MOD_SETTINGS['webmounts']) ;
 			$out .= $this->doc->spacer(10);
-			$out .= $this->doc->section('Archetype', tx_trees_treeViewForSelects::usageExample('index.php', $mounts));
+			$out .= $this->doc->section('Archetype', tx_trees_treeViewForSelects::usageExample($mounts));
 			$out .= $this->doc->sectionEnd();
 			$out .= $this->doc->spacer(10);
-			
-			// configuration of the tables
-			$array = array('params'=> array('inputSize' => 1));
+
+			//---------------------------------------------------------------------------------------
+			//  Singleselect
+			//---------------------------------------------------------------------------------------
+			$array = array('parameters'=> array('inputSize' => 1));
 			$out .= $this->doc->section('TCE Form Single Select', tx_trees::selectWizard($array));
 			$out .= $this->doc->sectionEnd();
 			
@@ -229,7 +231,7 @@ class  tx_trees_demos_trees extends t3lib_SCbase {
 			$parameters['fieldChangeFunc'] = array(	); 
 			$array = array();
 			$out .= $this->doc->section('TCE Form Multiselect', tx_trees::selectWizard($array));
-			$out .= '<input type="submit">';			
+			$out .= '<input type="submit">';
 			$out .= '<br><select name="name1" id="name1" multiple="multiple">';
 			for($i=0; $i<15; $i++) {
 				$label = 'Option ' . $i;
@@ -237,8 +239,8 @@ class  tx_trees_demos_trees extends t3lib_SCbase {
 			}
 			$out .= '</select>';		
 			$out .= '<select name="name2" id="name2" multiple="multiple">';
-			$out .= '</select>';		
-			
+			$out .= '</select>';
+
 			$out .= $this->doc->sectionEnd();
 			
 			

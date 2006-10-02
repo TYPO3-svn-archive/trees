@@ -22,7 +22,9 @@
 *  This copyright notice MUST APPEAR in all copies of the script!
 ***************************************************************/
 
-class tx_trees_configuration{
+require_once(t3lib_extMgm::extPath('trees', 'library/') . 'class.tx_trees_configurationAbstract.php');
+
+class tx_trees_configuration extends tx_trees_configurationAbstract {
 
 	var $focusCounter = 0;
 	var $currentFocusMethod = null;
@@ -60,24 +62,43 @@ class tx_trees_configuration{
 	function _tx_trees__selectWizardGet($key){
 		if(empty($this->currentConfiguration)) {
 			// get defaults
-			$defaults = array(
-				'table' 			=> 'pages',
-				'idField' 			=> 'uid',
-				'titleField'		=> 'title',
-				'parentIdField' 	=> 'pid',
-				'parentTableField'	=> '',
-				'nodeModelClass' 	=> 'tx_trees_nodeModelForTables',
-				'nodeViewClass' 	=> 'tx_trees_nodeViewAbstract',
-				'treeModelClass' 	=> 'tx_trees_treeModelAbstract',
-				'treeViewClass' 	=> 'tx_trees_treeViewForSelects',
-				'inputSize'			=> 10,
+			$defaultsList = '
+				nodeModelClass 		= tx_trees_nodeModelForTables 
+				nodeViewClass 		= tx_trees_nodeViewAbstract 
+				treeModelClass 		= tx_trees_treeModelAbstract 
+				treeViewClass 		= tx_trees_treeViewForSelects 
+				cssLevel			= few
+				listClassAttribute	= pageTree
+				rowClassAttribute	= pageList
+				rootNodeType 		= pages
+				indentMargin		= .&nbsp;
+				indentCharacter		= .&nbsp;
+				indentPadding  		= &nbsp;&nbsp;
+				onChange			=
+				onClick				=
+				type				= pages
+				table 				= pages
+				fields				= title
+				idField				= uid
+				titleField			= title
+				parentTable			= pages
+				parentIdField		= pid
+				parentTableField 	=
+				orderBy				=
+			';
+			$defaults = tx_trees_div::list2array($defaultsList);
+			$defaults = t3lib_div::array_merge(
+				$defaults,
+				array(
+					'inputSize'			=> 10,
+					'selectedValues'    => array(),
+					'rootId'			=> 0,
+					'limit'				=> 1000,
+				)
 			);
-	
-			// get locals
-			$local = $this->localConfiguration['params'];
 			
-			// merge it
-			$results = t3lib_div::array_merge((array) $local, (array) $defaults);
+ 			// merge with give local configuration
+			$results = t3lib_div::array_merge((array) $defaults, (array) $this->localConfiguration);
 	
 			// evaluate the rest
 			$results['rootNodeType'] = $results['table'];
@@ -86,7 +107,7 @@ class tx_trees_configuration{
 			$results['fields'] = $results['titleField'];
 			$results['inputId'] =$results['inputName'] = rand();
 
-			// store to singleton
+			// store to current configuration 
 			$this->currentConfiguration = $results;
 		}
 		return $this->currentConfiguration[$key];

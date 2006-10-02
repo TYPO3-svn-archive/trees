@@ -22,20 +22,14 @@
 *  This copyright notice MUST APPEAR in all copies of the script!
 ***************************************************************/
 
+require_once(t3lib_extMgm::extPath('trees', 'library/') . 'class.tx_trees_common.php');
+
 class tx_trees_treeViewAbstract extends tx_trees_common{
 	
-	// no direct use, use setters and getters
-	
-	var $settings = array(
-		'classLevel' => 'normal',  // few, normal, many
-		'listClass' => null,
-	);
-	
-	// private variables
+	var $requiredSettings = 'cssLevel, listClassAttribute';
 	var $treeModel = null;
 	var $nodeViews = array();
-	var $isInitialized = false;
-	var $classLevels = array('few', 'normal', 'many');
+	var $cssLevels = array('few', 'normal', 'many');
 	
 	//---------------------------------------------------------------------------
 	// public functions
@@ -47,61 +41,51 @@ class tx_trees_treeViewAbstract extends tx_trees_common{
 	}
 	
 	function render(){
-		$this->_init();
+		$this->_initialize();
 		$rows = array();
 		$rendered = array();
 		for($this->treeModel->rewind(); $this->treeModel->valid(); $this->treeModel->next()){
 			$rows[] = $this->_renderEntry($this->treeModel->current());
-		}
+		}			
 		return $this->_renderList($rows);
 	}
 	
-	function set($key, $value){
-		switch ($key){
-			case 'classLevel': 
-				if(!in_array($value, $this->classLevels)){
-					$this->end('set(ClassesLevel, ...)', 'Set one of: ' . join(', ', $this->classLevels));						
-				}  
-			break;
-		}
-		parent::set($key, $value);
-	}
-
 	function setTreeModel(&$treeModel){
 		$this->treeModel =& $treeModel;
 	}
 
-	function usageExampleNestedList($script, $mounts){
+	function usageExampleNestedList($mounts){
+		require_once(t3lib_extMgm::extPath('trees', 'library/') . 'class.tx_trees_defaultPageTreeConfiguration.php');
 		require_once(t3lib_extMgm::extPath('trees', 'library/') . 'class.tx_trees_nodeModelForTables.php');
 		require_once(t3lib_extMgm::extPath('trees', 'library/') . 'class.tx_trees_treeModelForPageTree.php');
 		require_once(t3lib_extMgm::extPath('trees', 'library/') . 'class.tx_trees_nodeViewAbstract.php');
+		$configuration = t3lib_div::makeInstance('tx_trees_defaultPageTreeConfiguration');
 		$treeModel = t3lib_div::makeInstance('tx_trees_treeModelForPageTree');
 		$treeView = t3lib_div::makeInstance('tx_trees_treeViewAbstract');
-		$nodeModel1 = t3lib_div::makeInstance('tx_trees_nodeModelForTables');
-		$nodeView1 = t3lib_div::makeInstance('tx_trees_nodeViewAbstract');
+		$nodeModel = t3lib_div::makeInstance('tx_trees_nodeModelForTables');
+		$nodeView = t3lib_div::makeInstance('tx_trees_nodeViewAbstract');
 		$treeView->setTreeModel($treeModel);
-		$treeModel->addNodeModel($nodeModel1);
-		$treeView->addNodeView($nodeView1);
-		$treeView->set('classLevel', 'few');
-		$treeView->set('listClass', 'pageTree');
-		$nodeModel1->set('table', 'pages');
-		$nodeModel1->set('parentTable', 'pages');
-		$nodeModel1->set('idField', 'uid');
-		$nodeModel1->set('parentIdField', 'pid');
-		$nodeModel1->set('fields', 'title');		
-		$nodeView1->set('type', 'pages');
-		$nodeView1->set('titleField', 'title');
-		$nodeView1->set('classAttribute', 'page');
+		$treeModel->addNodeModel($nodeModel);
+		$treeView->addNodeView($nodeView);
+		$treeModel->configure($configuration);
+		$treeView->configure($configuration);
+		$nodeModel->configure($configuration);
+		$nodeView->configure($configuration);
 		foreach($mounts as $mount){
 			$treeModel->addMount('webMount', 'pages', $mount);
 		}		
 		return $treeView->render();
 	}
 
-	function usageExampleMultiTypes($script, $mounts){
+	function usageExampleMultiTypes($mounts){
+		require_once(t3lib_extMgm::extPath('trees', 'library/') . 'class.tx_trees_configurationAbstract.php');
 		require_once(t3lib_extMgm::extPath('trees', 'library/') . 'class.tx_trees_nodeModelForTables.php');
 		require_once(t3lib_extMgm::extPath('trees', 'library/') . 'class.tx_trees_treeModelAbstract.php');
 		require_once(t3lib_extMgm::extPath('trees', 'library/') . 'class.tx_trees_nodeViewAbstract.php');
+		$treeModelConfiguration = t3lib_div::makeInstance('tx_trees_configurationAbstract');
+		$treeViewConfiguration = t3lib_div::makeInstance('tx_trees_configurationAbstract');
+		$nodeModelConfiguration = t3lib_div::makeInstance('tx_trees_configurationAbstract');
+		$nodeViewConfiguration = t3lib_div::makeInstance('tx_trees_configurationAbstract');
 		$treeModel = t3lib_div::makeInstance('tx_trees_treeModelAbstract');
 		$treeView = t3lib_div::makeInstance('tx_trees_treeViewAbstract');
 		$nodeModel1 = t3lib_div::makeInstance('tx_trees_nodeModelForTables');
@@ -121,51 +105,60 @@ class tx_trees_treeViewAbstract extends tx_trees_common{
 		$treeView->addNodeView($nodeView2);
 		$treeView->addNodeView($nodeView3);
 		$treeView->addNodeView($nodeView4);
-		$treeView->set('classLevel', 'few');
-		$treeView->set('listClass', 'multiTree');
-		
-		$nodeModel1->set('table', 'tx_trees_trunk1');
-		$nodeModel1->set('idField', 'uid');
-		$nodeModel1->set('parentTableField', 'parenttable');
-		$nodeModel1->set('parentIdField', 'parentid');
-		$nodeModel1->set('fields', 'title');		
-		
-		$nodeModel2->set('table', 'tx_trees_leaf1');
-		$nodeModel2->set('idField', 'uid');
-		$nodeModel2->set('parentTableField', 'parenttable');
-		$nodeModel2->set('parentIdField', 'parentid');
-		$nodeModel2->set('fields', 'header');		
-		
-		$nodeModel3->set('table', 'tx_trees_trunk2');
-		$nodeModel3->set('idField', 'uid');
-		$nodeModel3->set('parentTableField', 'parenttable');
-		$nodeModel3->set('parentIdField', 'parentid');
-		$nodeModel3->set('fields', 'title');		
-		
-		$nodeModel4->set('table', 'tx_trees_leaf2');
-		$nodeModel4->set('idField', 'uid');
-		$nodeModel4->set('parentTableField', 'parenttable');
-		$nodeModel4->set('parentIdField', 'parentid');
-		$nodeModel4->set('fields', 'header');		
-		
-		$nodeView1->set('type', 'tx_trees_trunk1');
-		$nodeView1->set('titleField', 'title');
-		$nodeView1->set('classAttribute', 'trunk1');
 
-		$nodeView2->set('type', 'tx_trees_leaf1');
-		$nodeView2->set('titleField', 'header');
-		$nodeView2->set('classAttribute', 'leaf1');
+		// tree model configuration
+		
+		$treeModelConfiguration->set('rootNodeType', 'tx_trees_trunk1');
+		$treeModelConfiguration->set('rootId', 0);
+		$treeModel->configure($treeModelConfiguration);
+		
+		// tree view configuration
+		
+		$treeViewConfiguration->set('cssLevel', 'few');		
+		$treeViewConfiguration->set('listClassAttribute', 'multiList');		
+		$treeView->configure($treeViewConfiguration);		
+		
+		// node model configuration
+		
+		$nodeModelConfiguration->set('parentTable', false);
+		$nodeModelConfiguration->set('limit', 1000);
+		$nodeModelConfiguration->set('orderBy', '');
+		$nodeModelConfiguration->set('table', 'tx_trees_trunk1');
+		$nodeModelConfiguration->set('idField', 'uid');
+		$nodeModelConfiguration->set('parentTableField', 'parenttable');
+		$nodeModelConfiguration->set('parentIdField', 'parentid');
+		$nodeModelConfiguration->set('fields', 'title');		
+		$nodeModel1->configure($nodeModelConfiguration);
+		
+		$nodeModelConfiguration->set('table', 'tx_trees_trunk2');
+		$nodeModel2->configure($nodeModelConfiguration);
+		
+		$nodeModelConfiguration->set('table', 'tx_trees_leaf1');
+		$nodeModelConfiguration->set('fields', 'header');		
+		$nodeModel3->configure($nodeModelConfiguration);
+		
+		$nodeModelConfiguration->set('table', 'tx_trees_leaf2');
+		$nodeModel4->configure($nodeModelConfiguration);
+		
+		// node view configuration
 
-		$nodeView3->set('type','tx_trees_trunk2');
-		$nodeView3->set('titleField', 'title');
-		$nodeView3->set('classAttribute', 'trunk2');
+		$nodeViewConfiguration->set('type', 'tx_trees_trunk1');
+		$nodeViewConfiguration->set('titleField', 'title');
+		$nodeViewConfiguration->set('rowClassAttribute', 'trunk1');
+		$nodeView1->configure($nodeViewConfiguration); 		
 
-		$nodeView4->set('type', 'tx_trees_leaf2');
-		$nodeView4->set('titleField', 'header');
-		$nodeView4->set('classAttribute', 'leaf2');
+		$nodeViewConfiguration->set('type', 'tx_trees_trunk2');
+		$nodeViewConfiguration->set('rowClassAttribute', 'trunk2');
+		$nodeView2->configure($nodeViewConfiguration); 		
 
-		$treeModel->set('rootNodeType', 'tx_trees_trunk1');
-		$treeModel->set('rootId', 0);
+		$nodeViewConfiguration->set('type', 'tx_trees_leaf1');
+		$nodeViewConfiguration->set('titleField', 'header');
+		$nodeViewConfiguration->set('rowClassAttribute', 'leaf1');
+		$nodeView3->configure($nodeViewConfiguration); 		
+		
+		$nodeViewConfiguration->set('type', 'tx_trees_leaf2');
+		$nodeViewConfiguration->set('rowClassAttribute', 'leaf2');
+		$nodeView4->configure($nodeViewConfiguration); 		
 		
 		$styles .= '<style type="text/css" >' . chr(10);
 		$styles .= '/*<![CDATA[*/' . chr(10);
@@ -175,29 +168,40 @@ class tx_trees_treeViewAbstract extends tx_trees_common{
 		$styles .= '.leaf2{color:darkred;}' . chr(10);
 		$styles .= '/*]]>*/' . chr(10);
 		$styles .= '</style>' . chr(10);
-				
-		return $styles . $treeView->render();
+		if($treeView->treeModel->countListNodes() < 3){
+			$return = '<h3>To use this example please install the 
+								data from examples.sql</h3>';
+		} else {
+			$return = $styles . $treeView->render();
+		}
+		return $return;
 	}
 
 	//---------------------------------------------------------------------------
 	// protected functions to overwrite in inherited classes
 	//---------------------------------------------------------------------------
 	
-	function _init(){
+	function _initialize(){
 		if($this->isInitialized){
 			return;
 		}
+		if(!$this->isConfigured) {
+			$this->_end('_initialize', 'Please configure the object first.');
+		}
+		if(!in_array($this->get('cssLevel'), $this->cssLevels)){
+			$this->_end('_initialize', 'Set one of cssLevels: ' . join(', ', $this->cssLevels));						
+		}		
 		if(empty($this->treeModel)){
-			$this->end('_init', 'Please set the $treeModel');		
+			$this->_end('_initialize', 'Please set the treeModel before configuration');
 		}
 		if(empty($this->nodeViews)){
-			$this->end('_init', 'Please set at least one of $nodeViews.');		
+			$this->end('_initialize', 'Please set at least one of nodeViews (before configuration).');		
 		}
 		// index the nodeViews by type
 		foreach($this->nodeViews as $nodeView){
 			$this->nodeViews[$nodeView->get('type')] = $nodeView;
 		}
-		$this->isInitialized = true;
+		parent::_initialize();
 	}
 	
 	function _renderEntry($entry){
@@ -207,26 +211,26 @@ class tx_trees_treeViewAbstract extends tx_trees_common{
 		}elseif($nodeType == '.LEVEL_END') {
 			$row = $this->_renderLevelEnd($entry);
 		}elseif(empty($nodeType)){
-			$this->view($entry);
-			$this->end('render', 'Empty nodeType');
+			$this->_view($entry);
+			$this->_end('render', 'Empty nodeType');
 		}elseif(!in_array($nodeType, array_keys($this->nodeViews))){
-			$this->end('render', 'No nodeView for nodeType' . $nodeType);
+			$this->_end('render', 'No nodeView for nodeType' . $nodeType);
 		} else {
 			$components['text'] = $this->nodeViews[$nodeType]->renderText($entry);
 			$components['text'] = $components['text'] ? $components['text'] 
 				: ($entry['.mountType'] ? ucfirst($entry['.mountType']) : '[no title]');
-			$components['class'] = $this->nodeViews[$nodeType]->get('classAttribute');
+			$components['class'] = $this->nodeViews[$nodeType]->get('rowClassAttribute');
 			$row = $this->_renderRow($entry, $components);
 		}
 		return $row;
 	}
 	
 	function _renderLevelBegin($current){
-		if($this->classLevel == 'many'){
+		if($this->cssLevel == 'many'){
 			$classes[] = 'level_' . $current['.level'];
 		} 
-		if($current['.level'] === 0 && !$this->isEmpty('listClass')){
-			$classes[] = $this->get('listClass');
+		if($current['.level'] === 0 && !$this->_empty('listClassAttribute')){
+			$classes[] = $this->get('listClassAttribute');
 		}
 		if(!empty($classes)){
 			$classes = ' class="' . join(' ', $classes) . '"';
@@ -245,7 +249,7 @@ class tx_trees_treeViewAbstract extends tx_trees_common{
 	}	
 	
 	function _renderRow($current, $components){
-		switch ($this->get('classLevel')) {
+		switch ($this->get('cssLevel')) {
 			case 'many': 
 				$classes[] = 'pos_' . $current['.position'];
 				if($current['.mountType']){
@@ -268,7 +272,7 @@ class tx_trees_treeViewAbstract extends tx_trees_common{
 		$out = '<li' . $classes . '>' . $components['text'] . '</li>' . chr(10);
 		return $out;
 	}
-	
+
 }
 
 if (defined('TYPO3_MODE') && $TYPO3_CONF_VARS[TYPO3_MODE]['XCLASS']['ext/trees/library/class.tx_trees_treeViewAbstract.php'])	{

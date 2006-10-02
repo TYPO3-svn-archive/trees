@@ -22,15 +22,11 @@
 *  This copyright notice MUST APPEAR in all copies of the script!
 ***************************************************************/
 
+require_once(t3lib_extMgm::extPath('trees', 'library/') . 'class.tx_trees_common.php');
+
 class tx_trees_nodeViewAbstract extends tx_trees_common {
 	
-	// no direct use, use setters and getters
-		
-	var $settings = array(
-		'type' => null,
-		'titleField' => null,
-		'classAttribute' => null,
-	);
+	var $requiredSettings = 'type, titleField, rowClassAttribute';
 	var $tree = null;
 	
 	//---------------------------------------------------------------------------
@@ -43,6 +39,20 @@ class tx_trees_nodeViewAbstract extends tx_trees_common {
 	
 	function setTree(&$object){
 		$this->tree =& $object;
+	}	
+
+	//---------------------------------------------------------------------------
+	// protected functions
+	//---------------------------------------------------------------------------
+
+	function _initialize(){
+		if($this->isInitialized){
+			return;
+		}
+		if(!$this->tree){
+			$this->_end('_initialize', 'Please set the tree for the node.');			
+		}
+		parent::_initialize();
 	}	
 }
 

@@ -35,6 +35,26 @@ class tx_trees_div{
 		return '<pre>' . $out .  '</pre>';
 	}
 	
+	function list2array($listString){
+		$array = array();
+		foreach(t3lib_div::trimExplode(chr(10), $listString) as $row){
+			if(!empty($row)){
+				list($key, $value) = t3lib_div::trimExplode('=', $row);
+				if(empty($key)) {
+					tx_trees_div::end('list2array', 'Empty key in given list.');
+				}
+				if($value === null) {
+					$value = '';
+				}
+				$array[$key] = $value;
+			}
+		}
+		if(empty($array)){
+			tx_trees_div::end('list2array', 'Empty list was given.');			
+		}
+		return $array;
+	}
+
 	function tt($marker = 'Timestamp', $display=false){
 		$time = tx_trees_div::_microtime();
 		$GLOBALS['tx_trees_div'][][(string) $time] = $marker;

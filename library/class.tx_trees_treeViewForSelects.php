@@ -26,85 +26,66 @@ require_once(t3lib_extMgm::extPath('trees', 'library/') . 'class.tx_trees_treeVi
 
 class tx_trees_treeViewForSelects extends tx_trees_treeViewAbstract {
 	
-	// no direct use, use setters and getters	
-	var $settings = array(
-		'classLevel' =>  'normal',  // few, normal, many
-		'listClass' => null,
-		'indentMargin' => '.',
-		'indentCharacter' => '&nbsp;.',
-		'indentPadding' => '&nbsp;',
-		'inputName' => null,
-		'inputId' => null,
-		'inputSize' => null,
-		'onChange' => '',
-		'onClick' => '',
-		'selectedValues' => array(),
-	);	
+	var $requiredSettings = 'cssLevel, listClassAttribute, indentMargin, indentCharacter, 
+	indentPadding, inputName, inputId, inputSize, onChange, onClick, selectedValues';
 	
 	//---------------------------------------------------------------------------
 	// public functions
 	//---------------------------------------------------------------------------
-
-	 
 	
-	function set($key, $value){
-		switch ($key){ 
-			case 'inputSize':
-				if(!is_integer($value)){
-					tx_trees_div::end('set', 'The inputSize must be integer.');
-				}
-			break;	
-		}			
-		parent::set($key, $value);
-	}
-	
-	function usageExample($script, $mounts){
+	function usageExample($mounts = array(0)){
+		require_once(t3lib_extMgm::extPath('trees', 'library/') . 'class.tx_trees_configurationAbstract.php');
 		require_once(t3lib_extMgm::extPath('trees', 'library/') . 'class.tx_trees_nodeModelForTables.php');
 		require_once(t3lib_extMgm::extPath('trees', 'library/') . 'class.tx_trees_treeModelAbstract.php');
 		require_once(t3lib_extMgm::extPath('trees', 'library/') . 'class.tx_trees_nodeViewAbstract.php');
+		$configuration = t3lib_div::makeInstance('tx_trees_configurationAbstract');
+		$configurationList = '
+			cssLevel			= few
+			listClassAttribute	= pageTree
+			rowClassAttribute	=
+			rootNodeType 		= pages
+			indentMargin		= .&nbsp;
+			indentCharacter		= .&nbsp;
+			indentPadding  		= &nbsp;&nbsp;
+			onChange			=
+			onClick				=
+			type				= pages
+			table 				= pages
+			fields				= title
+			idField				= uid
+			titleField			= title
+			parentTable			= pages
+			parentIdField		= pid
+			parentTableField 	=
+			orderBy				=
+		';
+		$configuration->setByList($configurationList);
+		$configuration->set('inputSize', 10);
+		$configuration->set('limit', 1000);
+		$configuration->set('selectedValues', array());	
 		foreach($mounts as $mount){
+			$configuration->set('inputId', 'tx_trees_example' . $mount);
+			$configuration->set('inputName', 'tx_trees_example' . $mount);
+			$configuration->set('rootId', $mount);		
 			$treeModel = t3lib_div::makeInstance('tx_trees_treeModelAbstract');
+			$treeModel->configure($configuration);
 			$treeView = t3lib_div::makeInstance('tx_trees_treeViewForSelects');
-			$nodeModel1 = t3lib_div::makeInstance('tx_trees_nodeModelForTables');
-			$nodeView1 = t3lib_div::makeInstance('tx_trees_nodeViewAbstract');
+			$treeView->configure($configuration);
+			$nodeModel = t3lib_div::makeInstance('tx_trees_nodeModelForTables');
+			$nodeModel->configure($configuration);
+			$nodeView = t3lib_div::makeInstance('tx_trees_nodeViewAbstract');
+			$nodeView->configure($configuration);
 			$treeView->setTreeModel($treeModel);
-			$treeModel->addNodeModel($nodeModel1);
-			$treeView->addNodeView($nodeView1);
-			$treeView->set('classLevel', 'few');
-			$treeView->set('listClass', 'pageTree');
-			$treeView->set('inputId', 'usageExample');
-			$treeView->set('inputName', 'tx_trees_treeViewForSelects[usageExample]');
-			$nodeModel1->set('table', 'pages');
-			$nodeModel1->set('parentTable', 'pages');
-			$nodeModel1->set('idField', 'uid');
-			$nodeModel1->set('parentIdField', 'pid');
-			$nodeModel1->set('fields', 'title');		
-			$nodeView1->set('type', 'pages');
-			$nodeView1->set('titleField', 'title');
-			$nodeView1->set('classAttribute', 'page');
-			$treeModel->set( 'rootNodeType', 'pages');
-			$treeModel->set('rootId', $mount);
+			$treeModel->addNodeModel($nodeModel);
+			$treeView->addNodeView($nodeView);			
 			$out .= '<p>' . $treeView->render() . '</p>';
-		}		
+		}
 		return $out;
 	}
 	
 	//---------------------------------------------------------------------------
 	// protected functions to overwrite in inherited classes
 	//---------------------------------------------------------------------------
-	
-	function _init(){
-		if($this->isInitialized){
-			return;
-		}
-		if($this->isEmpty('inputId')){
-			$this->end('_init', 'Please set the inputId');		
-		}		
-		if($this->isEmpty('inputName')){
-			$this->end('_init', 'Please set the inputName');		
-		}		
-		parent::_init();
-	}
 	
 	function _renderLevelEnd($current){	}
 	function _renderLevelBegin($current){}
@@ -127,8 +108,7 @@ class tx_trees_treeViewForSelects extends tx_trees_treeViewAbstract {
 	}	
 	
 	function _renderRow($current, $components){
-//		tx_trees_div::view($this->selectedValues);
-		$break = chr(10) . '    ';
+ 		$break = chr(10) . '    ';
 		$id = $current['.nodeType'] . '_' . $current[$current['.idField']];
 		$value = ' value="' . $id . '" ';
 		$selected = in_array($id, (array) $this->get('selectedValues')) ? ' selected="1" ' : '';
@@ -145,6 +125,22 @@ class tx_trees_treeViewForSelects extends tx_trees_treeViewAbstract {
 		 );
 		return $out;		
 	}
+
+	function _initialize(){
+		if($this->isInitialized){
+			return;
+		}
+		if(!$this->isConfigured) {
+			$this->_end('_initialize', 'Please configure the object first.');
+		}
+		if(!is_integer($this->settings['inputSize'])){
+			$this->end('_initialize', 'The inputSize must be integer.');
+		}
+		if(!is_array($this->settings['selectedValues'])){
+			$this->end('_initialize', 'selectedValues must be an array.');
+		}		
+		parent::_initialize();
+	}	
 	
 }
 

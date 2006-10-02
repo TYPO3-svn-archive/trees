@@ -25,9 +25,12 @@
 class tx_trees{	
 	
 	function selectWizard(&$input){
+		// local configuration
+		$localConfiguration = $input['parameters'];
 		
 		// load most often used classes
 		// other requiered classes must be loaded external 
+		require_once(t3lib_extMgm::extPath('trees', 'library/') . 'class.tx_trees_configuration.php');
 		require_once(t3lib_extMgm::extPath('trees', 'library/') . 'class.tx_trees_nodeModelForTables.php');
 		require_once(t3lib_extMgm::extPath('trees', 'library/') . 'class.tx_trees_treeModelAbstract.php');
 		require_once(t3lib_extMgm::extPath('trees', 'library/') . 'class.tx_trees_nodeViewAbstract.php');
@@ -43,8 +46,11 @@ class tx_trees{
 		$input['item'] = join(chr(10), $rows);
 
 		// construct
+		$localConfiguration['onClick'] = 'setFormValueFromBrowseWin(\'' . $input['itemName'] . 
+			'\', this.getAttribute(\'value\'), this.firstChild.data); return false;';
+
 		$configuration  = t3lib_div::makeInstance('tx_trees_configuration');
-		$configuration->setFocus('tx_trees->selectWizard', $input);
+		$configuration->setFocus('tx_trees->selectWizard', $localConfiguration);
 		$treeModel 	= t3lib_div::makeInstance($configuration->get('treeModelClass'));
 		$treeView 	= t3lib_div::makeInstance($configuration->get('treeViewClass'));
 		$nodeModel 	= t3lib_div::makeInstance($configuration->get('nodeModelClass'));
@@ -58,9 +64,6 @@ class tx_trees{
 		$treeModel->configure($configuration);
 		$nodeModel->configure($configuration);
 		$nodeView->configure($configuration);
-		$onClick = 'setFormValueFromBrowseWin(\'' . $input['itemName'] . 
-		'\', this.getAttribute(\'value\'), this.firstChild.data); return false;';
-		$treeView->set('onClick', $onClick);
 		
 		// render
 		$out .= $treeView->render();

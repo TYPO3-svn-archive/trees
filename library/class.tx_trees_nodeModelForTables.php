@@ -26,46 +26,22 @@ require_once(t3lib_extMgm::extPath('trees', 'library/') . 'class.tx_trees_nodeMo
 
 class tx_trees_nodeModelForTables extends tx_trees_nodeModelAbstract {
 	
-	// don't set this directly, use setter functions
-	var $settings = array(
-		'fields' => array(),
-		'idField' => null,
-		'limit' => 10000,
-		'orderBy' => '',
-		'parentIdField' => null,
-		'parentTable' => null,		// if unique parent table
-		'parentTableField' => null,	// if not unique parent table
-		'sorting' => '',
-		'type' => null,
-		'table' => null,
-	);
+	// Order matters: fields MUST come after parentIdField, parentTableField 
+	// to include them automatically in the set function
+	var $requiredSettings = 'table, idField, parentIdField, parentTable, 
+		parentTableField, fields, limit, orderBy';  
 	
 	function tx_trees_nodeModelForTables(){}
-	
-	//---------------------------------------------------------------------------
-	// setters
-	//---------------------------------------------------------------------------
-	
-	function set($key, $value){
-		switch($key){
-			case 'fields': 
-				if(!is_array($value)) {
-					$value =  array_unique(t3lib_div::trimExplode(',',$value));
-				}				
-			break;
-		}		
-		parent::set($key, $value);
-	}
 	
 	//---------------------------------------------------------------------------
 	// getters
 	//---------------------------------------------------------------------------
 
 	function findAsChildren($parentNodeType, $parentId){
+		$this->_initialize();
 		if(empty($parentNodeType)) {
-			$this->end('findAsChildren', 'Empty parentNodeType.');
+			$this->_end('findAsChildren', 'Empty parentNodeType.');
 		}
-		$this->_init();
 		$return = array();
 		$this->_findTableArray(&$tableArray);
 		$table = $this->get('table');
@@ -81,7 +57,7 @@ class tx_trees_nodeModelForTables extends tx_trees_nodeModelAbstract {
 	}
 
 	function findById($id){
-		$this->_init();
+		$this->_initialize();
 		$return = array(); 
 		$this->_findTableArray(&$tableArray);
 		if(!empty($tableArray[$id])){   // Root ID => 0 is empty
@@ -105,74 +81,71 @@ class tx_trees_nodeModelForTables extends tx_trees_nodeModelAbstract {
 	// protected functions
 	//---------------------------------------------------------------------------
 	
-	function _findTableArray(&$array){
-		$array =& $this->tree->loadFromSingleton($this->get('table'));
-		if($array === null){
-			$array = array();
-			$this->_loadFromDatabase($array);
-			$this->tree->storeAsSingleton($this->get('table'), $array);
-		}
-	}
-	
 	function _buildQuery(){
-		$deleteClause = ' ' . t3lib_BEfunc::deleteClause($this->get('table')) . ' ';
-		$fields = join(',', $this->get('fields'));
-		$table = $this->get('table');
+		$deleteClause = ' ' . t3lib_BEfunc::deleteClause($this->settings['table']) . ' ';
+		$fields = join(',', $this->settings['fields']);
+		$table = $this->settings['table'];
 		$where = '1=1 ' . $deleteClause;
 		$groupBy;
-		$orderBy = $this->get('orderBy');
-		$limit = $this->get('limit');
+		$orderBy = $this->settings['orderBy'];
+		$limit = $this->settings['limit'];
 		$query = $GLOBALS['TYPO3_DB']->SELECTquery($fields, $table, $where, $groupBy, $orderBy, $limit);
 		return $query;
 	}
+
+	function _findTableArray(&$array){
+		$array =& $this->tree->loadFromSingleton($this->settings['table']);
+		if($array === null){
+			$array = array();
+			$this->_loadFromDatabase($array);
+			$this->tree->storeAsSingleton($this->settings['table'], $array);
+		}
+	}
 	
-	function _init(){
+	function _initialize(){
 		if($this->isInitialized){
 			return;
 		}
-		if($this->isEmpty('table')){
-			$this->end('_init', 'Table is not set');
+		if(!$this->isConfigured) {
+			$this->_end('_initialize', 'Please configure the object first.');
 		}
-		if($this->isEmpty('parentTable') && $this->isEmpty('parentTableField')){
-			$this->end('_init', 'Set either the parent table (if unique) or the the parent table field.');
+		if(!is_integer($this->settings['limit'])){
+				$this->_end('_initialize', 'The limit must be integer.');
 		}
-		if(!$this->isEmpty('parentTable') && !$this->isEmpty('parentTableField')){
-			$this->end('_init', 'Do not set parentTable and parantTableField at the same time.');
-		}
-		if($this->isEmpty('parentIdField')){
-			$this->end('_init', 'parentIdField is not set');
-		}
-		if($this->isEmpty('idField')){
-			$this->end('_init', 'idField is not set');
-		}
-		if(count($this->get('fields')) == 0) {
-			$this->set('fields', array('*'));
+		// evaluate the fields array for the query
+		$fields = $this->settings['fields'];
+		if($fields == '*'){
+			$fields = array('*');
 		} else {
-			if($this->get('parentTableField')){
-				array_unshift($this->get('fields'), $this->get('parentTableField'));
+			if(!is_array($fields)) {
+				$fields =  t3lib_div::trimExplode(',',$fields);
 			}
-			array_unshift($this->get('fields'), $this->get('idField'), $this->get('parentIdField'));
-		}
-		$this->set('fields', array_unique((array) $this->get('fields')));
-		$this->set('type',  'Just a dummy to satisfy the checks of parent::_init(). We use $this->settings[table] instead.');
-		parent::_init();
+			foreach(array('idField', 'parentTableField', 'parentIdField') as $field){
+				if($this->settings[$field]){
+					$fields[] = $this->settings[$field];
+				}
+			}
+			$fields = array_unique($fields);
+		} 
+		$this->settings['fields'] = $fields;
+		parent::_initialize();
 	}
-	
+		
 	function _loadFromDatabase(&$array){
-		$idField = $this->get('idField');
-		$parentTable = $this->get('parentTable');
-		$parentIdField = $this->get('parentIdField');
-		$parentTableField = $this->get('parentTableField');
+		$idField = $this->settings['idField'];
+		$parentTable = $this->settings['parentTable'];
+		$parentIdField = $this->settings['parentIdField'];
+		$parentTableField = $this->settings['parentTableField'];
 		$query = $this->_buildQuery();
 		$result = $GLOBALS['TYPO3_DB']->sql(TYPO3_db, $query);
-		$this->tt('Pre query "' . $this->get('table') .'"');
+		$this->_tt('Pre query "' . $this->settings['table'] .'"');
 		while($row = $GLOBALS['TYPO3_DB']->sql_fetch_assoc($result)){
 			$tempParentTable = $parentTable	? $parentTable : $row[$parentTableField];
 			$array['.parentIndex'][$tempParentTable][$row[$parentIdField]][$row[$idField]] = $row[$idField];
 			$array[$row[$idField]] = $row;
 		}
-		$this->tt('Post query "' . $this->get('table') .'"');
-	}
+		$this->_tt('Post query "' . $this->settings['table'] .'"');
+	}	
 	
 }
 if (defined('TYPO3_MODE') && $TYPO3_CONF_VARS[TYPO3_MODE]['XCLASS']['ext/trees/library/class.tx_trees_nodeModelForTables.php'])	{

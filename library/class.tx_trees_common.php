@@ -25,53 +25,70 @@
 
 class tx_trees_common{
 	
+	var $requiredSettings; // comma separated list of keys as a string
 	var $settings = array();
+	var $isConfigured = false;
+	var $isInitialized = false;
 	
+	//--------------------------------------------------------
+	// public functions
+	//--------------------------------------------------------
+
 	function configure($configurationObject){
-		foreach(array_keys($this->settings) as $key){
+		$required = t3lib_div::trimExplode(',', $this->requiredSettings);
+		foreach($required as $key){
 			$value = $configurationObject->get($key);
 			if(isset($value)) {
-				$this->set($key, $value);
+				$this->settings[$key] = $value;  // no checks and evaluations here, do them all in _initialize()
+			} else {
+				$this->_end('configure', 'Missing configuration for ' . $key);				
 			}
 		}
+		$this->isConfigured = true;
 	}
 	
 	function get($key){
 		if(in_array($key, array_keys($this->settings))){
 			return $this->settings[$key];
 		} else {
-			$this->end('set', 'Invalid key ' . $key);
+			$this->_end('get', 'Invalid key ' . $key);
 		}
 	}
 
-	function dump($par){
+	//--------------------------------------------------------
+	// protected functions
+	//--------------------------------------------------------
+
+	function _dump($par){
 		return	tx_trees_div::dump($par);
 	}
 	
-	function isEmpty($key){				
+	function _empty($key){				
 		return empty($this->settings[$key]);
 	}
 	
-	function end($function, $message){
+	function _end($function, $message){
 		tx_trees_div::end($function, $message);
 	}
-
-	function set($key, $value){
-		if(in_array($key, array_keys($this->settings))){
-			$this->settings[$key] = $value;
-		} else {
-			$this->end('set', 'Invalid key ' . $key);
+	
+	function _initialize(){
+		if($this->isInitialized){
+			return;
 		}
+		if(!$this->isConfigured) {
+			$this->_end('_initialize', 'Please configure the object first.');
+		}
+		// do initilizations here in derived classes
+		$this->isInitialized = true;
 	}
-
-	function tt($marker = 'Timestamp', $display=false){
+	
+	function _tt($marker = 'Timestamp', $display=false){
 		return tx_trees_div::tt($marker, $display);
 	}
 	
-	function view($par){
+	function _view($par){
 		tx_trees_div::view($par);
-	}
-	
+	}	
 }
 
 if (defined('TYPO3_MODE') && $TYPO3_CONF_VARS[TYPO3_MODE]['XCLASS']['ext/trees/library/class.tx_trees_common.php'])	{

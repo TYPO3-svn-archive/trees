@@ -22,12 +22,12 @@
 *  This copyright notice MUST APPEAR in all copies of the script!
 ***************************************************************/
 
+require_once(t3lib_extMgm::extPath('trees', 'library/') . 'class.tx_trees_common.php');
+
 class tx_trees_nodeModelAbstract extends tx_trees_common{
 	
-	// use setters to set this
 	var $tree = null;
-	var $isInitialized = false;
-	var $settings = array('type' => null);	
+	var $requiredSettings = 'type';
 	
 	//---------------------------------------------------------------------------
 	// public functions
@@ -41,27 +41,22 @@ class tx_trees_nodeModelAbstract extends tx_trees_common{
 	}
 	
 	function tx_trees_nodeModelAbstract(){
-			tx_trees_div::end('Constructur', ' This is an abstract class. Please use derived classes.');
+			$this->_end('Constructur', ' This is an abstract class. Please use derived classes.');
 	}	
 	
 	//---------------------------------------------------------------------------
 	// protected functions
 	//---------------------------------------------------------------------------
-	
-	function _init(){				
+
+	function _initialize(){
 		if($this->isInitialized){
-			tx_trees_div::view($this->isInitialized);
 			return;
 		}
-		if(empty($this->settings['type'])){
-			tx_trees_div::end('_init', 'No type has been set.');
+		if(!$this->tree){
+			$this->_end('_initialize', 'Please set the tree for the node.');			
 		}
-		if(empty($this->tree)){
-			tx_trees_div::end('_init', 'The parent object $tree is not set.');
-		}
-		$this->isInitialized = true;
-	}
-	
+		parent::_initialize();
+	}	
 }
 if (defined('TYPO3_MODE') && $TYPO3_CONF_VARS[TYPO3_MODE]['XCLASS']['ext/trees/library/class.tx_trees_nodeModelAbstract.php'])	{
 	include_once($TYPO3_CONF_VARS[TYPO3_MODE]['XCLASS']['ext/trees/library/class.tx_trees_nodeModelAbstract.php']);

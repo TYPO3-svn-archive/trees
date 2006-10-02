@@ -2,12 +2,15 @@
 if (!defined ('TYPO3_MODE'))     die ('Access denied.');
 
 //------------------------------------------------------------------------------------- 
-// Tutor Module
+// Regularly used classes
 //------------------------------------------------------------------------------------- 
 
 require_once(t3lib_extMgm::extPath('trees', 'library/') . 'class.tx_trees_div.php');
-require_once(t3lib_extMgm::extPath('trees', 'library/') . 'class.tx_trees_common.php');
-require_once(t3lib_extMgm::extPath('trees', 'library/') . 'class.tx_trees_configuration.php');
+
+//------------------------------------------------------------------------------------- 
+// Tutor Module
+//------------------------------------------------------------------------------------- 
+
 if (TYPO3_MODE=="BE")	{	
 	t3lib_extMgm::addModule('help','txtreesDemos','',t3lib_extMgm::extPath($_EXTKEY) . 'demos/trees/');
 }
