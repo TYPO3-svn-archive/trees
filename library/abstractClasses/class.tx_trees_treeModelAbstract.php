@@ -22,9 +22,9 @@
 *  This copyright notice MUST APPEAR in all copies of the script!
 ***************************************************************/
 
-require_once(t3lib_extMgm::extPath('trees', 'library/') . 'class.tx_trees_common.php');
+require_once(t3lib_extMgm::extPath('trees', 'library/abstractClasses/') . 'class.tx_trees_commonAbstract.php');
 
-class tx_trees_treeModelAbstract  extends tx_trees_common{
+class tx_trees_treeModelAbstract  extends tx_trees_commonAbstract{
 		
 	var $requiredSettings = 'rootNodeType, rootId';
 	var $treeArray = array();
@@ -162,8 +162,8 @@ class tx_trees_treeModelAbstract  extends tx_trees_common{
 	}
 	
 }
-if (defined('TYPO3_MODE') && $TYPO3_CONF_VARS[TYPO3_MODE]['XCLASS']['ext/trees/library/class.tx_trees_treeModelAbstract.php'])	{
-	include_once($TYPO3_CONF_VARS[TYPO3_MODE]['XCLASS']['ext/trees/library/class.tx_trees_treeModelAbstract.php']);
+if (defined('TYPO3_MODE') && $TYPO3_CONF_VARS[TYPO3_MODE]['XCLASS']['ext/trees/library/abstractClasses/class.tx_trees_treeModelAbstract.php'])	{
+	include_once($TYPO3_CONF_VARS[TYPO3_MODE]['XCLASS']['ext/trees/library/abstractClasses/class.tx_trees_treeModelAbstract.php']);
 }
 
 ?>

@@ -22,9 +22,9 @@
 *  This copyright notice MUST APPEAR in all copies of the script!
 ***************************************************************/
 
-require_once(t3lib_extMgm::extPath('trees', 'library/') . 'class.tx_trees_common.php');
+require_once(t3lib_extMgm::extPath('trees', 'library/abstractClasses/') . 'class.tx_trees_commonAbstract.php');
 
-class tx_trees_treeViewAbstract extends tx_trees_common{
+class tx_trees_treeViewAbstract extends tx_trees_commonAbstract{
 	
 	var $requiredSettings = 'cssLevel, listClassAttribute';
 	var $treeModel = null;
@@ -58,7 +58,7 @@ class tx_trees_treeViewAbstract extends tx_trees_common{
 		require_once(t3lib_extMgm::extPath('trees', 'library/') . 'class.tx_trees_defaultPageTreeConfiguration.php');
 		require_once(t3lib_extMgm::extPath('trees', 'library/') . 'class.tx_trees_nodeModelForTables.php');
 		require_once(t3lib_extMgm::extPath('trees', 'library/') . 'class.tx_trees_treeModelForPageTree.php');
-		require_once(t3lib_extMgm::extPath('trees', 'library/') . 'class.tx_trees_nodeViewAbstract.php');
+		require_once(t3lib_extMgm::extPath('trees', 'library/abstractClasses/') . 'class.tx_trees_nodeViewAbstract.php');
 		$configuration = t3lib_div::makeInstance('tx_trees_defaultPageTreeConfiguration');
 		$treeModel = t3lib_div::makeInstance('tx_trees_treeModelForPageTree');
 		$treeView = t3lib_div::makeInstance('tx_trees_treeViewAbstract');
@@ -78,10 +78,10 @@ class tx_trees_treeViewAbstract extends tx_trees_common{
 	}
 
 	function usageExampleMultiTypes($mounts){
-		require_once(t3lib_extMgm::extPath('trees', 'library/') . 'class.tx_trees_configurationAbstract.php');
+		require_once(t3lib_extMgm::extPath('trees', 'library/abstractClasses/') . 'class.tx_trees_configurationAbstract.php');
 		require_once(t3lib_extMgm::extPath('trees', 'library/') . 'class.tx_trees_nodeModelForTables.php');
-		require_once(t3lib_extMgm::extPath('trees', 'library/') . 'class.tx_trees_treeModelAbstract.php');
-		require_once(t3lib_extMgm::extPath('trees', 'library/') . 'class.tx_trees_nodeViewAbstract.php');
+		require_once(t3lib_extMgm::extPath('trees', 'library/abstractClasses/') . 'class.tx_trees_treeModelAbstract.php');
+		require_once(t3lib_extMgm::extPath('trees', 'library/abstractClasses/') . 'class.tx_trees_nodeViewAbstract.php');
 		$treeModelConfiguration = t3lib_div::makeInstance('tx_trees_configurationAbstract');
 		$treeViewConfiguration = t3lib_div::makeInstance('tx_trees_configurationAbstract');
 		$nodeModelConfiguration = t3lib_div::makeInstance('tx_trees_configurationAbstract');
@@ -275,8 +275,8 @@ class tx_trees_treeViewAbstract extends tx_trees_common{
 
 }
 
-if (defined('TYPO3_MODE') && $TYPO3_CONF_VARS[TYPO3_MODE]['XCLASS']['ext/trees/library/class.tx_trees_treeViewAbstract.php'])	{
-	include_once($TYPO3_CONF_VARS[TYPO3_MODE]['XCLASS']['ext/trees/library/class.tx_trees_treeViewAbstract.php']);
+if (defined('TYPO3_MODE') && $TYPO3_CONF_VARS[TYPO3_MODE]['XCLASS']['ext/trees/library/abstractClasses/class.tx_trees_treeViewAbstract.php'])	{
+	include_once($TYPO3_CONF_VARS[TYPO3_MODE]['XCLASS']['ext/trees/library/abstractClasses/class.tx_trees_treeViewAbstract.php']);
 }
 
 ?>

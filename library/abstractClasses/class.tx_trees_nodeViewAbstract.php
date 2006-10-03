@@ -22,28 +22,25 @@
 *  This copyright notice MUST APPEAR in all copies of the script!
 ***************************************************************/
 
-require_once(t3lib_extMgm::extPath('trees', 'library/') . 'class.tx_trees_common.php');
+require_once(t3lib_extMgm::extPath('trees', 'library/abstractClasses/') . 'class.tx_trees_commonAbstract.php');
 
-class tx_trees_nodeModelAbstract extends tx_trees_common{
+class tx_trees_nodeViewAbstract extends tx_trees_commonAbstract {
 	
+	var $requiredSettings = 'type, titleField, rowClassAttribute';
 	var $tree = null;
-	var $requiredSettings = 'type';
 	
 	//---------------------------------------------------------------------------
 	// public functions
 	//---------------------------------------------------------------------------
-	function findAsChildren($parentNodeType, $parentId){ }
 
-	function findById($id){	}
-
-	function setTree(&$object){
-		$this->tree =& $object;
+	function renderText($currentArray){
+		return $currentArray[$this->get('titleField')];
 	}
 	
-	function tx_trees_nodeModelAbstract(){
-			$this->_end('Constructur', ' This is an abstract class. Please use derived classes.');
+	function setTree(&$object){
+		$this->tree =& $object;
 	}	
-	
+
 	//---------------------------------------------------------------------------
 	// protected functions
 	//---------------------------------------------------------------------------
@@ -58,8 +55,9 @@ class tx_trees_nodeModelAbstract extends tx_trees_common{
 		parent::_initialize();
 	}	
 }
-if (defined('TYPO3_MODE') && $TYPO3_CONF_VARS[TYPO3_MODE]['XCLASS']['ext/trees/library/class.tx_trees_nodeModelAbstract.php'])	{
-	include_once($TYPO3_CONF_VARS[TYPO3_MODE]['XCLASS']['ext/trees/library/class.tx_trees_nodeModelAbstract.php']);
+
+if (defined('TYPO3_MODE') && $TYPO3_CONF_VARS[TYPO3_MODE]['XCLASS']['ext/trees/library/abstractClasses/class.tx_trees_nodeViewAbstract.php'])	{
+	include_once($TYPO3_CONF_VARS[TYPO3_MODE]['XCLASS']['ext/trees/library/abstractClasses/class.tx_trees_nodeViewAbstract.php']);
 }
 
 ?>

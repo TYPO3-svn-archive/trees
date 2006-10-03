@@ -22,7 +22,7 @@
 *  This copyright notice MUST APPEAR in all copies of the script!
 ***************************************************************/
 
-require_once(t3lib_extMgm::extPath('trees', 'library/') . 'class.tx_trees_treeViewAbstract.php');
+require_once(t3lib_extMgm::extPath('trees', 'library/abstractClasses/') . 'class.tx_trees_treeViewAbstract.php');
 
 class tx_trees_treeViewForSelects extends tx_trees_treeViewAbstract {
 	
@@ -34,10 +34,10 @@ class tx_trees_treeViewForSelects extends tx_trees_treeViewAbstract {
 	//---------------------------------------------------------------------------
 	
 	function usageExample($mounts = array(0)){
-		require_once(t3lib_extMgm::extPath('trees', 'library/') . 'class.tx_trees_configurationAbstract.php');
+		require_once(t3lib_extMgm::extPath('trees', 'library/abstractClasses/') . 'class.tx_trees_configurationAbstract.php');
 		require_once(t3lib_extMgm::extPath('trees', 'library/') . 'class.tx_trees_nodeModelForTables.php');
-		require_once(t3lib_extMgm::extPath('trees', 'library/') . 'class.tx_trees_treeModelAbstract.php');
-		require_once(t3lib_extMgm::extPath('trees', 'library/') . 'class.tx_trees_nodeViewAbstract.php');
+		require_once(t3lib_extMgm::extPath('trees', 'library/abstractClasses/') . 'class.tx_trees_treeModelAbstract.php');
+		require_once(t3lib_extMgm::extPath('trees', 'library/abstractClasses/') . 'class.tx_trees_nodeViewAbstract.php');
 		$configuration = t3lib_div::makeInstance('tx_trees_configurationAbstract');
 		$configurationList = '
 			cssLevel			= few

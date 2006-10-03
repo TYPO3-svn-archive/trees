@@ -22,7 +22,7 @@
 *  This copyright notice MUST APPEAR in all copies of the script!
 ***************************************************************/
 
-require_once(t3lib_extMgm::extPath('trees', 'library/') . 'class.tx_trees_treeModelAbstract.php');
+require_once(t3lib_extMgm::extPath('trees', 'library/abstractClasses/') . 'class.tx_trees_treeModelAbstract.php');
 
 class tx_trees_treeModelForPageTree extends tx_trees_treeModelAbstract{
 	
@@ -70,7 +70,7 @@ class tx_trees_treeModelForPageTree extends tx_trees_treeModelAbstract{
 	}	
 
 	function usageExampleDumpWithTt_content($mounts){
-		require_once(t3lib_extMgm::extPath('trees', 'library/') . 'class.tx_trees_configurationAbstract.php');
+		require_once(t3lib_extMgm::extPath('trees', 'library/abstractClasses/') . 'class.tx_trees_configurationAbstract.php');
 		require_once(t3lib_extMgm::extPath('trees', 'library/') . 'class.tx_trees_nodeModelForTables.php');
 		$treeModel = t3lib_div::makeInstance('tx_trees_treeModelForPageTree');
 		$nodeModel = t3lib_div::makeInstance('tx_trees_nodeModelForTables');
