@@ -12,7 +12,7 @@ require_once(t3lib_extMgm::extPath('trees', 'library/') . 'class.tx_trees_div.ph
 //------------------------------------------------------------------------------------- 
 
 if (TYPO3_MODE=="BE")	{	
-	t3lib_extMgm::addModule('help','txtreesDemos','',t3lib_extMgm::extPath($_EXTKEY) . 'demos/trees/');
+	t3lib_extMgm::addModule('help','txtreesTreesDemo','',t3lib_extMgm::extPath($_EXTKEY) . 'treesDemoModule');
 }
 
 //------------------------------------------------------------------------------------- 
