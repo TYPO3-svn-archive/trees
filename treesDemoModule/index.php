@@ -30,7 +30,7 @@ require_once($BACK_PATH.'init.php');
 require_once($BACK_PATH.'template.php');
 require_once(PATH_t3lib.'class.t3lib_scbase.php');
 
-$LANG->includeLLFile('EXT:trees/demos/trees/locallang.xml');
+$LANG->includeLLFile('EXT:trees/treesDemoModule/locallang.xml');
 $BE_USER->modAccess($MCONF,1);	// This checks permissions and exits if the users has no permission for entry.
 	// DEFAULT initialization of a module [END]
 
@@ -41,7 +41,7 @@ $BE_USER->modAccess($MCONF,1);	// This checks permissions and exits if the users
  * @package	TYPO3
  * @subpackage	tx_trees
  */
-class  tx_trees_demos_trees extends t3lib_SCbase {
+class  tx_trees_treesDemoModule extends t3lib_SCbase {
 	var $pageinfo;
 	var $errors = array();
 
@@ -131,21 +131,21 @@ class  tx_trees_demos_trees extends t3lib_SCbase {
 	}
 	
 	function t3lib_treeviewController()	{
-		require_once(t3lib_extMgm::extPath('trees', 'demos/trees/') . 'class.tx_trees_demos_trees_t3lib_treeview.php');
+		require_once(t3lib_extMgm::extPath('trees', 'library/') . 'class.tx_trees_t3libTreeViewDemo.php');
 		if($this->MOD_SETTINGS['webmounts'] != 'none') {
 			$mounts = ($this->MOD_SETTINGS['webmounts'] == 'all') 
 				? $GLOBALS['WEBMOUNTS'] : array($this->MOD_SETTINGS['webmounts']) ;
-			$out .= tx_trees_demos_trees_t3lib_treeview::example($mounts);
+			$out .= tx_trees_t3libTreeViewDemo::example($mounts);
 		}
 		return $out;
 	}
 	
 	function t3lib_browsetreeController()	{
-		require_once(t3lib_extMgm::extPath('trees', 'demos/trees/') . 'class.tx_trees_demos_trees_t3lib_browsetree.php');
+		require_once(t3lib_extMgm::extPath('trees', 'library/') . 'class.tx_trees_t3libBrowseTreeDemo.php');
 		if($this->MOD_SETTINGS['webmounts'] != 'none') {
 			$mounts = ($this->MOD_SETTINGS['webmounts'] == 'all') 
 				? $GLOBALS['WEBMOUNTS'] : array($this->MOD_SETTINGS['webmounts']) ;
-			$out .= tx_trees_demos_trees_t3lib_browsetree::example($mounts);
+			$out .= tx_trees_t3libBrowseTreeDemo::example($mounts);
 		}
 		return $out;
 	}
@@ -337,10 +337,10 @@ class  tx_trees_demos_trees extends t3lib_SCbase {
 }
 
 // Require class extensions
-if (defined('TYPO3_MODE') && $TYPO3_CONF_VARS[TYPO3_MODE]['XCLASS']['ext/trees/demos/trees/index.php'])	{
-	include_once($TYPO3_CONF_VARS[TYPO3_MODE]['XCLASS']['ext/trees/demos/trees/index.php']);
+if (defined('TYPO3_MODE') && $TYPO3_CONF_VARS[TYPO3_MODE]['XCLASS']['ext/trees/treesDemoModule/index.php'])	{
+	include_once($TYPO3_CONF_VARS[TYPO3_MODE]['XCLASS']['ext/trees/treesDemoModule/index.php']);
 }
 // Run
-$obj = t3lib_div::makeInstance('tx_trees_demos_trees');
+$obj = t3lib_div::makeInstance('tx_trees_treesDemoModule');
 $obj->main();
 ?>

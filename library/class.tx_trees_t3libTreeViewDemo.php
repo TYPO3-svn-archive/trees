@@ -22,43 +22,35 @@
 *  This copyright notice MUST APPEAR in all copies of the script!
 ***************************************************************/
 
-require_once(PATH_t3lib.'class.t3lib_browsetree.php');
+require_once(PATH_t3lib.'class.t3lib_treeview.php');
 
-class tx_trees_demos_trees_t3lib_browsetree extends t3lib_browsetree{
+class tx_trees_t3libTreeViewDemo extends t3lib_treeview{
 
-	function tx_trees_demos_trees_t3lib_browsetree() {
-		$this->init();
+	function tx_trees_t3libTreeViewDemo(){
+		$this->init();		
 	}
 	
 	function init(){
-		parent::init();
+		$this->table = 'pages';
+		parent::init();		
+	}
+	
+	function getResult(){
+		return $this->getBrowsableTree();
 	}
 
-	/*************************************************
-	* Example (embedded teaching function)
-	*
-	* simply call
-	* $out = tx_tutor_t3lib_browsetree::staticExample('index.php');
-	*
-	* This static function creates an instance of
-	* the class itself and runs a possible usage.
-	*
-	* @return string
-	*/
-	
 	function example($webmounts = 0){
-		$object = t3lib_div::makeInstance('tx_trees_demos_trees_t3lib_browsetree');
+		$object = t3lib_div::makeInstance('tx_trees_t3libTreeViewDemo');
 		$object->thisScript = $thisScript;
+		$object->expandAll = 1;
 		$object->MOUNTS = $webmounts;
-		return $object->getBrowsableTree();
+		return $object->getResult();
 	}
-
 	
 }
 
-if (defined('TYPO3_MODE') && $TYPO3_CONF_VARS[TYPO3_MODE]['XCLASS']['ext/trees/demos/trees/class.tx_trees_demos_trees_t3lib_browsetree.php'])	{
-	include_once($TYPO3_CONF_VARS[TYPO3_MODE]['XCLASS']['ext/trees/demos/trees/class.tx_trees_demos_trees_t3lib_browsetree.php']);
+if (defined('TYPO3_MODE') && $TYPO3_CONF_VARS[TYPO3_MODE]['XCLASS']['ext/trees/treesDemoModule/class.tx_trees_t3libTreeViewDemo.php'])	{
+	include_once($TYPO3_CONF_VARS[TYPO3_MODE]['XCLASS']['ext/trees/treesDemoModule/class.tx_trees_t3libTreeViewDemo.php']);
 }
-
 
 ?>
