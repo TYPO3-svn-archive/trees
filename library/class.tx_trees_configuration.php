@@ -35,6 +35,15 @@ class tx_trees_configuration extends tx_trees_configurationAbstract {
 	// Public functions
 	//--------------------------------------------------------------------------
 
+	function get($key){
+		$method = $this->currentFocusMethod;
+		if(method_exists($this, $method)){
+			return $this->$method($key);			
+		}else{
+			tx_trees_div::end('get', 'Please set a valid focus with the setFocus(...) method first.');
+		}		
+	}
+	
 	function setFocus($classMethod, $localConfiguration = array()){
 		$method = '_' . str_replace('->', '__', $classMethod) . 'Get';
 		if(method_exists($this, $method)){
@@ -46,14 +55,7 @@ class tx_trees_configuration extends tx_trees_configurationAbstract {
 		}
 	}
 	
-	function get($key){
-		$method = $this->currentFocusMethod;
-		if(method_exists($this, $method)){
-			return $this->$method($key);			
-		}else{
-			tx_trees_div::end('get', 'Please set a valid focus with the setFocus(...) method first.');
-		}		
-	}
+	function tx_trees_configuration(){}
 	
 	//--------------------------------------------------------------------------
 	// Protected functions
@@ -61,11 +63,16 @@ class tx_trees_configuration extends tx_trees_configurationAbstract {
  
 	function _tx_trees__selectWizardGet($key){
 		if(empty($this->currentConfiguration)) {
+			// load classes
+			require_once(t3lib_extMgm::extPath('trees', 'library/') . 'class.tx_trees_nodeModelForTables.php');
+			require_once(t3lib_extMgm::extPath('trees', 'library/') . 'class.tx_trees_genericTreeModel.php');
+			require_once(t3lib_extMgm::extPath('trees', 'library/') . 'class.tx_trees_nodeViewForSelects.php');
+			require_once(t3lib_extMgm::extPath('trees', 'library/') . 'class.tx_trees_treeViewForSelects.php');
 			// get defaults
 			$defaultsList = '
 				nodeModelClass 		= tx_trees_nodeModelForTables 
-				nodeViewClass 		= tx_trees_nodeViewAbstract 
-				treeModelClass 		= tx_trees_treeModelAbstract 
+				nodeViewClass 		= tx_trees_nodeViewForSelects 
+				treeModelClass 		= tx_trees_genericTreeModel
 				treeViewClass 		= tx_trees_treeViewForSelects 
 				cssLevel			= few
 				listClassAttribute	= pageTree
@@ -73,7 +80,7 @@ class tx_trees_configuration extends tx_trees_configurationAbstract {
 				rootNodeType 		= pages
 				indentMargin		= .&nbsp;
 				indentCharacter		= .&nbsp;
-				indentPadding  		= &nbsp;&nbsp;
+				indentPadding  		= &nbsp; 
 				onChange			=
 				onClick				=
 				type				= pages

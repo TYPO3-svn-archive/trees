@@ -25,7 +25,7 @@
 class tx_trees_div{	
 
 	function end($function, $message){
-			die(get_class($this) . '->' . $function . '(): ' . $message );		
+			die(get_class($this) . ' [or an ancester of it ... ]->' . $function . '(): ' . $message );		
 	}
 
 	function dump($par){
@@ -72,7 +72,7 @@ class tx_trees_div{
 			} else {
 				$percent = '--';
 			}
-			$last = sprintf('<p><span style="display:block; width:20em; float:left;">%s :</span> %01.2f (%s %%)</p>', 
+			$last = sprintf('<p><span style="display:block; width:20em; float:left;">%s :</span> %03d msec (%s %%)</p>', 
 							$marker, $duration, $percent);		
 			$out .= $last;
 		}
@@ -87,8 +87,8 @@ class tx_trees_div{
 	}
 	
 	function _microtime(){
-	   list($msec, $sec) = explode(' ', microtime());
-	   return ((float)$sec + (float)$msec);
+		list($msec, $sec) = explode(' ', microtime());
+		return 1000 * ((float)substr($sec,-4) + (float)$msec);
 	}
 	
 }

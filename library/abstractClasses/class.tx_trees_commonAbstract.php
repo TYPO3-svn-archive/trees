@@ -55,6 +55,10 @@ class tx_trees_commonAbstract{
 		}
 	}
 
+	function tx_trees_commonAbstract(){
+		tx_trees_div::end('tx_trees_commonAbstract', 'This is an abstract class. Please use a derived class.');
+	}
+		
 	//--------------------------------------------------------
 	// protected functions
 	//--------------------------------------------------------

@@ -26,7 +26,14 @@
 class tx_trees_configurationAbstract{
 	
 	var $currentConfiguration = array();
-		
+	
+	function get($key){
+		if(empty($key)){
+			tx_trees_div::end('get', 'Please give a valid key. '); 			
+		}
+		return $this->currentConfiguration[$key];
+	}
+	
 	function set($key, $value){
 		if(empty($key)){
 			tx_trees_div::end('set', 'Please give a key.'); 			
@@ -37,13 +44,6 @@ class tx_trees_configurationAbstract{
 		$this->currentConfiguration[$key] = $value;
 	}
 
-	function get($key){
-		if(empty($key)){
-			tx_trees_div::end('get', 'Please give a valid key. '); 			
-		}
-		return $this->currentConfiguration[$key];
-	}
-	
 	function setByArray($array){
 		foreach($array as $key => $value){
 			$this->set($key, $value);
@@ -53,6 +53,11 @@ class tx_trees_configurationAbstract{
 	function setByList($string){
 			return $this->setByArray(tx_trees_div::list2array($string));
 	}
+	
+	function tx_trees_configurationAbstract(){
+		tx_trees_div::end('tx_trees_configurationAbstract', 'This is an abstract class. Please use a derived class, i.e. tx_trees_genericConfiguration.');
+	}
+		
 }
 
 if (defined('TYPO3_MODE') && $TYPO3_CONF_VARS[TYPO3_MODE]['XCLASS']['ext/trees/library/abstractClasses/class.tx_trees_configurationAbstract.php'])	{

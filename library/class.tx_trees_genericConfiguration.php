@@ -24,45 +24,14 @@
 
 require_once(t3lib_extMgm::extPath('trees', 'library/abstractClasses/') . 'class.tx_trees_configurationAbstract.php');
 
-class tx_trees_defaultPageTreeConfiguration extends tx_trees_configurationAbstract{
-	
-	var $isInitialized = false;
-	
-	function tx_trees_defaultPageTreeConfiguration(){}
-	
-	function get($key){
-		if(!$this->isInitialized){
-			$this->_initialize();
-		}
-		return $this->currentConfiguration[$key];
-	}
-	
-	function _initialize(){
-		$configurationList = '
-			emptyTitle 			= [no title]
-			cssLevel 			= few
-			listClassAttribute	= pageTree
-			rowClassAttribute	= 			
-			titleField			= title
-			rootNodeType 		= pages
-			rootId				= 0
-			type				= pages
-			table				= pages		
-			fields				= title	
-			idField				= uid
-			parentIdField		= pid
-			parentTable			= pages
-			parentTableField	=
-			orderBy				=	
-		';
-		$this->setByList($configurationList);
-		$this->set('limit', 1000);
-		$this->isInitialized = true;
-	}
+class tx_trees_genericConfiguration extends tx_trees_configurationAbstract{
+
+	function tx_trees_genericConfiguration(){}
 	
 }
 
-if (defined('TYPO3_MODE') && $TYPO3_CONF_VARS[TYPO3_MODE]['XCLASS']['ext/trees/library/class.tx_trees_defaultPageTreeConfiguration.php'])	{
-	include_once($TYPO3_CONF_VARS[TYPO3_MODE]['XCLASS']['ext/trees/library/class.tx_trees_defaultPageTreeConfiguration.php']);
+if (defined('TYPO3_MODE') && $TYPO3_CONF_VARS[TYPO3_MODE]['XCLASS']['ext/trees/library/class.tx_trees_genericConfiguration.php'])	{
+	include_once($TYPO3_CONF_VARS[TYPO3_MODE]['XCLASS']['ext/trees/library/class.tx_trees_genericConfiguration.php']);
 }
+
 ?>

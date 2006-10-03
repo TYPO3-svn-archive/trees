@@ -40,6 +40,8 @@ class tx_trees_treeModelForPageTree extends tx_trees_treeModelAbstract{
 		$this->mounts[] = array('mountType' => $mountType, 'nodeType' => $nodeType, 'id' => $id);
 	}
 	
+	function tx_trees_treeModelForPageTree(){}
+	
 	//---------------------------------------------------------------------------
 	// usage examples
 	//---------------------------------------------------------------------------
@@ -70,14 +72,14 @@ class tx_trees_treeModelForPageTree extends tx_trees_treeModelAbstract{
 	}	
 
 	function usageExampleDumpWithTt_content($mounts){
-		require_once(t3lib_extMgm::extPath('trees', 'library/abstractClasses/') . 'class.tx_trees_configurationAbstract.php');
+		require_once(t3lib_extMgm::extPath('trees', 'library/') . 'class.tx_trees_genericConfiguration.php');
 		require_once(t3lib_extMgm::extPath('trees', 'library/') . 'class.tx_trees_nodeModelForTables.php');
 		$treeModel = t3lib_div::makeInstance('tx_trees_treeModelForPageTree');
 		$nodeModel = t3lib_div::makeInstance('tx_trees_nodeModelForTables');
 		$nodeModel2 = t3lib_div::makeInstance('tx_trees_nodeModelForTables');
 		$treeModel->addNodeModel($nodeModel);
 		$treeModel->addNodeModel($nodeModel2);
-		$configuration = t3lib_div::makeInstance('tx_trees_configurationAbstract');
+		$configuration = t3lib_div::makeInstance('tx_trees_genericConfiguration');
 		$configurationList = '
 			rootNodeType 		= pages
 			rootId				= 0
@@ -133,6 +135,7 @@ class tx_trees_treeModelForPageTree extends tx_trees_treeModelAbstract{
 			$counter++;
 		}
 		$this->treeArray =& $array;
+		$this->_prependNestedHeader($this->treeArray);
 	}
 
 	function _initialize(){

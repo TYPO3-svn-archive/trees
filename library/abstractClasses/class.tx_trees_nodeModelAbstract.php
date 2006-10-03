@@ -41,7 +41,7 @@ class tx_trees_nodeModelAbstract extends tx_trees_commonAbstract{
 	}
 	
 	function tx_trees_nodeModelAbstract(){
-			$this->_end('Constructur', ' This is an abstract class. Please use derived classes.');
+			$this->_end('tx_trees_nodeModelAbstract', ' This is an abstract class. Please use a derived class.');
 	}	
 	
 	//---------------------------------------------------------------------------

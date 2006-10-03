@@ -24,21 +24,20 @@
 
 require_once(t3lib_extMgm::extPath('trees', 'library/abstractClasses/') . 'class.tx_trees_treeViewAbstract.php');
 
-class tx_trees_treeViewForSelects extends tx_trees_treeViewAbstract {
-	
-	var $requiredSettings = 'cssLevel, listClassAttribute, indentMargin, indentCharacter, 
-	indentPadding, inputName, inputId, inputSize, onChange, onClick, selectedValues';
-	
+class tx_trees_treeViewForSelects extends tx_trees_treeViewAbstract {	
+
+	var $requiredSettings = 'cssLevel, listClassAttribute, selectedValues,
+			inputName, 	inputId, inputSize, onChange';
 	//---------------------------------------------------------------------------
 	// public functions
-	//---------------------------------------------------------------------------
+	//---------------------c------------------------------------------------------
 	
 	function usageExample($mounts = array(0)){
-		require_once(t3lib_extMgm::extPath('trees', 'library/abstractClasses/') . 'class.tx_trees_configurationAbstract.php');
+		require_once(t3lib_extMgm::extPath('trees', 'library/') . 'class.tx_trees_genericConfiguration.php');
 		require_once(t3lib_extMgm::extPath('trees', 'library/') . 'class.tx_trees_nodeModelForTables.php');
-		require_once(t3lib_extMgm::extPath('trees', 'library/abstractClasses/') . 'class.tx_trees_treeModelAbstract.php');
-		require_once(t3lib_extMgm::extPath('trees', 'library/abstractClasses/') . 'class.tx_trees_nodeViewAbstract.php');
-		$configuration = t3lib_div::makeInstance('tx_trees_configurationAbstract');
+		require_once(t3lib_extMgm::extPath('trees', 'library/') . 'class.tx_trees_genericTreeModel.php');
+		require_once(t3lib_extMgm::extPath('trees', 'library/') . 'class.tx_trees_nodeViewForSelects.php');
+		$configuration = t3lib_div::makeInstance('tx_trees_genericConfiguration');
 		$configurationList = '
 			cssLevel			= few
 			listClassAttribute	= pageTree
@@ -67,13 +66,13 @@ class tx_trees_treeViewForSelects extends tx_trees_treeViewAbstract {
 			$configuration->set('inputId', 'tx_trees_example' . $mount);
 			$configuration->set('inputName', 'tx_trees_example' . $mount);
 			$configuration->set('rootId', $mount);		
-			$treeModel = t3lib_div::makeInstance('tx_trees_treeModelAbstract');
+			$treeModel = t3lib_div::makeInstance('tx_trees_genericTreeModel');
 			$treeModel->configure($configuration);
 			$treeView = t3lib_div::makeInstance('tx_trees_treeViewForSelects');
 			$treeView->configure($configuration);
 			$nodeModel = t3lib_div::makeInstance('tx_trees_nodeModelForTables');
 			$nodeModel->configure($configuration);
-			$nodeView = t3lib_div::makeInstance('tx_trees_nodeViewAbstract');
+			$nodeView = t3lib_div::makeInstance('tx_trees_nodeViewForSelects');
 			$nodeView->configure($configuration);
 			$treeView->setTreeModel($treeModel);
 			$treeModel->addNodeModel($nodeModel);
@@ -82,6 +81,8 @@ class tx_trees_treeViewForSelects extends tx_trees_treeViewAbstract {
 		}
 		return $out;
 	}
+	
+	function tx_trees_treeViewForSelects(){}
 	
 	//---------------------------------------------------------------------------
 	// protected functions to overwrite in inherited classes
@@ -107,25 +108,6 @@ class tx_trees_treeViewForSelects extends tx_trees_treeViewAbstract {
 		return $out;
 	}	
 	
-	function _renderRow($current, $components){
- 		$break = chr(10) . '    ';
-		$id = $current['.nodeType'] . '_' . $current[$current['.idField']];
-		$value = ' value="' . $id . '" ';
-		$selected = in_array($id, (array) $this->get('selectedValues')) ? ' selected="1" ' : '';
-		$prefix = $this->get('indentMargin');
-		for($i=0; $i < $current['.level']; $i++){
-			$prefix .= $this->get('indentCharacter');	
-		}
-		$prefix .= $this->get('indentPadding');
-		$onClick .= $this->get('onClick') ? ' onClick="' . $this->get('onClick') . '"' : '';
-		$text = $components['text'];
-		$out = sprintf(
-			'%s<option%s%s%s>%s%s</option>',
-			 $break, $value, $selected, $onClick, $prefix, $text
-		 );
-		return $out;		
-	}
-
 	function _initialize(){
 		if($this->isInitialized){
 			return;
@@ -134,10 +116,10 @@ class tx_trees_treeViewForSelects extends tx_trees_treeViewAbstract {
 			$this->_end('_initialize', 'Please configure the object first.');
 		}
 		if(!is_integer($this->settings['inputSize'])){
-			$this->end('_initialize', 'The inputSize must be integer.');
+			$this->_end('_initialize', 'The inputSize must be integer.');
 		}
 		if(!is_array($this->settings['selectedValues'])){
-			$this->end('_initialize', 'selectedValues must be an array.');
+			$this->_end('_initialize', 'selectedValues must be an array.');
 		}		
 		parent::_initialize();
 	}	

@@ -31,6 +31,10 @@ class tx_trees_treeModelAbstract  extends tx_trees_commonAbstract{
 	var $listArray = array();
 	var $singleton = array();
 	var $nodeModels = array();
+	var $nestedTreeModel = 'Nested Tree by Elmar Hinz';
+	var $nestedTreeVersion = '1.0';
+	var $linearizedTreeModel = 'Linearized Tree by Elmar Hinz';
+	var $linearizedTreeVersion = '1.0';
 	
 	//---------------------------------------------------------------------------
 	// public functions
@@ -84,6 +88,10 @@ class tx_trees_treeModelAbstract  extends tx_trees_commonAbstract{
 		$this->singleton[$type] =& $data;
 	}
 	
+	function tx_trees_treeModelAbstract(){
+			$this->_end('tx_trees_treeModelAbstract', ' This is an abstract class. Please use a derived class.');
+	}
+	
 	function valid(){
 		return ((bool) current($this->listArray));
 	}
@@ -99,6 +107,7 @@ class tx_trees_treeModelAbstract  extends tx_trees_commonAbstract{
 			$this->_buildTree();
 			$this->_tt('Pre linearization');
 			$this->_linearizeTreeArray($this->treeArray, $this->listArray);
+			$this->_prependLinearizedHeader($this->listArray);
 			$this->_tt('Post linearization');
 		}
 	}
@@ -106,6 +115,7 @@ class tx_trees_treeModelAbstract  extends tx_trees_commonAbstract{
 	function _buildTree(){
 		$this->_initialize();
 		$this->treeArray = $this->_recur($this->get('rootNodeType'), $this->get('rootId'));
+		$this->_prependNestedHeader($this->treeArray);
 	}
 
 	function _initialize(){
@@ -114,11 +124,11 @@ class tx_trees_treeModelAbstract  extends tx_trees_commonAbstract{
 		}
 		if(!$this->isConfigured) {
 			$this->_end('_initialize', 'Please configure the object first.');
-		}elseif(empty($this->nodeModels)){
-			$this->_end('_initialize', 'Please set at least one nodeModel.');			
-		} else {		
-			parent::_initialize();
 		}
+		if(empty($this->nodeModels)){
+			$this->_end('_initialize', 'Please set at least one nodeModel.');			
+		} 
+		parent::_initialize();
 	}			
 	
 	function _linearizeTreeArray(&$treeArray, &$listArray, $level = 0){
@@ -141,6 +151,20 @@ class tx_trees_treeModelAbstract  extends tx_trees_commonAbstract{
 			$listArray[$last] = t3lib_div::array_merge((array) $listArray[$last], array('.isLastSibling' => true));
 		}
 		array_push($listArray, array('.nodeType' => '.LEVEL_END', '.level' => $level));
+	}
+	
+	function _prependLinearizedHeader(&$array){
+		$head['HEADER']['.nodeType'] = '.HEADER';
+		$head['HEADER']['.dataModelName'] = $this->linearizedTreeModel;
+		$head['HEADER']['.dataModelVersion'] = $this->linearizedTreeVersion;
+		$array = t3lib_div::array_merge($array, $head);
+	}
+	
+	function _prependNestedHeader(&$array){
+		$head['HEADER']['.nodeType'] = '.HEADER';
+		$head['HEADER']['.dataModelName'] = $this->nestedTreeModel;
+		$head['HEADER']['.dataModelVersion'] = $this->nestedTreeVersion;
+		$array = t3lib_div::array_merge($array, $head);		
 	}
 	
 	function _recur($parentNodeType, $parentId){

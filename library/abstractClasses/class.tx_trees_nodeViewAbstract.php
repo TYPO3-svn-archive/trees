@@ -26,19 +26,21 @@ require_once(t3lib_extMgm::extPath('trees', 'library/abstractClasses/') . 'class
 
 class tx_trees_nodeViewAbstract extends tx_trees_commonAbstract {
 	
-	var $requiredSettings = 'type, titleField, rowClassAttribute';
+	var $requiredSettings = 'type';
 	var $tree = null;
 	
 	//---------------------------------------------------------------------------
 	// public functions
 	//---------------------------------------------------------------------------
 
-	function renderText($currentArray){
-		return $currentArray[$this->get('titleField')];
-	}
+	function render($currentArray){	}
 	
 	function setTree(&$object){
 		$this->tree =& $object;
+	}	
+
+	function tx_trees_nodeViewAbstract(){
+			$this->_end('tx_trees_nodeViewAbstract', ' This is an abstract class. Please use a derived class.');
 	}	
 
 	//---------------------------------------------------------------------------

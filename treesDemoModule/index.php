@@ -181,21 +181,21 @@ class  tx_trees_treesDemoModule extends t3lib_SCbase {
 	}
 	
 	function viewAsNestedListController()	{
-		require_once(t3lib_extMgm::extPath('trees', 'library/abstractClasses/') . 'class.tx_trees_treeViewAbstract.php');
+		require_once(t3lib_extMgm::extPath('trees', 'library/') . 'class.tx_trees_treeViewForSimpleLists.php');
 		if($this->MOD_SETTINGS['webmounts'] != 'none') {
 			$mounts = ($this->MOD_SETTINGS['webmounts'] == 'all') 
 				? $GLOBALS['WEBMOUNTS'] : array($this->MOD_SETTINGS['webmounts']) ;
-			$out .= tx_trees_treeViewAbstract::usageExampleNestedList($mounts);
+			$out .= tx_trees_treeViewForSimpleLists::usageExampleNestedList($mounts);
 		}
 		return $out;
 	}
 	
 	function multiTypeViewController()	{
-		require_once(t3lib_extMgm::extPath('trees', 'library/abstractClasses/') . 'class.tx_trees_treeViewAbstract.php');
+		require_once(t3lib_extMgm::extPath('trees', 'library/') . 'class.tx_trees_treeViewForSimpleLists.php');
 		if($this->MOD_SETTINGS['webmounts'] != 'none') {
 			$mounts = ($this->MOD_SETTINGS['webmounts'] == 'all') 
 				? $GLOBALS['WEBMOUNTS'] : array($this->MOD_SETTINGS['webmounts']) ;
-			$out .= tx_trees_treeViewAbstract::usageExampleMultiTypes($mounts);
+			$out .= tx_trees_treeViewForSimpleLists::usageExampleMultiTypes($mounts);
 		}
 		return $out;
 	}
