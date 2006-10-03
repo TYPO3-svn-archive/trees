@@ -65,14 +65,14 @@ class tx_trees_configuration extends tx_trees_configurationAbstract {
 		if(empty($this->currentConfiguration)) {
 			// load classes
 			require_once(t3lib_extMgm::extPath('trees', 'library/') . 'class.tx_trees_nodeModelForTables.php');
-			require_once(t3lib_extMgm::extPath('trees', 'library/') . 'class.tx_trees_genericTreeModel.php');
+			require_once(t3lib_extMgm::extPath('trees', 'library/') . 'class.tx_trees_treeModelForTables.php');
 			require_once(t3lib_extMgm::extPath('trees', 'library/') . 'class.tx_trees_nodeViewForSelects.php');
 			require_once(t3lib_extMgm::extPath('trees', 'library/') . 'class.tx_trees_treeViewForSelects.php');
 			// get defaults
 			$defaultsList = '
 				nodeModelClass 		= tx_trees_nodeModelForTables 
+				treeModelClass 		= tx_trees_treeModelForTables
 				nodeViewClass 		= tx_trees_nodeViewForSelects 
-				treeModelClass 		= tx_trees_genericTreeModel
 				treeViewClass 		= tx_trees_treeViewForSelects 
 				cssLevel			= few
 				listClassAttribute	= pageTree

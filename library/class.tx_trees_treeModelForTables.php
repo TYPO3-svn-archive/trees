@@ -24,14 +24,14 @@
 
 require_once(t3lib_extMgm::extPath('trees', 'library/abstractClasses/') . 'class.tx_trees_treeModelAbstract.php');
 
-class tx_trees_genericTreeModel extends tx_trees_treeModelAbstract{
+class tx_trees_treeModelForTables extends tx_trees_treeModelAbstract{
 
-	function tx_trees_genericTreeModel(){}
+	function tx_trees_treeModelForTables(){}
 	
 }
 
-if (defined('TYPO3_MODE') && $TYPO3_CONF_VARS[TYPO3_MODE]['XCLASS']['ext/trees/library/class.tx_trees_genericTreeModel.php'])	{
-	include_once($TYPO3_CONF_VARS[TYPO3_MODE]['XCLASS']['ext/trees/library/class.tx_trees_genericTreeModel.php']);
+if (defined('TYPO3_MODE') && $TYPO3_CONF_VARS[TYPO3_MODE]['XCLASS']['ext/trees/library/class.tx_trees_treeModelForTables.php'])	{
+	include_once($TYPO3_CONF_VARS[TYPO3_MODE]['XCLASS']['ext/trees/library/class.tx_trees_treeModelForTables.php']);
 }
 
 ?>

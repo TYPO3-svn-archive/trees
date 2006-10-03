@@ -32,13 +32,14 @@ class tx_trees_treeViewForSimpleLists extends tx_trees_treeViewAbstract {
 	function usageExampleMultiTypes($mounts){
 		require_once(t3lib_extMgm::extPath('trees', 'library/') . 'class.tx_trees_genericConfiguration.php');
 		require_once(t3lib_extMgm::extPath('trees', 'library/') . 'class.tx_trees_nodeModelForTables.php');
-		require_once(t3lib_extMgm::extPath('trees', 'library/') . 'class.tx_trees_genericTreeModel.php');
+		require_once(t3lib_extMgm::extPath('trees', 'library/') . 'class.tx_trees_treeModelForTables.php');
 		require_once(t3lib_extMgm::extPath('trees', 'library/') . 'class.tx_trees_nodeViewForSimpleLists.php');
+		require_once(t3lib_extMgm::extPath('trees', 'library/') . 'class.tx_trees_treeViewForSimpleLists.php');
 		$treeModelConfiguration = t3lib_div::makeInstance('tx_trees_genericConfiguration');
 		$treeViewConfiguration = t3lib_div::makeInstance('tx_trees_genericConfiguration');
 		$nodeModelConfiguration = t3lib_div::makeInstance('tx_trees_genericConfiguration');
 		$nodeViewConfiguration = t3lib_div::makeInstance('tx_trees_genericConfiguration');
-		$treeModel = t3lib_div::makeInstance('tx_trees_genericTreeModel');
+		$treeModel = t3lib_div::makeInstance('tx_trees_treeModelForTables');
 		$treeView = t3lib_div::makeInstance('tx_trees_treeViewForSimpleLists');
 		$nodeModel1 = t3lib_div::makeInstance('tx_trees_nodeModelForTables');
 		$nodeView1 = t3lib_div::makeInstance('tx_trees_nodeViewForSimpleLists');

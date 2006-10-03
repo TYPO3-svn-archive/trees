@@ -49,8 +49,8 @@ class tx_trees_t3libTreeViewDemo extends t3lib_treeview{
 	
 }
 
-if (defined('TYPO3_MODE') && $TYPO3_CONF_VARS[TYPO3_MODE]['XCLASS']['ext/trees/treesDemoModule/class.tx_trees_t3libTreeViewDemo.php'])	{
-	include_once($TYPO3_CONF_VARS[TYPO3_MODE]['XCLASS']['ext/trees/treesDemoModule/class.tx_trees_t3libTreeViewDemo.php']);
+if (defined('TYPO3_MODE') && $TYPO3_CONF_VARS[TYPO3_MODE]['XCLASS']['ext/trees/library/class.tx_trees_t3libTreeViewDemo.php'])	{
+	include_once($TYPO3_CONF_VARS[TYPO3_MODE]['XCLASS']['ext/trees/library/class.tx_trees_t3libTreeViewDemo.php']);
 }
 
 ?>
