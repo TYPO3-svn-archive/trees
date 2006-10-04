@@ -1,0 +1,527 @@
+************
+Better Trees
+************
+
+============
+Introduction
+============
+
+What does it do?
+================
+
+This extension contains a library to build trees and a bunch of tree applications, 
+namely an alternative page navigation tree, category trees, and tree selects to use
+in your BE Forms. 
+
+The library is designed build tree structures from the database and other sources 
+of nested data like XML files. The examples generate trees from the database table 
+"pages" and some other database tables. The tree structure can be accessed as
+a nested array and as a linearized array of the same nested data.
+
+The object orientated library is divied into data objects and rendering objects,
+so that you can easily extend the classes to access other data sources like XML 
+or the directory tree. You can render the generated trees to any form of output
+by extending the rendering objects.
+
+A tutor module below the main BE module "Help" presents different usage examples 
+of the elements and vizualizes the data model. It also does live benchmarking 
+based on your own data.
+
+Screenshots
+===========
+
+============
+Users manual
+============
+
+This extension is targeted to administrators and programmers. Users
+will only meet with this library in form of navigation trees, selects, 
+or other elements that represent trees.
+
+==============
+Administration
+==============
+
+Alternative pagetree
+====================
+
+==========
+Developers
+==========
+
+Overview of all classes
+=======================
+
+----------------------------
+Abstract Classes of the tree
+----------------------------
+
+tx_trees_configurationAbstract
+	Abstract class for configuration objects.
+tx_trees_commonAbstract
+	Abstract class with common methods of the 4 tree object types.
+tx_trees_nodeModelAbstract
+	Abstract class for the node data.
+tx_trees_treeModelAbstract
+	Abstract class of the tree model.
+tx_trees_nodeViewAbstract
+	Abstract class of row rendering.
+tx_trees_treeViewAbstract
+	Abstract class of tree/list rendering.
+
+---------------------------
+Derived Classes of the tree
+---------------------------
+
+tx_trees_nodeModelForTables
+	Loading a table from database.
+tx_trees_treeModelForTables 
+	Generating a tree from database.
+tx_trees_treeModelForPageTree 
+	Tress below multiple mountpoints.
+tx_trees_nodeViewForSelects 
+	Rows of form selects.
+tx_trees_nodeViewForSimpleLists
+	Rows of ul lists.
+tx_trees_treeViewForSelects
+	Form selects.
+tx_trees_treeViewForSimpleLists
+	UL lists.
+
+------------------------------
+Other classes of the extension
+------------------------------
+
+tx_trees_div
+	Collection of static functions.
+tx_trees 
+	By this class the extension is called from external.
+tx_trees_configuration 
+	Configurations used by tx_trees.
+tx_trees_genericConfiguration 
+	Configuration carrier to fill with settings for different uses.
+tx_trees_defaultPageTreeConfiguration
+	Settings to create pagetrees.
+tx_trees_treesDemoModule
+	Class in index.php of the trees demo module.
+tx_trees_t3libBrowseTreeDemo
+	Usage example of t3lib_browsetree.
+tx_trees_t3libTreeView
+	Usage example of t3lib_treeview.
+
+Concepts of the architecture
+============================
+
+---------------------------
+Concept of the tree classes
+---------------------------
+
+The overall structure of the objects implements the fundamental concepts
+known from the graytree library. In contrary to the graytree library
+this library doesn't depend directly or indirectly on t3lib_browsetree,
+but is programmed from scratch.
+
+The whole tree generation is divided in two phases, 
+the loading of the data and the rendering of the output, 
+model and view. The first phase we call model. 
+Data is loaded from different tables and maybe from other 
+sources like XML. From the data the internal structure of 
+the tree is created. The view phase does the rendering of 
+that internal structure to a visible tree as HTML, 
+XML or other formats of output. This give us best flexibility 
+to do diffent things with the tree.
+
+Both phases, model and view are representated by a few classes 
+that together do the job. To achieve best performances we reuse 
+objects, whereever possible and store the data into a common array. 
+Both in the model and the view there is one object per node type. 
+Every node type is typically stored in one DB table, 
+so that we can say simplifying that we have two objects 
+per table one for the model and one for the view. 
+
+As example we could have two objects for pages 
+and two for addresses. All node objects of the models are kept 
+in one container. It's the same for the view. The objects for 
+the nodes derive from the classes nodeModel and nodeView. 
+The containers derive from treeModel and treeView.
+
+For an application you will typically make 4 or more classes 
+that derive from this 4 "abstract" classes or you make use of 
+the derived classes contained in the extensions library.
+
+1. nodeModelAbstract
+2. treeModelAbstract
+3. nodeViewAbstract
+4. treeViewAbstract
+
+Class hierarchies of the tree elements
+---------------------------------------------
+
+* tx_trees_nodeModelAbstract
+
+  - tx_trees_nodeModelForTables
+
+* tx_trees_treeModelAbstract
+
+  - tx_trees_treeModelForTables 
+  - tx_trees_treeModelForPageTree 
+
+* tx_trees_nodeViewAbstract
+
+  - tx_trees_nodeViewForSelects 
+  - tx_trees_nodeViewForSimpleLists
+
+* tx_trees_treeViewAbstract
+
+  - tx_trees_treeViewForSelects
+  - tx_trees_treeViewForSimpleLists
+
+--------------------------------
+Concept of configuration objects 
+--------------------------------
+
+The main advantage of configuration objects is, that you can transport all 
+configurations and the logic in one object instead of passing lots configuration 
+arrays from function to function and fcalling lots of setters for each object. 
+In TYPO3 there are different configuration places that have to be merged: 
+extension configuration, userTS, pageTS, TCA. All merging of configuration can 
+be done within the configuration object instead of doing it in differet places now.
+
+The classes of the pagetree contain no default configurations. The complete 
+configuration is passed in form of a configuration object. If you want to work 
+with default configurations, you can define default configuration objects. 
+An example for such an object is the class tx_trees_defaultPageTreeConfiguration.
+
+A class is simply configured by passing a configuration object to the method configure().
+::
+
+	$configurationObject = t3lib_div::makeInstance('tx_trees_defaultPageTreeConfiguration');
+	$treeModel = t3lib_div::makeInstance('tx_trees_treeModelForPageTree');
+	$treeModel->configure($configurationObject);
+
+The method configure() retrieves the settings from the configuration object by 
+calling the method get() for the required keys.
+
+::
+
+	class tx_trees_commonAbstract{
+		...
+		var $requiredSettings; // comma separated list of keys as a string
+		var $settings = array();
+		var $isConfigured = false;
+		...
+		function configure($configurationObject){
+			$required = t3lib_div::trimExplode(',', $this->requiredSettings);
+			foreach($required as $key){
+				$value = $configurationObject->get($key);
+				if(isset($value)) {
+					$this->settings[$key] = $value;  // no checks and evaluations here, do them all in _initialize()
+				} else {
+					$this->_end('configure', 'Missing configuration for ' . $key);				
+				}
+			}
+			$this->isConfigured = true;
+		}
+		...
+	}	
+
+The required keys of an object are defined within the internal varibale $requiredSettings
+in form of a comma separated list. This is an unusual, new concept, to assure 
+that all settings are given and that the develper quickly learns about all 
+possibile settings. For each of the required keys the get() function of the
+configuration object must answer with a value that is not null. If get() returns 
+a *null* value the script is terminated with an error message. 
+
+There may be situtions, where you don't want to set a value, because you don't want the 
+object to use it. In this case you can give a value like 0, false or the empty string, but
+the configuration object must answer with a value, to indicate that the setting has been
+considered.
+
+You can program your own configuration objects or fill the generic configuration 
+object tx_trees_configurationAbstract with your settings.
+
+You find examples for specialized configuration objects in:
+
+ * tx_trees_configuration
+ * tx_trees_defaultPageTreeConfiguration
+ 
+ The usageExample functions in the different classes teach you, how to work with
+ configuration objects.
+
+
+Using the pagetree classes
+==========================
+
+To usage of a class of the pagetree is simpel:
+
+1. Prepare a configuration object.
+2. Make an instance of the class.
+3. Configure the class with the configuration object.
+4. Relate the class with the other tree classes.
+5. Use the class.
+
+The order of the points 2, 3 and for is not important and the other 
+points are intuitive. It is logical to prepare the configuration object 
+before using it (3). It is also logical to do all settings of the tree 
+object before using it (5). If you make a mistake, you usually get a clear
+error message that helps you to find out the reason.
+
+I provided usage examples that you can directly run in some of the classes:
+
+* tx_trees_treeModelForPageTree::usageExampleDumpPageTree()
+* tx_trees_treeModelForPageTree::usageExampleDumpList()
+* tx_trees_treeModelForPageTree::usageExampleDumpTree()
+* tx_trees_treeModelForPageTree::usageExampleDumpWithTt_content()
+* tx_trees_treeViewForSimpleLists::usageExampleNestedList()
+* tx_trees_treeViewForSimpleLists::usageExampleMultiTypes()
+* tx_trees_treeViewForSelects:: usageExample()
+
+This examples are also called from the trees demo module.
+
+I suppose the following approach step by step:
+
+1. Run the demo Module und have a look to the controller function in treesDemo/index.php.
+2. Make calls to the usage examples from your own scripts.
+3. Copy code from within a usage example that is interesting to you and make it run.
+4. Do some alterations to the setting of the usage example and observer the results.
+5. Maybe make your own configuration class based on a copy of tx_trees_defaultPageTreeConfiguration.
+
+-------------------------------------------
+How do you find out the necessary settings? 
+-------------------------------------------
+
+Until all settings are done the class tells you which setting is
+still missing. You find the list of all required settings of a class in
+the variables declaration of the class in the varible $requiredSettings.
+
+This is the example of the class tx_trees_treeViewForSelects:
+
+var $requiredSettings = 'cssLevel, listClassAttribute, selectedValues,
+			inputName, 	inputId, inputSize, onChange';
+
+To find out what each setting should look like please have a look
+into the usage examples and into the classes:
+
+* tx_trees_defaultPageTreeConfiguration
+* tx_trees_configuration
+
+----------------------------------
+List of possibly required settings 
+----------------------------------
+
+====================  ========  ========================================  ==============
+setting               type      definition                                example
+====================  ========  ========================================  ==============
+ emptyTitle            string    Replacement if title field is empty       [no title]
+ cssLevel              string    one of: few, normal, many                 few
+ listClassAttribute    string    class attribut of the lists tag (ul,      pageTree
+                                 select ... depending on the 
+                                 nodeViewclass)                   
+ rowClassAttribute     string    class attribut of the row tag             pageRow
+                                 (li, option, ...)                            
+ titleField            string    the title to display                      title
+ type                  string    type of the node, usually the             pages
+                                 table name                            
+ table                 string    for db tables equal to type               pages        
+ fields                string    fields to query from db (some fields      title
+                                 are automatically added)        
+ idField               string    field containing the id                   uid
+ parentIdField         string    field conatining the parents id           pid
+ parentTable           string    name of the parent table if known         pages
+ parentTableField      string    field containing the name of the          parentTable
+                                 parent table (see hint below)                
+ orderBy               string    order by clause                           sorting
+ rootNodeType          string    table of with the root node (see below)   pages
+ rootId                integer   id of the root node                       0, 234
+ limit                 integer   maximal number of entries to query        1000
+====================  ========  ========================================  ==============
+	
+.. HINT:: 
+	You either set parentTable or parentTableField, never both. Set the missing one to the 
+	empty string where required.
+
+---------------------
+Configuration example
+---------------------
+
+::
+
+	class tx_trees_defaultPageTreeConfiguration extends tx_trees_configurationAbstract{
+		
+		var $isInitialized = false;
+		
+		function tx_trees_defaultPageTreeConfiguration(){}
+		
+		function get($key){
+			if(!$this->isInitialized){
+				$this->_initialize();
+			}
+			return $this->currentConfiguration[$key];
+		}
+		
+		function _initialize(){
+			$configurationList = '
+				emptyTitle          = [no title]
+				cssLevel            = few
+				listClassAttribute  = pageTree
+				rowClassAttribute   = 			
+				titleField          = title
+				rootNodeType        = pages
+				rootId              = 0
+				type                = pages
+				table               = pages		
+				fields              = title	
+				idField             = uid
+				parentIdField       = pid
+				parentTable         = pages
+				parentTableField    =
+				orderBy             =	
+			';
+			$this->setByList($configurationList);
+			$this->set('limit', 1000);
+			$this->isInitialized = true;
+		}
+		
+	}
+
+
+Building your own set of pagtree classes
+========================================
+
+Building your own pagetree classes is simpel, be inheriting from the abstract classes.
+The best way to learn how to do it, is to look into the available derived classes. 
+
+Be aware to folow some rules, if your objects should work in the style of the
+other pagetree objects:
+
+1. Do all configuration settings by using configuration objects. 
+2. To do so define the class variable $requiredSettings as a comma 
+   separated list of the required values.
+3. Don't forget to reinclude the settings of the ancesters into 
+   your $requiredSettings.
+4. Use the function _initialize() in the way described below.
+5. Catch possible errors with if functions do $this->_end().  (PHP4 style of exception handling.)
+6. Deliver helpfull error messages with the function  
+   $this->_end('functioname', 'message) for the sake of yourself and other developers.
+
+--------------------------
+The function _initialize()
+--------------------------
+
+Before the generation of the output is started this function assures, that everything
+is well prepared. You must call it as the first step from every function by which the
+user can possible start the output generation.
+
+::
+
+	function _initialize(){
+		if($this->isInitialized){
+			return;
+		}
+		if(!$this->isConfigured) {
+			$this->_end('_initialize', 'Please configure the object first.');
+		}
+		// your evaluations go here		
+		parent::_initialize();
+	}	
+	
+To make sure that the function is only applied once you check first if the
+flag *$this->isInitialized* has already been set. Next you check the flag
+*$this->isConfigured*. You remind the developer to configure the class if he has 
+forgotton to do it. 
+
+Now you do your own evaluations and checks. Check here if everything has been set 
+that is necessary for output generation. Mind that the function *configure()* 
+already assures that all required settings are given, but no more.
+
+The last step is to call *parent::_initialize()* to assure that the evaluations of
+the ancesters are also done and to finally set the *$this->isInitialized* flag.
+
+
+Alternative pagetree
+====================
+
+Selects for your own extensions
+===============================
+
+=============
+Configuration
+=============
+
+========
+Tutorial
+========
+
+After installation and reload of the frameset you find a tutor module "Trees" 
+below the main BE module "Help".
+
+==============
+Known Problems
+==============
+
+==== 
+TODO
+==== 
+
+* Moving linecreation to nodes for abstract and derived
+* zweite selectbox anpassen
+* Popup information 
+* Selecttypen: Vollpfad, Abgekürzter Pfad, Baum mit Icons, Baum nested UL
+* Query Zugriffsrechte
+* Tutor vollenden
+* Dokumentation
+* Alte API
+
+==============
+Change Log
+==============
+
+See file ChangeLog
+
+=========
+Plannning
+=========
+
+Mount Configuration
+===================
+
+The developer defines mount types for trees of own tables. 
+The admin configures the mounts for users and groups.
+
+Mount Types
+	Mount point configurations are added to the users and the groups configuration
+	by extending the $TCA configuration of the tables be_users and be_groups by a 
+	column (group field) to select the mount points. 
+
+Mount Point Table
+	The mount points are stored in the table tx_trees_mounts. The main 
+	field "mountpoint"contains a combined value of the mounted table and 
+	the entry id in this form: tabletype_id.
+	
+	This table is related to be_users and be_groups by the tables 
+	be_users_tx_trees_mounts_mm and be_groups_tx_trees_mounts_mm 
+
+New Mounts
+	New Mount points (access points) are configured in the administration 
+	of users and groups. To do this we use a TCA groups field.
+
+Roots
+	All table entries with a parent ID of 0 are Roots. They are automatically 
+	listed for admins.
+	
+	
+	
+	
+
+
+
+
+
+
+
+
+
+
+
+
+
