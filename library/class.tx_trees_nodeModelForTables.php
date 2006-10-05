@@ -94,7 +94,7 @@ class tx_trees_nodeModelForTables extends tx_trees_nodeModelAbstract {
 	}
 
 	function _findTableArray(&$array){
-		$array =& $this->tree->loadFromSingleton($this->settings['table']);
+		$array = $this->tree->loadFromSingleton($this->settings['table']);
 		if($array === null){
 			$array = array();
 			$this->_loadFromDatabase($array);

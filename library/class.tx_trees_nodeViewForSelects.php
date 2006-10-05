@@ -26,11 +26,11 @@ require_once(t3lib_extMgm::extPath('trees', 'library/abstractClasses/') . 'class
 
 class tx_trees_nodeViewForSelects extends tx_trees_nodeViewAbstract {
 
-	var $requiredSettings = 
-	'type, titleField, onClick,	indentMargin, indentCharacter, indentPadding';
+	var $requiredSettings = 'type, titleField, onClick,	indentMargin, indentCharacter, indentPadding';
 	
 	function render($current){
- 		$break = chr(10) . '    ';
+		$this->tree->currentTitle = $current[$this->get('titleField')];
+		$break = chr(10) . '    ';
 		$id = $current['.nodeType'] . '_' . $current[$current['.idField']];
 		$value = ' value="' . $id . '" ';
 		$selected = in_array($id, (array) $this->tree->get('selectedValues')) ? ' selected="1" ' : '';
@@ -40,12 +40,13 @@ class tx_trees_nodeViewForSelects extends tx_trees_nodeViewAbstract {
 		}
 		$prefix .= $this->get('indentPadding');
 		$onClick .= $this->get('onClick') ? ' onClick="' . $this->get('onClick') . '"' : '';
-		$title = $current[$this->get('titleField')];
+		$label = $current[$this->get('titleField')];
+		$title = ' title="' . $this->tree-> getCurrentBreadcrumb()  . '" ';
 		$out = sprintf(
-			'%s<option%s%s%s>%s%s</option>',
-			 $break, $value, $selected, $onClick, $prefix, $title
+			'%s<option%s%s%s%s>%s%s</option>',
+			 $break, $value, $selected, $onClick, $title, $prefix, $label
 		 );
-		return $out;		
+		 return $out;		
 	}
 
 	function tx_trees_nodeViewForSelects(){}

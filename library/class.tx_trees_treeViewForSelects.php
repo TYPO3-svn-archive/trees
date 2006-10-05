@@ -28,10 +28,38 @@ class tx_trees_treeViewForSelects extends tx_trees_treeViewAbstract {
 
 	var $requiredSettings = 'cssLevel, listClassAttribute, selectedValues,
 			inputName, 	inputId, inputSize, onChange';
+	var $titleStack = array();
+	var $currentTitle = '';
+	var $entries;
+
 	//---------------------------------------------------------------------------
 	// public functions
-	//---------------------c------------------------------------------------------
+	//---------------------------------------------------------------------------
 	
+	function getBreadcrumb($typeId){
+		if(empty($this->entries)){
+			$this->render();
+		}
+		return $this->entries[$typeId]['.breadcrumb'];
+	}
+
+	function getCurrentBreadcrumb(){
+		return join(' > ', $this->titleStack) . ' > ' . $this->currentTitle;
+	}
+	
+	function render(){
+		$this->_initialize();
+		for($this->treeModel->rewind(); $this->treeModel->valid(); $this->treeModel->next()){
+			$current = $this->treeModel->current();
+			$rows[] =  $current['.row'] = $this->_renderEntry($current);
+			if(isset($current[$current['.idField']])){
+				$current['.breadcrumb'] = $this->getCurrentBreadcrumb();
+				$this->entries[$current['.nodeType'] . '_' . $current[$current['.idField']]] = $current;
+			}
+		}
+		return $this->_renderList($rows);
+	}	
+		
 	function usageExample($mounts = array(0)){
 		require_once(t3lib_extMgm::extPath('trees', 'library/') . 'class.tx_trees_genericConfiguration.php');
 		require_once(t3lib_extMgm::extPath('trees', 'library/') . 'class.tx_trees_nodeModelForTables.php');
@@ -88,17 +116,21 @@ class tx_trees_treeViewForSelects extends tx_trees_treeViewAbstract {
 	//---------------------------------------------------------------------------
 	// protected functions to overwrite in inherited classes
 	//---------------------------------------------------------------------------
-	
-	function _renderLevelEnd($current){	}
-	function _renderLevelBegin($current){}
-	
+
+	function _renderLevelBegin($current){
+		array_push($this->titleStack, $this->currentTitle);
+	}
+	function _renderLevelEnd($current){
+		array_pop($this->titleStack);		
+	}
+
 	function _renderList($rows){
 		$break = chr(10);
 		$rows = join('', $rows);
 		$id = ' id="' . $this->get('inputId') . '"';
 		$name = ' name="' . $this->get('inputName') . '"';			
 		if($this->get('inputSize') > 1){
-			$size =' size="' . (int) $this->get('inputSize') . '" multiple="multiple"';			
+			$size =' size="' . (int) $this->get('inputSize') . '" multiple="multiple"';	
 		}else{
 		}
 		$onChange = $this->get('onChange') ? ' onChange="' . $this->get('onChange') .'"'  : '';

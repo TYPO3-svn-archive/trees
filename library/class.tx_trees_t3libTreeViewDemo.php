@@ -39,7 +39,7 @@ class tx_trees_t3libTreeViewDemo extends t3lib_treeview{
 		return $this->getBrowsableTree();
 	}
 
-	function example($webmounts = 0){
+	function example($webmounts = 0, $thisScript = 'index.php'){
 		$object = t3lib_div::makeInstance('tx_trees_t3libTreeViewDemo');
 		$object->thisScript = $thisScript;
 		$object->expandAll = 1;

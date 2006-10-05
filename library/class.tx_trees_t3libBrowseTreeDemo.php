@@ -46,7 +46,7 @@ class tx_trees_t3libBrowseTreeDemo extends t3lib_browsetree{
 	* @return string
 	*/
 	
-	function example($webmounts = 0){
+	function example($webmounts = 0, $thisScript = 'index.php'){
 		$object = t3lib_div::makeInstance('tx_trees_t3libBrowseTreeDemo');
 		$object->thisScript = $thisScript;
 		$object->MOUNTS = $webmounts;

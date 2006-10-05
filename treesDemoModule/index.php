@@ -135,7 +135,7 @@ class  tx_trees_treesDemoModule extends t3lib_SCbase {
 		if($this->MOD_SETTINGS['webmounts'] != 'none') {
 			$mounts = ($this->MOD_SETTINGS['webmounts'] == 'all') 
 				? $GLOBALS['WEBMOUNTS'] : array($this->MOD_SETTINGS['webmounts']) ;
-			$out .= tx_trees_t3libTreeViewDemo::example($mounts);
+			$out .= tx_trees_t3libTreeViewDemo::example($mounts, 'index.php');
 		}
 		return $out;
 	}
@@ -145,7 +145,7 @@ class  tx_trees_treesDemoModule extends t3lib_SCbase {
 		if($this->MOD_SETTINGS['webmounts'] != 'none') {
 			$mounts = ($this->MOD_SETTINGS['webmounts'] == 'all') 
 				? $GLOBALS['WEBMOUNTS'] : array($this->MOD_SETTINGS['webmounts']) ;
-			$out .= tx_trees_t3libBrowseTreeDemo::example($mounts);
+			$out .= tx_trees_t3libBrowseTreeDemo::example($mounts, 'index.php');
 		}
 		return $out;
 	}

@@ -139,10 +139,11 @@ class tx_trees_treeModelAbstract  extends tx_trees_commonAbstract{
 				$entry = $treeArray[$key];
 				$tmp['.level'] = $level;
 				$tmp['.position'] = $position++;
+				$tmp['.numberOfChildren'] = count($treeArray[$key . '.']);
 				$entry = t3lib_div::array_merge((array) $entry, (array) $tmp);
 				array_push($listArray, $entry);
 				$last = count($listArray) - 1;
-				if(!empty($treeArray[$key . '.'])) {
+				if($tmp['.numberOfChildren'] > 0) {
 					$this->_linearizeTreeArray(&$treeArray[$key . '.'], &$listArray, ($level + 1));
 				}
 			}

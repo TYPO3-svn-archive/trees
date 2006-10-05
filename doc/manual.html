@@ -1,0 +1,808 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta name="generator" content="Docutils 0.4: http://docutils.sourceforge.net/" />
+<title>Better Trees</title>
+<style type="text/css">
+
+/*
+:Author: David Goodger
+:Contact: goodger@users.sourceforge.net
+:Date: $Date$
+:Revision: $Revision$
+:Copyright: This stylesheet has been placed in the public domain.
+
+Default cascading style sheet for the HTML output of Docutils.
+
+See http://docutils.sf.net/docs/howto/html-stylesheets.html for how to
+customize this style sheet.
+*/
+
+/* used to remove borders from tables and images */
+.borderless, table.borderless td, table.borderless th {
+  border: 0 }
+
+table.borderless td, table.borderless th {
+  /* Override padding for "table.docutils td" with "! important".
+     The right padding separates the table cells. */
+  padding: 0 0.5em 0 0 ! important }
+
+.first {
+  /* Override more specific margin styles with "! important". */
+  margin-top: 0 ! important }
+
+.last, .with-subtitle {
+  margin-bottom: 0 ! important }
+
+.hidden {
+  display: none }
+
+a.toc-backref {
+  text-decoration: none ;
+  color: black }
+
+blockquote.epigraph {
+  margin: 2em 5em ; }
+
+dl.docutils dd {
+  margin-bottom: 0.5em }
+
+/* Uncomment (and remove this text!) to get bold-faced definition list terms
+dl.docutils dt {
+  font-weight: bold }
+*/
+
+div.abstract {
+  margin: 2em 5em }
+
+div.abstract p.topic-title {
+  font-weight: bold ;
+  text-align: center }
+
+div.admonition, div.attention, div.caution, div.danger, div.error,
+div.hint, div.important, div.note, div.tip, div.warning {
+  margin: 2em ;
+  border: medium outset ;
+  padding: 1em }
+
+div.admonition p.admonition-title, div.hint p.admonition-title,
+div.important p.admonition-title, div.note p.admonition-title,
+div.tip p.admonition-title {
+  font-weight: bold ;
+  font-family: sans-serif }
+
+div.attention p.admonition-title, div.caution p.admonition-title,
+div.danger p.admonition-title, div.error p.admonition-title,
+div.warning p.admonition-title {
+  color: red ;
+  font-weight: bold ;
+  font-family: sans-serif }
+
+/* Uncomment (and remove this text!) to get reduced vertical space in
+   compound paragraphs.
+div.compound .compound-first, div.compound .compound-middle {
+  margin-bottom: 0.5em }
+
+div.compound .compound-last, div.compound .compound-middle {
+  margin-top: 0.5em }
+*/
+
+div.dedication {
+  margin: 2em 5em ;
+  text-align: center ;
+  font-style: italic }
+
+div.dedication p.topic-title {
+  font-weight: bold ;
+  font-style: normal }
+
+div.figure {
+  margin-left: 2em ;
+  margin-right: 2em }
+
+div.footer, div.header {
+  clear: both;
+  font-size: smaller }
+
+div.line-block {
+  display: block ;
+  margin-top: 1em ;
+  margin-bottom: 1em }
+
+div.line-block div.line-block {
+  margin-top: 0 ;
+  margin-bottom: 0 ;
+  margin-left: 1.5em }
+
+div.sidebar {
+  margin-left: 1em ;
+  border: medium outset ;
+  padding: 1em ;
+  background-color: #ffffee ;
+  width: 40% ;
+  float: right ;
+  clear: right }
+
+div.sidebar p.rubric {
+  font-family: sans-serif ;
+  font-size: medium }
+
+div.system-messages {
+  margin: 5em }
+
+div.system-messages h1 {
+  color: red }
+
+div.system-message {
+  border: medium outset ;
+  padding: 1em }
+
+div.system-message p.system-message-title {
+  color: red ;
+  font-weight: bold }
+
+div.topic {
+  margin: 2em }
+
+h1.section-subtitle, h2.section-subtitle, h3.section-subtitle,
+h4.section-subtitle, h5.section-subtitle, h6.section-subtitle {
+  margin-top: 0.4em }
+
+h1.title {
+  text-align: center }
+
+h2.subtitle {
+  text-align: center }
+
+hr.docutils {
+  width: 75% }
+
+img.align-left {
+  clear: left }
+
+img.align-right {
+  clear: right }
+
+ol.simple, ul.simple {
+  margin-bottom: 1em }
+
+ol.arabic {
+  list-style: decimal }
+
+ol.loweralpha {
+  list-style: lower-alpha }
+
+ol.upperalpha {
+  list-style: upper-alpha }
+
+ol.lowerroman {
+  list-style: lower-roman }
+
+ol.upperroman {
+  list-style: upper-roman }
+
+p.attribution {
+  text-align: right ;
+  margin-left: 50% }
+
+p.caption {
+  font-style: italic }
+
+p.credits {
+  font-style: italic ;
+  font-size: smaller }
+
+p.label {
+  white-space: nowrap }
+
+p.rubric {
+  font-weight: bold ;
+  font-size: larger ;
+  color: maroon ;
+  text-align: center }
+
+p.sidebar-title {
+  font-family: sans-serif ;
+  font-weight: bold ;
+  font-size: larger }
+
+p.sidebar-subtitle {
+  font-family: sans-serif ;
+  font-weight: bold }
+
+p.topic-title {
+  font-weight: bold }
+
+pre.address {
+  margin-bottom: 0 ;
+  margin-top: 0 ;
+  font-family: serif ;
+  font-size: 100% }
+
+pre.literal-block, pre.doctest-block {
+  margin-left: 2em ;
+  margin-right: 2em ;
+  background-color: #eeeeee }
+
+span.classifier {
+  font-family: sans-serif ;
+  font-style: oblique }
+
+span.classifier-delimiter {
+  font-family: sans-serif ;
+  font-weight: bold }
+
+span.interpreted {
+  font-family: sans-serif }
+
+span.option {
+  white-space: nowrap }
+
+span.pre {
+  white-space: pre }
+
+span.problematic {
+  color: red }
+
+span.section-subtitle {
+  /* font-size relative to parent (h1..h6 element) */
+  font-size: 80% }
+
+table.citation {
+  border-left: solid 1px gray;
+  margin-left: 1px }
+
+table.docinfo {
+  margin: 2em 4em }
+
+table.docutils {
+  margin-top: 0.5em ;
+  margin-bottom: 0.5em }
+
+table.footnote {
+  border-left: solid 1px black;
+  margin-left: 1px }
+
+table.docutils td, table.docutils th,
+table.docinfo td, table.docinfo th {
+  padding-left: 0.5em ;
+  padding-right: 0.5em ;
+  vertical-align: top }
+
+table.docutils th.field-name, table.docinfo th.docinfo-name {
+  font-weight: bold ;
+  text-align: left ;
+  white-space: nowrap ;
+  padding-left: 0 }
+
+h1 tt.docutils, h2 tt.docutils, h3 tt.docutils,
+h4 tt.docutils, h5 tt.docutils, h6 tt.docutils {
+  font-size: 100% }
+
+tt.docutils {
+  background-color: #eeeeee }
+
+ul.auto-toc {
+  list-style-type: none }
+
+</style>
+</head>
+<body>
+<div class="document" id="better-trees">
+<h1 class="title">Better Trees</h1>
+<div class="section">
+<h1><a id="introduction" name="introduction">Introduction</a></h1>
+<div class="section">
+<h2><a id="what-does-it-do" name="what-does-it-do">What does it do?</a></h2>
+<p>This extension contains a library to build trees and a bunch of tree applications,
+namely an alternative page navigation tree, category trees, and tree selects to use
+in your BE Forms.</p>
+<p>The library is designed build tree structures from the database and other sources
+of nested data like XML files. The examples generate trees from the database table
+&quot;pages&quot; and some other database tables. The tree structure can be accessed as
+a nested array and as a linearized array of the same nested data.</p>
+<p>The object orientated library is divied into data objects and rendering objects,
+so that you can easily extend the classes to access other data sources like XML
+or the directory tree. You can render the generated trees to any form of output
+by extending the rendering objects.</p>
+<p>A tutor module below the main BE module &quot;Help&quot; presents different usage examples
+of the elements and vizualizes the data model. It also does live benchmarking
+based on your own data.</p>
+</div>
+<div class="section">
+<h2><a id="screenshots" name="screenshots">Screenshots</a></h2>
+</div>
+</div>
+<div class="section">
+<h1><a id="users-manual" name="users-manual">Users manual</a></h1>
+<p>This extension is targeted to administrators and programmers. Users
+will only meet with this library in form of navigation trees, selects,
+or other elements that represent trees.</p>
+</div>
+<div class="section">
+<h1><a id="administration" name="administration">Administration</a></h1>
+<div class="section">
+<h2><a id="alternative-pagetree" name="alternative-pagetree">Alternative pagetree</a></h2>
+</div>
+</div>
+<div class="section">
+<h1><a id="developers" name="developers">Developers</a></h1>
+<div class="section">
+<h2><a id="overview-of-all-classes" name="overview-of-all-classes">Overview of all classes</a></h2>
+<div class="section">
+<h3><a id="abstract-classes-of-the-tree" name="abstract-classes-of-the-tree">Abstract Classes of the tree</a></h3>
+<dl class="docutils">
+<dt>tx_trees_configurationAbstract</dt>
+<dd>Abstract class for configuration objects.</dd>
+<dt>tx_trees_commonAbstract</dt>
+<dd>Abstract class with common methods of the 4 tree object types.</dd>
+<dt>tx_trees_nodeModelAbstract</dt>
+<dd>Abstract class for the node data.</dd>
+<dt>tx_trees_treeModelAbstract</dt>
+<dd>Abstract class of the tree model.</dd>
+<dt>tx_trees_nodeViewAbstract</dt>
+<dd>Abstract class of row rendering.</dd>
+<dt>tx_trees_treeViewAbstract</dt>
+<dd>Abstract class of tree/list rendering.</dd>
+</dl>
+</div>
+<div class="section">
+<h3><a id="derived-classes-of-the-tree" name="derived-classes-of-the-tree">Derived Classes of the tree</a></h3>
+<dl class="docutils">
+<dt>tx_trees_nodeModelForTables</dt>
+<dd>Loading a table from database.</dd>
+<dt>tx_trees_treeModelForTables</dt>
+<dd>Generating a tree from database.</dd>
+<dt>tx_trees_treeModelForPageTree</dt>
+<dd>Tress below multiple mountpoints.</dd>
+<dt>tx_trees_nodeViewForSelects</dt>
+<dd>Rows of form selects.</dd>
+<dt>tx_trees_nodeViewForSimpleLists</dt>
+<dd>Rows of ul lists.</dd>
+<dt>tx_trees_treeViewForSelects</dt>
+<dd>Form selects.</dd>
+<dt>tx_trees_treeViewForSimpleLists</dt>
+<dd>UL lists.</dd>
+</dl>
+</div>
+<div class="section">
+<h3><a id="other-classes-of-the-extension" name="other-classes-of-the-extension">Other classes of the extension</a></h3>
+<dl class="docutils">
+<dt>tx_trees_div</dt>
+<dd>Collection of static functions.</dd>
+<dt>tx_trees</dt>
+<dd>By this class the extension is called from external.</dd>
+<dt>tx_trees_configuration</dt>
+<dd>Configurations used by tx_trees.</dd>
+<dt>tx_trees_genericConfiguration</dt>
+<dd>Configuration carrier to fill with settings for different uses.</dd>
+<dt>tx_trees_defaultPageTreeConfiguration</dt>
+<dd>Settings to create pagetrees.</dd>
+<dt>tx_trees_treesDemoModule</dt>
+<dd>Class in index.php of the trees demo module.</dd>
+<dt>tx_trees_t3libBrowseTreeDemo</dt>
+<dd>Usage example of t3lib_browsetree.</dd>
+<dt>tx_trees_t3libTreeView</dt>
+<dd>Usage example of t3lib_treeview.</dd>
+</dl>
+</div>
+</div>
+<div class="section">
+<h2><a id="concepts-of-the-architecture" name="concepts-of-the-architecture">Concepts of the architecture</a></h2>
+<div class="section">
+<h3><a id="concept-of-the-tree-classes" name="concept-of-the-tree-classes">Concept of the tree classes</a></h3>
+<p>The overall structure of the objects implements the fundamental concepts
+known from the graytree library. In contrary to the graytree library
+this library doesn't depend directly or indirectly on t3lib_browsetree,
+but is programmed from scratch.</p>
+<p>The whole tree generation is divided in two phases,
+the loading of the data and the rendering of the output,
+model and view. The first phase we call model.
+Data is loaded from different tables and maybe from other
+sources like XML. From the data the internal structure of
+the tree is created. The view phase does the rendering of
+that internal structure to a visible tree as HTML,
+XML or other formats of output. This give us best flexibility
+to do diffent things with the tree.</p>
+<p>Both phases, model and view are representated by a few classes
+that together do the job. To achieve best performances we reuse
+objects, whereever possible and store the data into a common array.
+Both in the model and the view there is one object per node type.
+Every node type is typically stored in one DB table,
+so that we can say simplifying that we have two objects
+per table one for the model and one for the view.</p>
+<p>As example we could have two objects for pages
+and two for addresses. All node objects of the models are kept
+in one container. It's the same for the view. The objects for
+the nodes derive from the classes nodeModel and nodeView.
+The containers derive from treeModel and treeView.</p>
+<p>For an application you will typically make 4 or more classes
+that derive from this 4 &quot;abstract&quot; classes or you make use of
+the derived classes contained in the extensions library.</p>
+<ol class="arabic simple">
+<li>nodeModelAbstract</li>
+<li>treeModelAbstract</li>
+<li>nodeViewAbstract</li>
+<li>treeViewAbstract</li>
+</ol>
+<div class="section">
+<h4><a id="class-hierarchies-of-the-tree-elements" name="class-hierarchies-of-the-tree-elements">Class hierarchies of the tree elements</a></h4>
+<ul class="simple">
+<li>tx_trees_nodeModelAbstract<ul>
+<li>tx_trees_nodeModelForTables</li>
+</ul>
+</li>
+<li>tx_trees_treeModelAbstract<ul>
+<li>tx_trees_treeModelForTables</li>
+<li>tx_trees_treeModelForPageTree</li>
+</ul>
+</li>
+<li>tx_trees_nodeViewAbstract<ul>
+<li>tx_trees_nodeViewForSelects</li>
+<li>tx_trees_nodeViewForSimpleLists</li>
+</ul>
+</li>
+<li>tx_trees_treeViewAbstract<ul>
+<li>tx_trees_treeViewForSelects</li>
+<li>tx_trees_treeViewForSimpleLists</li>
+</ul>
+</li>
+</ul>
+</div>
+</div>
+<div class="section">
+<h3><a id="concept-of-configuration-objects" name="concept-of-configuration-objects">Concept of configuration objects</a></h3>
+<p>The main advantage of configuration objects is that you can transport all
+configurations and the logic in one object instead of passing lots configuration
+arrays from function to function and form class to class and calling lots of
+setters for one object. In TYPO3 there are different configuration places
+that have to be merged: extension configuration, userTS, pageTS, TCA.
+All merging of configuration can be done within the configuration object instead
+of doing it in differet places.</p>
+<p>The classes of the pagetree contain no default configurations. The complete
+configuration is passed in form of a configuration object. If you want to work
+with default configurations, you can define default configuration objects.
+An example for such an object is the class tx_trees_defaultPageTreeConfiguration.</p>
+<p>A class is configured by passing a configuration object to the method configure().</p>
+<pre class="literal-block">
+$configurationObject = t3lib_div::makeInstance('tx_trees_defaultPageTreeConfiguration');
+$treeModel = t3lib_div::makeInstance('tx_trees_treeModelForPageTree');
+$treeModel-&gt;configure($configurationObject);
+</pre>
+<p>The method configure() retrieves the settings from the configuration object by
+calling the method get() for the required keys.</p>
+<pre class="literal-block">
+class tx_trees_commonAbstract{
+        ...
+        var $requiredSettings; // comma separated list of keys as a string
+        var $settings = array();
+        var $isConfigured = false;
+        ...
+        function configure($configurationObject){
+                $required = t3lib_div::trimExplode(',', $this-&gt;requiredSettings);
+                foreach($required as $key){
+                        $value = $configurationObject-&gt;get($key);
+                        if(isset($value)) {
+                                $this-&gt;settings[$key] = $value;  // no checks and evaluations here, do them all in _initialize()
+                        } else {
+                                $this-&gt;_end('configure', 'Missing configuration for ' . $key);
+                        }
+                }
+                $this-&gt;isConfigured = true;
+        }
+        ...
+}
+</pre>
+<p>The required keys of an object are defined within the internal varibale $requiredSettings
+in form of a comma separated list. This is an unusual, new concept, to assure
+that all settings are given and that the develper quickly learns about all
+possibile settings. For each of the required keys the get() function of the
+configuration object must answer with a value that is not null. If get() returns
+a <em>null</em> value the script is terminated with an error message.</p>
+<p>There may be situtions, where you don't want to set a value, because you don't want the
+object to use it. In this case you can give a value like 0, false or the empty string, but
+the configuration object must answer with a value, to indicate that the setting was
+considered.</p>
+<p>You can program your own configuration objects or fill the generic configuration
+object tx_trees_configurationAbstract with your settings.</p>
+<p>You find examples for specialized configuration objects in:</p>
+<blockquote>
+<ul class="simple">
+<li>tx_trees_configuration</li>
+<li>tx_trees_defaultPageTreeConfiguration</li>
+</ul>
+<p>The usageExample functions in the different classes teach you, how to work with
+configuration objects.</p>
+</blockquote>
+</div>
+</div>
+<div class="section">
+<h2><a id="using-the-pagetree-classes" name="using-the-pagetree-classes">Using the pagetree classes</a></h2>
+<p>To usage of a class of the pagetree is simpel:</p>
+<ol class="arabic simple">
+<li>Prepare a configuration object.</li>
+<li>Make an instance of the class.</li>
+<li>Configure the class with the configuration object.</li>
+<li>Relate the class with the other tree classes.</li>
+<li>Use the class.</li>
+</ol>
+<p>The order of the points 2, 3 and for is not important and the other
+points are intuitive. It is logical to prepare the configuration object
+before using it (3). It is also logical to do all settings of the tree
+object before using it (5). If you make a mistake, you usually get a clear
+error message that helps you to find out the reason.</p>
+<p>I provided usage examples that you can directly run in some of the classes:</p>
+<ul class="simple">
+<li>tx_trees_treeModelForPageTree::usageExampleDumpPageTree()</li>
+<li>tx_trees_treeModelForPageTree::usageExampleDumpList()</li>
+<li>tx_trees_treeModelForPageTree::usageExampleDumpTree()</li>
+<li>tx_trees_treeModelForPageTree::usageExampleDumpWithTt_content()</li>
+<li>tx_trees_treeViewForSimpleLists::usageExampleNestedList()</li>
+<li>tx_trees_treeViewForSimpleLists::usageExampleMultiTypes()</li>
+<li>tx_trees_treeViewForSelects:: usageExample()</li>
+</ul>
+<p>This examples are also called from the trees demo module.</p>
+<p>I suppose the following approach step by step:</p>
+<ol class="arabic simple">
+<li>Run the demo Module und have a look to the controller function in treesDemo/index.php.</li>
+<li>Make calls to the usage examples from your own scripts.</li>
+<li>Copy code from within a usage example that is interesting to you and make it run.</li>
+<li>Do some alterations to the setting of the usage example and observer the results.</li>
+<li>Maybe make your own configuration class based on a copy of tx_trees_defaultPageTreeConfiguration.</li>
+</ol>
+<div class="section">
+<h3><a id="how-do-you-find-out-the-necessary-settings" name="how-do-you-find-out-the-necessary-settings">How do you find out the necessary settings?</a></h3>
+<p>Until all settings are done the class tells you which setting is
+still missing. You find the list of all required settings of a class in
+the variables declaration of the class in the varible $requiredSettings.</p>
+<p>This is the example of the class tx_trees_treeViewForSelects:</p>
+<dl class="docutils">
+<dt>var $requiredSettings = 'cssLevel, listClassAttribute, selectedValues,</dt>
+<dd>inputName,      inputId, inputSize, onChange';</dd>
+</dl>
+<p>To find out what each setting should look like please have a look
+into the usage examples and into the classes:</p>
+<ul class="simple">
+<li>tx_trees_defaultPageTreeConfiguration</li>
+<li>tx_trees_configuration</li>
+</ul>
+</div>
+<div class="section">
+<h3><a id="list-of-possibly-required-settings" name="list-of-possibly-required-settings">List of possibly required settings</a></h3>
+<table border="1" class="docutils">
+<colgroup>
+<col width="24%" />
+<col width="10%" />
+<col width="49%" />
+<col width="17%" />
+</colgroup>
+<thead valign="bottom">
+<tr><th class="head">setting</th>
+<th class="head">type</th>
+<th class="head">definition</th>
+<th class="head">example</th>
+</tr>
+</thead>
+<tbody valign="top">
+<tr><td>emptyTitle</td>
+<td>string</td>
+<td>Replacement if title field is empty</td>
+<td>[no title]</td>
+</tr>
+<tr><td>cssLevel</td>
+<td>string</td>
+<td>one of: few, normal, many</td>
+<td>few</td>
+</tr>
+<tr><td>listClassAttribute</td>
+<td>string</td>
+<td>class attribut of the lists tag (ul,
+select ... depending on the
+nodeViewclass)</td>
+<td>pageTree</td>
+</tr>
+<tr><td>rowClassAttribute</td>
+<td>string</td>
+<td>class attribut of the row tag
+(li, option, ...)</td>
+<td>pageRow</td>
+</tr>
+<tr><td>titleField</td>
+<td>string</td>
+<td>the title to display</td>
+<td>title</td>
+</tr>
+<tr><td>type</td>
+<td>string</td>
+<td>type of the node, usually the
+table name</td>
+<td>pages</td>
+</tr>
+<tr><td>table</td>
+<td>string</td>
+<td>for db tables equal to type</td>
+<td>pages</td>
+</tr>
+<tr><td>fields</td>
+<td>string</td>
+<td>fields to query from db (some fields
+are automatically added)</td>
+<td>title</td>
+</tr>
+<tr><td>idField</td>
+<td>string</td>
+<td>field containing the id</td>
+<td>uid</td>
+</tr>
+<tr><td>parentIdField</td>
+<td>string</td>
+<td>field conatining the parents id</td>
+<td>pid</td>
+</tr>
+<tr><td>parentTable</td>
+<td>string</td>
+<td>name of the parent table if known</td>
+<td>pages</td>
+</tr>
+<tr><td>parentTableField</td>
+<td>string</td>
+<td>field containing the name of the
+parent table (see hint below)</td>
+<td>parentTable</td>
+</tr>
+<tr><td>orderBy</td>
+<td>string</td>
+<td>order by clause</td>
+<td>sorting</td>
+</tr>
+<tr><td>rootNodeType</td>
+<td>string</td>
+<td>table of with the root node (see below)</td>
+<td>pages</td>
+</tr>
+<tr><td>rootId</td>
+<td>integer</td>
+<td>id of the root node</td>
+<td>0, 234</td>
+</tr>
+<tr><td>limit</td>
+<td>integer</td>
+<td>maximal number of entries to query</td>
+<td>1000</td>
+</tr>
+</tbody>
+</table>
+<div class="hint">
+<p class="first admonition-title">Hint</p>
+<p class="last">You either set parentTable or parentTableField, never both. Set the missing one to the
+empty string where required.</p>
+</div>
+</div>
+<div class="section">
+<h3><a id="configuration-example" name="configuration-example">Configuration example</a></h3>
+<pre class="literal-block">
+class tx_trees_defaultPageTreeConfiguration extends tx_trees_configurationAbstract{
+
+        var $isInitialized = false;
+
+        function tx_trees_defaultPageTreeConfiguration(){}
+
+        function get($key){
+                if(!$this-&gt;isInitialized){
+                        $this-&gt;_initialize();
+                }
+                return $this-&gt;currentConfiguration[$key];
+        }
+
+        function _initialize(){
+                $configurationList = '
+                        emptyTitle          = [no title]
+                        cssLevel            = few
+                        listClassAttribute  = pageTree
+                        rowClassAttribute   =
+                        titleField          = title
+                        rootNodeType        = pages
+                        rootId              = 0
+                        type                = pages
+                        table               = pages
+                        fields              = title
+                        idField             = uid
+                        parentIdField       = pid
+                        parentTable         = pages
+                        parentTableField    =
+                        orderBy             =
+                ';
+                $this-&gt;setByList($configurationList);
+                $this-&gt;set('limit', 1000);
+                $this-&gt;isInitialized = true;
+        }
+
+}
+</pre>
+</div>
+</div>
+<div class="section">
+<h2><a id="build-your-own-pagtree-classes" name="build-your-own-pagtree-classes">Build your own pagtree classes</a></h2>
+<p>Building your own pagetree classes is simpel. The best way to learn how to do it
+is to look into the available derived classes.</p>
+<p>Be aware to folow some rules, if your objects should work in the style of the
+other pagetree objects:</p>
+<ol class="arabic simple">
+<li>Do all configuration settings by using configuration objects.
+To do so define the class variable $requiredSettings as a comma
+separated list of the required values.</li>
+<li>Don't forget to reinclude the settings of the ancesters into
+your $requiredSettings.</li>
+<li>Use the function _initialize() in the way described below.</li>
+<li>Catch possible errors with if functions do $this-&gt;_end().  (PHP4 style of exception handling.)</li>
+<li>Deliver helpfull error messages with the function
+$this-&gt;_end('functioname', 'message) for the sake of yourself and other developers.</li>
+</ol>
+</div>
+<div class="section">
+<h2><a id="id1" name="id1">Alternative pagetree</a></h2>
+</div>
+<div class="section">
+<h2><a id="selects-for-your-own-extensions" name="selects-for-your-own-extensions">Selects for your own extensions</a></h2>
+</div>
+</div>
+<div class="section">
+<h1><a id="configuration" name="configuration">Configuration</a></h1>
+</div>
+<div class="section">
+<h1><a id="tutorial" name="tutorial">Tutorial</a></h1>
+<p>After installation and reload of the frameset you find a tutor module &quot;Trees&quot;
+below the main BE module &quot;Help&quot;.</p>
+</div>
+<div class="section">
+<h1><a id="known-problems" name="known-problems">Known Problems</a></h1>
+</div>
+<div class="section">
+<h1><a id="todo" name="todo">TODO</a></h1>
+<ul class="simple">
+<li>Moving linecreation to nodes for abstract and derived</li>
+<li>zweite selectbox anpassen</li>
+<li>Popup information</li>
+<li>Selecttypen: Vollpfad, Abgekürzter Pfad, Baum mit Icons, Baum nested UL</li>
+<li>Query Zugriffsrechte</li>
+<li>Tutor vollenden</li>
+<li>Dokumentation</li>
+<li>Alte API</li>
+</ul>
+</div>
+<div class="section">
+<h1><a id="change-log" name="change-log">Change Log</a></h1>
+<p>See file ChangeLog</p>
+</div>
+<div class="section">
+<h1><a id="plannning" name="plannning">Plannning</a></h1>
+<div class="section">
+<h2><a id="mount-configuration" name="mount-configuration">Mount Configuration</a></h2>
+<p>The developer defines mount types for trees of own tables.
+The admin configures the mounts for users and groups.</p>
+<dl class="docutils">
+<dt>Mount Types</dt>
+<dd>Mount point configurations are added to the users and the groups configuration
+by extending the $TCA configuration of the tables be_users and be_groups by a
+column (group field) to select the mount points.</dd>
+<dt>Mount Point Table</dt>
+<dd><p class="first">The mount points are stored in the table tx_trees_mounts. The main
+field &quot;mountpoint&quot;contains a combined value of the mounted table and
+the entry id in this form: tabletype_id.</p>
+<p class="last">This table is related to be_users and be_groups by the tables
+be_users_tx_trees_mounts_mm and be_groups_tx_trees_mounts_mm</p>
+</dd>
+<dt>New Mounts</dt>
+<dd>New Mount points (access points) are configured in the administration
+of users and groups. To do this we use a TCA groups field.</dd>
+<dt>Roots</dt>
+<dd>All table entries with a parent ID of 0 are Roots. They are automatically
+listed for admins.</dd>
+</dl>
+</div>
+</div>
+</div>
+</body>
+</html>

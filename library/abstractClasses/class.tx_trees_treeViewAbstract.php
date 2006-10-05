@@ -44,7 +44,6 @@ class tx_trees_treeViewAbstract extends tx_trees_commonAbstract{
 	function render(){
 		$this->_initialize();
 		$rows = array();
-		$rendered = array();
 		for($this->treeModel->rewind(); $this->treeModel->valid(); $this->treeModel->next()){
 			$rows[] = $this->_renderEntry($this->treeModel->current());
 		}

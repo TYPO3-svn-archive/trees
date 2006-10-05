@@ -24,28 +24,26 @@
 
 class tx_trees{	
 	
+	var $treeView;
+	
 	function selectWizard(&$input){
 		// local configuration
-		$localConfiguration = $input['parameters'];
+		$localConfiguration = $input['wConf']['parameters'];
 		
 		// Other classes are loaded by the configuration
 		require_once(t3lib_extMgm::extPath('trees', 'library/') . 'class.tx_trees_configuration.php');
-		
-		// remove the original browser wizard button
-		$rows = array();
-		foreach( split(chr(10), $input['item']) as $row){
-			if(!strpos ($row, 'setFormValueOpenBrowser')){
-				array_push($rows, $row);
-			}
-		}
-		$input['item'] = join(chr(10), $rows);
 
 		// construct
-		$localConfiguration['onClick'] = 'setFormValueFromBrowseWin(\'' . $input['itemName'] . 
-			'\', this.getAttribute(\'value\'), this.firstChild.data); return false;';
+		$localConfiguration['onChange'] = 'setFormValueFromBrowseWin(
+				\'' . $input['itemName'] . '\', 
+				 this.options[this.selectedIndex].value,
+				 this.options[this.selectedIndex].text
+			); ';		
 
 		$configuration  = t3lib_div::makeInstance('tx_trees_configuration');
 		$configuration->setFocus('tx_trees->selectWizard', $localConfiguration);
+		
+		
 		$treeModel 	= t3lib_div::makeInstance($configuration->get('treeModelClass'));
 		$treeView 	= t3lib_div::makeInstance($configuration->get('treeViewClass'));
 		$nodeModel 	= t3lib_div::makeInstance($configuration->get('nodeModelClass'));
@@ -63,8 +61,29 @@ class tx_trees{
 		// render
 		$out .= $treeView->render();
 		
+		// add title attribute to the given options
+		$pattern = '|<option([^>]+value\s*=\s*"([^"]*)"[^>]*)>([^<]*</option>)|';
+		$GLOBALS['tx_trees']['selectWizard']['treeView'] = $treeView;
+		$input['item'] = preg_replace_callback(
+			$pattern, array('tx_trees', '_createOption'), $input['item'] 
+		);	
+
+		// and remove the original browser wizard button
+		$pattern = '|<td.*setFormValueOpenBrowser.*</td>|U';
+		$input['item'] = preg_replace($pattern, '', $input['item']);
+		
+		// return
 		return $out;
-	}	
+	}
+	
+	function _createOption($matches){
+		if($title = $GLOBALS['tx_trees']['selectWizard']['treeView']->getBreadcrumb($matches[2])){
+			$title = ' title="' . $title .'"'; 
+		} else {
+			$title = ' title="[no title]"'; 
+		}
+		return '<option ' . $matches[1] . $title . '>' . $matches[3];
+	}
 }
 
 if (defined('TYPO3_MODE') && $TYPO3_CONF_VARS[TYPO3_MODE]['XCLASS']['ext/trees/class.tx_trees.php'])	{
