@@ -49,6 +49,9 @@ Alternative pagetree
 Developers
 ==========
 
+Selects for your own extensions
+===============================
+
 Overview of all classes
 =======================
 
@@ -438,12 +441,6 @@ The last step is to call *parent::_initialize()* to assure that the evaluations 
 the ancesters are also done and to finally set the *$this->isInitialized* flag.
 
 
-Alternative pagetree
-====================
-
-Selects for your own extensions
-===============================
-
 =============
 Configuration
 =============
@@ -463,9 +460,8 @@ Known Problems
 TODO
 ==== 
 
-* Moving linecreation to nodes for abstract and derived
-* zweite selectbox anpassen
-* Popup information 
+* Javascript fixen: setFormValueFromBrowseWin
+* Auswahloption: nur leafs
 * Selecttypen: Vollpfad, Abgekürzter Pfad, Baum mit Icons, Baum nested UL
 * Query Zugriffsrechte
 * Tutor vollenden

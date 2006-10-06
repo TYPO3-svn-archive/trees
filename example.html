@@ -1,0 +1,39 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<title>Insert title here</title>
+</head>
+<body>
+<div id="board">&nbsp;</div>
+<div id="board2">&nbsp;</div>
+<div id="board3">&nbsp;</div>
+<select multiple="1" id="select1" 
+	onChange="move(
+		this.options[this.selectedIndex].value,
+		this.options[this.selectedIndex].text,
+		this.options[this.selectedIndex].title
+	);"
+>
+<option title="title1" value="one">eins</option>
+<option title="title2" value="two">zwei</option>
+<option title="title3" value="three">drei</option>
+<option title="title4" value="four">vier</option>
+</select>
+<select multiple="1" id="select2">
+</select>
+<script>
+function move(value, text, title){
+	document.getElementById("board").firstChild.data = value;
+	document.getElementById("board2").firstChild.data = text;
+	document.getElementById("board3").firstChild.data = title;
+
+	option = document.createElement("option");
+	option.title = title;
+	option.value = value;
+	option.text = text;
+	document.getElementById("select2").appendChild(option);
+}
+</script>
+</body>
+</html>

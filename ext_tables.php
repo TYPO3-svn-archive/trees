@@ -151,9 +151,9 @@ t3lib_extMgm::addToAllTCAtypes("be_users","tx_trees_mounts;;;;1-1-1");
 // Tables for the examples
 //------------------------------------------------------------------------------------- 
 
-$TCA["tx_trees_trunk1"] = Array (
+$TCA["tx_trees_examples_regions"] = Array (
     "ctrl" => Array (
-        'title' => 'LLL:EXT:trees/locallang_db.xml:tx_trees_trunk1',        
+        'title' => 'LLL:EXT:trees/locallang_db.xml:tx_trees_examples_regions',        
         'label' => 'title',    
         'tstamp' => 'tstamp',
         'crdate' => 'crdate',
@@ -164,16 +164,16 @@ $TCA["tx_trees_trunk1"] = Array (
             "disabled" => "hidden",
         ),
         "dynamicConfigFile" => t3lib_extMgm::extPath($_EXTKEY)."tca.php",
-        "iconfile" => t3lib_extMgm::extRelPath($_EXTKEY)."icon_tx_trees_trunk1.gif",
+        "iconfile" => t3lib_extMgm::extRelPath($_EXTKEY)."icon_tx_trees_examples_regions.gif",
     ),
     "feInterface" => Array (
         "fe_admin_fieldList" => "hidden, parentid, parenttable, title",
     )
 );
 
-$TCA["tx_trees_trunk2"] = Array (
+$TCA["tx_trees_examples_entities"] = Array (
     "ctrl" => Array (
-        'title' => 'LLL:EXT:trees/locallang_db.xml:tx_trees_trunk2',        
+        'title' => 'LLL:EXT:trees/locallang_db.xml:tx_trees_examples_entities',        
         'label' => 'title',    
         'tstamp' => 'tstamp',
         'crdate' => 'crdate',
@@ -184,16 +184,16 @@ $TCA["tx_trees_trunk2"] = Array (
             "disabled" => "hidden",
         ),
         "dynamicConfigFile" => t3lib_extMgm::extPath($_EXTKEY)."tca.php",
-        "iconfile" => t3lib_extMgm::extRelPath($_EXTKEY)."icon_tx_trees_trunk2.gif",
+        "iconfile" => t3lib_extMgm::extRelPath($_EXTKEY)."icon_tx_trees_examples_entities.gif",
     ),
     "feInterface" => Array (
         "fe_admin_fieldList" => "hidden, parentid, parenttable, title",
     )
 );
 
-$TCA["tx_trees_leaf1"] = Array (
+$TCA["tx_trees_examples_products"] = Array (
     "ctrl" => Array (
-        'title' => 'LLL:EXT:trees/locallang_db.xml:tx_trees_leaf1',        
+        'title' => 'LLL:EXT:trees/locallang_db.xml:tx_trees_examples_products',        
         'label' => 'uid',    
         'tstamp' => 'tstamp',
         'crdate' => 'crdate',
@@ -205,16 +205,16 @@ $TCA["tx_trees_leaf1"] = Array (
             "disabled" => "hidden",
         ),
         "dynamicConfigFile" => t3lib_extMgm::extPath($_EXTKEY)."tca.php",
-        "iconfile" => t3lib_extMgm::extRelPath($_EXTKEY)."icon_tx_trees_leaf1.gif",
+        "iconfile" => t3lib_extMgm::extRelPath($_EXTKEY)."icon_tx_trees_examples_products.gif",
     ),
     "feInterface" => Array (
         "fe_admin_fieldList" => "hidden, parentid, parenttable, header",
     )
 );
 
-$TCA["tx_trees_leaf2"] = Array (
+$TCA["tx_trees_examples_buildings"] = Array (
     "ctrl" => Array (
-        'title' => 'LLL:EXT:trees/locallang_db.xml:tx_trees_leaf2',        
+        'title' => 'LLL:EXT:trees/locallang_db.xml:tx_trees_examples_buildings',        
         'label' => 'header',    
         'tstamp' => 'tstamp',
         'crdate' => 'crdate',
@@ -225,7 +225,7 @@ $TCA["tx_trees_leaf2"] = Array (
             "disabled" => "hidden",
         ),
         "dynamicConfigFile" => t3lib_extMgm::extPath($_EXTKEY)."tca.php",
-        "iconfile" => t3lib_extMgm::extRelPath($_EXTKEY)."icon_tx_trees_leaf2.gif",
+        "iconfile" => t3lib_extMgm::extRelPath($_EXTKEY)."icon_tx_trees_examples_buildings.gif",
     ),
     "feInterface" => Array (
         "fe_admin_fieldList" => "hidden, parentid, parenttable, header",

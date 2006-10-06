@@ -59,9 +59,9 @@ CREATE TABLE be_users (
 
 
 #
-# Table structure for table 'tx_trees_trunk1'
+# Table structure for table 'tx_trees_examples_regions'
 #
-CREATE TABLE tx_trees_trunk1 (
+CREATE TABLE tx_trees_examples_regions (
 	uid int(11) NOT NULL auto_increment,
 	pid int(11) DEFAULT '0' NOT NULL,
 	tstamp int(11) DEFAULT '0' NOT NULL,
@@ -80,9 +80,9 @@ CREATE TABLE tx_trees_trunk1 (
 
 
 #
-# Table structure for table 'tx_trees_trunk2'
+# Table structure for table 'tx_trees_examples_entities'
 #
-CREATE TABLE tx_trees_trunk2 (
+CREATE TABLE tx_trees_examples_entities (
 	uid int(11) NOT NULL auto_increment,
 	pid int(11) DEFAULT '0' NOT NULL,
 	tstamp int(11) DEFAULT '0' NOT NULL,
@@ -101,9 +101,9 @@ CREATE TABLE tx_trees_trunk2 (
 
 
 #
-# Table structure for table 'tx_trees_leaf1'
+# Table structure for table 'tx_trees_examples_products'
 #
-CREATE TABLE tx_trees_leaf1 (
+CREATE TABLE tx_trees_examples_products (
 	uid int(11) NOT NULL auto_increment,
 	pid int(11) DEFAULT '0' NOT NULL,
 	tstamp int(11) DEFAULT '0' NOT NULL,
@@ -122,9 +122,9 @@ CREATE TABLE tx_trees_leaf1 (
 
 
 #
-# Table structure for table 'tx_trees_leaf2'
+# Table structure for table 'tx_trees_examples_buildings'
 #
-CREATE TABLE tx_trees_leaf2 (
+CREATE TABLE tx_trees_examples_buildings (
 	uid int(11) NOT NULL auto_increment,
 	pid int(11) DEFAULT '0' NOT NULL,
 	tstamp int(11) DEFAULT '0' NOT NULL,

@@ -72,7 +72,7 @@ class tx_trees_div{
 			} else {
 				$percent = '--';
 			}
-			$last = sprintf('<p><span style="display:block; width:20em; float:left;">%s :</span> %03d msec (%s %%)</p>', 
+			$last = sprintf('<p><span style="display:block; width:25em; float:left;">%s :</span> %03d msec (%s %%)</p>', 
 							$marker, $duration, $percent);		
 			$out .= $last;
 		}

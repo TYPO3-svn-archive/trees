@@ -61,7 +61,7 @@ class tx_trees_treeViewForSimpleLists extends tx_trees_treeViewAbstract {
 
 		// tree model configuration
 		
-		$treeModelConfiguration->set('rootNodeType', 'tx_trees_trunk1');
+		$treeModelConfiguration->set('rootNodeType', '');
 		$treeModelConfiguration->set('rootId', 0);
 		$treeModel->configure($treeModelConfiguration);
 		
@@ -76,51 +76,51 @@ class tx_trees_treeViewForSimpleLists extends tx_trees_treeViewAbstract {
 		$nodeModelConfiguration->set('parentTable', false);
 		$nodeModelConfiguration->set('limit', 1000);
 		$nodeModelConfiguration->set('orderBy', '');
-		$nodeModelConfiguration->set('table', 'tx_trees_trunk1');
+		$nodeModelConfiguration->set('table', 'tx_trees_examples_regions');
 		$nodeModelConfiguration->set('idField', 'uid');
 		$nodeModelConfiguration->set('parentTableField', 'parenttable');
 		$nodeModelConfiguration->set('parentIdField', 'parentid');
 		$nodeModelConfiguration->set('fields', 'title');		
 		$nodeModel1->configure($nodeModelConfiguration);
 		
-		$nodeModelConfiguration->set('table', 'tx_trees_trunk2');
+		$nodeModelConfiguration->set('table', 'tx_trees_examples_entities');
 		$nodeModel2->configure($nodeModelConfiguration);
 		
-		$nodeModelConfiguration->set('table', 'tx_trees_leaf1');
+		$nodeModelConfiguration->set('table', 'tx_trees_examples_products');
 		$nodeModelConfiguration->set('fields', 'header');		
 		$nodeModel3->configure($nodeModelConfiguration);
 		
-		$nodeModelConfiguration->set('table', 'tx_trees_leaf2');
+		$nodeModelConfiguration->set('table', 'tx_trees_examples_buildings');
 		$nodeModel4->configure($nodeModelConfiguration);
 		
 		// node view configuration
 
 		$nodeViewConfiguration->set('emptyTitle', '[no title]');		
-		$nodeViewConfiguration->set('type', 'tx_trees_trunk1');
+		$nodeViewConfiguration->set('type', 'tx_trees_examples_regions');
 		$nodeViewConfiguration->set('cssLevel', 'few');		
 		$nodeViewConfiguration->set('titleField', 'title');
-		$nodeViewConfiguration->set('rowClassAttribute', 'trunk1');
+		$nodeViewConfiguration->set('rowClassAttribute', 'region');
 		$nodeView1->configure($nodeViewConfiguration); 		
 
-		$nodeViewConfiguration->set('type', 'tx_trees_trunk2');
-		$nodeViewConfiguration->set('rowClassAttribute', 'trunk2');
+		$nodeViewConfiguration->set('type', 'tx_trees_examples_entities');
+		$nodeViewConfiguration->set('rowClassAttribute', 'entity');
 		$nodeView2->configure($nodeViewConfiguration); 		
 
-		$nodeViewConfiguration->set('type', 'tx_trees_leaf1');
+		$nodeViewConfiguration->set('type', 'tx_trees_examples_products');
 		$nodeViewConfiguration->set('titleField', 'header');
-		$nodeViewConfiguration->set('rowClassAttribute', 'leaf1');
+		$nodeViewConfiguration->set('rowClassAttribute', 'product');
 		$nodeView3->configure($nodeViewConfiguration); 		
 		
-		$nodeViewConfiguration->set('type', 'tx_trees_leaf2');
-		$nodeViewConfiguration->set('rowClassAttribute', 'leaf2');
+		$nodeViewConfiguration->set('type', 'tx_trees_examples_buildings');
+		$nodeViewConfiguration->set('rowClassAttribute', 'building');
 		$nodeView4->configure($nodeViewConfiguration); 		
 		
 		$styles .= '<style type="text/css" >' . chr(10);
 		$styles .= '/*<![CDATA[*/' . chr(10);
-		$styles .= '.trunk1{color:#555;}' . chr(10);
-		$styles .= '.trunk2{font-weight:bold;color:#555;}' . chr(10);
-		$styles .= '.leaf1{color:darkblue;}' . chr(10);
-		$styles .= '.leaf2{color:darkred;}' . chr(10);
+		$styles .= '.region{color:#555;}' . chr(10);
+		$styles .= '.entity{font-weight:bold;color:#555;}' . chr(10);
+		$styles .= '.product{color:darkblue;}' . chr(10);
+		$styles .= '.building{color:darkred;}' . chr(10);
 		$styles .= '/*]]>*/' . chr(10);
 		$styles .= '</style>' . chr(10);
 		if($treeView->treeModel->countListNodes() < 5){

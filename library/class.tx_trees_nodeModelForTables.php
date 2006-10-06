@@ -39,9 +39,11 @@ class tx_trees_nodeModelForTables extends tx_trees_nodeModelAbstract {
 
 	function findAsChildren($parentNodeType, $parentId){
 		$this->_initialize();
+		/*
 		if(empty($parentNodeType)) {
 			$this->_end('findAsChildren', 'Empty parentNodeType.');
 		}
+		*/
 		$return = array();
 		$this->_findTableArray(&$tableArray);
 		$table = $this->get('table');

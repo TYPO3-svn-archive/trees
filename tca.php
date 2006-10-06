@@ -1,12 +1,12 @@
 <?php
 if (!defined ('TYPO3_MODE')) 	die ('Access denied.');
 
-$TCA["tx_trees_trunk1"] = Array (
-	"ctrl" => $TCA["tx_trees_trunk1"]["ctrl"],
+$TCA["tx_trees_examples_regions"] = Array (
+	"ctrl" => $TCA["tx_trees_examples_regions"]["ctrl"],
 	"interface" => Array (
 		"showRecordFieldList" => "hidden,parentid,parenttable,title"
 	),
-	"feInterface" => $TCA["tx_trees_trunk1"]["feInterface"],
+	"feInterface" => $TCA["tx_trees_examples_regions"]["feInterface"],
 	"columns" => Array (
 		"hidden" => Array (		
 			"exclude" => 1,
@@ -18,21 +18,21 @@ $TCA["tx_trees_trunk1"] = Array (
 		),
 		"parentid" => Array (		
 			"exclude" => 0,		
-			"label" => "LLL:EXT:trees/locallang_db.xml:tx_trees_trunk1.parentid",		
+			"label" => "LLL:EXT:trees/locallang_db.xml:tx_trees_examples_regions.parentid",		
 			"config" => Array (
 				"type" => "none",
 			)
 		),
 		"parenttable" => Array (		
 			"exclude" => 0,		
-			"label" => "LLL:EXT:trees/locallang_db.xml:tx_trees_trunk1.parenttable",		
+			"label" => "LLL:EXT:trees/locallang_db.xml:tx_trees_examples_regions.parenttable",		
 			"config" => Array (
 				"type" => "none",
 			)
 		),
 		"title" => Array (		
 			"exclude" => 0,		
-			"label" => "LLL:EXT:trees/locallang_db.xml:tx_trees_trunk1.title",		
+			"label" => "LLL:EXT:trees/locallang_db.xml:tx_trees_examples_regions.title",		
 			"config" => Array (
 				"type" => "input",	
 				"size" => "30",	
@@ -50,12 +50,12 @@ $TCA["tx_trees_trunk1"] = Array (
 
 
 
-$TCA["tx_trees_trunk2"] = Array (
-	"ctrl" => $TCA["tx_trees_trunk2"]["ctrl"],
+$TCA["tx_trees_examples_entities"] = Array (
+	"ctrl" => $TCA["tx_trees_examples_entities"]["ctrl"],
 	"interface" => Array (
 		"showRecordFieldList" => "hidden,parentid,parenttable,title"
 	),
-	"feInterface" => $TCA["tx_trees_trunk2"]["feInterface"],
+	"feInterface" => $TCA["tx_trees_examples_entities"]["feInterface"],
 	"columns" => Array (
 		"hidden" => Array (		
 			"exclude" => 1,
@@ -67,21 +67,21 @@ $TCA["tx_trees_trunk2"] = Array (
 		),
 		"parentid" => Array (		
 			"exclude" => 0,		
-			"label" => "LLL:EXT:trees/locallang_db.xml:tx_trees_trunk2.parentid",		
+			"label" => "LLL:EXT:trees/locallang_db.xml:tx_trees_examples_entities.parentid",		
 			"config" => Array (
 				"type" => "none",
 			)
 		),
 		"parenttable" => Array (		
 			"exclude" => 0,		
-			"label" => "LLL:EXT:trees/locallang_db.xml:tx_trees_trunk2.parenttable",		
+			"label" => "LLL:EXT:trees/locallang_db.xml:tx_trees_examples_entities.parenttable",		
 			"config" => Array (
 				"type" => "none",
 			)
 		),
 		"title" => Array (		
 			"exclude" => 0,		
-			"label" => "LLL:EXT:trees/locallang_db.xml:tx_trees_trunk2.title",		
+			"label" => "LLL:EXT:trees/locallang_db.xml:tx_trees_examples_entities.title",		
 			"config" => Array (
 				"type" => "input",	
 				"size" => "30",
@@ -98,12 +98,12 @@ $TCA["tx_trees_trunk2"] = Array (
 
 
 
-$TCA["tx_trees_leaf1"] = Array (
-	"ctrl" => $TCA["tx_trees_leaf1"]["ctrl"],
+$TCA["tx_trees_examples_produtcs"] = Array (
+	"ctrl" => $TCA["tx_trees_examples_produtcs"]["ctrl"],
 	"interface" => Array (
 		"showRecordFieldList" => "hidden,parentid,parenttable,header"
 	),
-	"feInterface" => $TCA["tx_trees_leaf1"]["feInterface"],
+	"feInterface" => $TCA["tx_trees_examples_produtcs"]["feInterface"],
 	"columns" => Array (
 		"hidden" => Array (		
 			"exclude" => 1,
@@ -115,21 +115,21 @@ $TCA["tx_trees_leaf1"] = Array (
 		),
 		"parentid" => Array (		
 			"exclude" => 0,		
-			"label" => "LLL:EXT:trees/locallang_db.xml:tx_trees_leaf1.parentid",		
+			"label" => "LLL:EXT:trees/locallang_db.xml:tx_trees_examples_produtcs.parentid",		
 			"config" => Array (
 				"type" => "none",
 			)
 		),
 		"parenttable" => Array (		
 			"exclude" => 0,		
-			"label" => "LLL:EXT:trees/locallang_db.xml:tx_trees_leaf1.parenttable",		
+			"label" => "LLL:EXT:trees/locallang_db.xml:tx_trees_examples_produtcs.parenttable",		
 			"config" => Array (
 				"type" => "none",
 			)
 		),
 		"header" => Array (		
 			"exclude" => 0,		
-			"label" => "LLL:EXT:trees/locallang_db.xml:tx_trees_leaf1.header",		
+			"label" => "LLL:EXT:trees/locallang_db.xml:tx_trees_examples_produtcs.header",		
 			"config" => Array (
 				"type" => "input",	
 				"size" => "30",
@@ -146,12 +146,12 @@ $TCA["tx_trees_leaf1"] = Array (
 
 
 
-$TCA["tx_trees_leaf2"] = Array (
-	"ctrl" => $TCA["tx_trees_leaf2"]["ctrl"],
+$TCA["tx_trees_examples_buildings"] = Array (
+	"ctrl" => $TCA["tx_trees_examples_buildings"]["ctrl"],
 	"interface" => Array (
 		"showRecordFieldList" => "hidden,parentid,parenttable,header"
 	),
-	"feInterface" => $TCA["tx_trees_leaf2"]["feInterface"],
+	"feInterface" => $TCA["tx_trees_examples_buildings"]["feInterface"],
 	"columns" => Array (
 		"hidden" => Array (		
 			"exclude" => 1,
@@ -163,21 +163,21 @@ $TCA["tx_trees_leaf2"] = Array (
 		),
 		"parentid" => Array (		
 			"exclude" => 0,		
-			"label" => "LLL:EXT:trees/locallang_db.xml:tx_trees_leaf2.parentid",		
+			"label" => "LLL:EXT:trees/locallang_db.xml:tx_trees_examples_buildings.parentid",		
 			"config" => Array (
 				"type" => "none",
 			)
 		),
 		"parenttable" => Array (		
 			"exclude" => 0,		
-			"label" => "LLL:EXT:trees/locallang_db.xml:tx_trees_leaf2.parenttable",		
+			"label" => "LLL:EXT:trees/locallang_db.xml:tx_trees_examples_buildings.parenttable",		
 			"config" => Array (
 				"type" => "none",
 			)
 		),
 		"header" => Array (		
 			"exclude" => 0,		
-			"label" => "LLL:EXT:trees/locallang_db.xml:tx_trees_leaf2.header",		
+			"label" => "LLL:EXT:trees/locallang_db.xml:tx_trees_examples_buildings.header",		
 			"config" => Array (
 				"type" => "input",	
 				"size" => "30",
