@@ -26,7 +26,7 @@ require_once(t3lib_extMgm::extPath('trees', 'library/abstractClasses/') . 'class
 
 class tx_trees_nodeViewForSimpleLists extends tx_trees_nodeViewAbstract {
 	
-	var $requiredSettings = 'cssLevel, type, titleField, rowClassAttribute, emptyTitle';
+	var $requiredSettings = 'cssLevel, nodeType, titleField, rowClassAttribute, emptyTitle';
 	var $cssLevels = array('few', 'normal', 'many');
 	var $tree = null;
 
@@ -34,7 +34,8 @@ class tx_trees_nodeViewForSimpleLists extends tx_trees_nodeViewAbstract {
 	// public functions
 	//---------------------------------------------------------------------------
 
-	function render($current){
+	function renderRow(){
+		$current = $this->tree->getCurrentValues();
 		switch ($this->get('cssLevel')) {
 			case 'many':
 				$classes[] = 'pos_' . $current['.position'];

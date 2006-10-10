@@ -26,25 +26,52 @@ require_once(t3lib_extMgm::extPath('trees', 'library/abstractClasses/') . 'class
 
 class tx_trees_nodeViewForSelects extends tx_trees_nodeViewAbstract {
 
-	var $requiredSettings = 'type, titleField, onClick,	indentMargin, indentCharacter, indentPadding';
+	var $requiredSettings = 'nodeType, titleField, indentMargin, indentCharacter, indentPadding, setValue, rowClassAttribute, style';
 	
-	function render($current){
-		$this->tree->currentTitle = $current[$this->get('titleField')];
+	function getLabelArray(){
+		$current = $this->tree->getCurrentValues();
+		if($this->get('setValue')){
+			$id = ($this->get('setValue')) ?  $current['.nodeType'] . '_' . $current[$current['.idField']] : '';
+		} else {
+			$id = '--div--';
+		}
+		$title = $this->tree->getCurrentBreadcrumb();
+		$class = $this->get('rowClassAttribute') ? ' class="' . $this->get('rowClassAttribute') . '"' : '';
+		return array($title, $id, '', array('class' => $class, 'setValue' => $this->get('setValue')));
+	}
+	
+	function getStyle($superId){
+		$style = 
+			($this->get('style') && $this->get('rowClassAttribute') && $this->tree->get('inputId')) 
+			? '#' . $superId . ' .' . $this->get('rowClassAttribute') 
+			. ' {' . $this->get('style') . '}' . chr(10) 
+			: '';
+		return $style;
+	}	
+	
+	function getTitle(){
+		$values = $this->tree->getCurrentValues();
+		return $values[$this->get('titleField')];
+	}
+	
+	function renderRow(){
+		$current = $this->tree->getCurrentValues();
 		$break = chr(10) . '    ';
-		$id = $current['.nodeType'] . '_' . $current[$current['.idField']];
+		$id = ($this->get('setValue')) ?  $current['.nodeType'] . '_' . $current[$current['.idField']] : '';
 		$value = ' value="' . $id . '" ';
 		$selected = in_array($id, (array) $this->tree->get('selectedValues')) ? ' selected="1" ' : '';
 		$prefix = $this->get('indentMargin');
 		for($i=0; $i < $current['.level']; $i++){
-			$prefix .= $this->get('indentCharacter');	
+			$prefix .= $this->get('indentCharacter');
 		}
 		$prefix .= $this->get('indentPadding');
-		$onClick .= $this->get('onClick') ? ' onClick="' . $this->get('onClick') . '"' : '';
+		$class = $this->get('rowClassAttribute') ? ' class="' . $this->get('rowClassAttribute') . '"' : '';
+		
 		$label = $current[$this->get('titleField')];
-		$title = ' title="' . $this->tree-> getCurrentBreadcrumb()  . '" ';
+		$title = ' title="' . htmlspecialchars($this->tree->getCurrentBreadcrumb())  . '" ';
 		$out = sprintf(
 			'%s<option%s%s%s%s>%s%s</option>',
-			 $break, $value, $selected, $onClick, $title, $prefix, $label
+			 $break, $value, $selected, $title, $class, $prefix, $label
 		 );
 		 return $out;		
 	}

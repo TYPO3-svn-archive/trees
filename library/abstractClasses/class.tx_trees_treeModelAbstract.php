@@ -40,9 +40,9 @@ class tx_trees_treeModelAbstract  extends tx_trees_commonAbstract{
 	// public functions
 	//---------------------------------------------------------------------------
 
-	function addNodeModel(&$nodeModel){
+	function addNodeModel($nodeModel){
 		$nodeModel->setTree(&$this);
-		$this->nodeModels[] =& $nodeModel;
+		$this->nodeModels[] = $nodeModel;
 	}
 	
 	function build(){

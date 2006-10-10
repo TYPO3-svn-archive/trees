@@ -46,8 +46,7 @@ class tx_trees_defaultPageTreeConfiguration extends tx_trees_configurationAbstra
 			titleField			= title
 			rootNodeType 		= pages
 			rootId				= 0
-			type				= pages
-			table				= pages		
+			nodeType			= pages
 			fields				= title	
 			idField				= uid
 			parentIdField		= pid

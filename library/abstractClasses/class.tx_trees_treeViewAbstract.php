@@ -31,21 +31,28 @@ class tx_trees_treeViewAbstract extends tx_trees_commonAbstract{
 	var $dataModelName = 'Linearized Tree by Elmar Hinz';
 	var $dataModelVersion = '1.0';
 	var $headerChecked = false;
+	var $currentValues = null;
+	var $currentNode = null;
 
 	//---------------------------------------------------------------------------
 	// public functions
 	//---------------------------------------------------------------------------
 	
-	function addNodeView(&$nodeView){
+	function addNodeView($nodeView){
 		$nodeView->setTree(&$this);
-		$this->nodeViews[] =& $nodeView;
+		$this->nodeViews[] = $nodeView;
+	}
+	
+	function getCurrentValues(){
+		return $this->currentValues;
 	}
 	
 	function render(){
 		$this->_initialize();
 		$rows = array();
 		for($this->treeModel->rewind(); $this->treeModel->valid(); $this->treeModel->next()){
-			$rows[] = $this->_renderEntry($this->treeModel->current());
+			$this->currentValues = $this->treeModel->current();  // here we set the important currentValues
+			$rows[] = $this->_renderRow();
 		}
 		return $this->_renderList($rows);
 	}
@@ -75,53 +82,55 @@ class tx_trees_treeViewAbstract extends tx_trees_commonAbstract{
 		if(empty($this->nodeViews)){
 			$this->end('_initialize', 'Please set at least one of nodeViews (before configuration).');
 		}
-		// index the nodeViews by type
+		// index the nodeViews by nodeType
 		foreach($this->nodeViews as $nodeView){
-			$this->nodeViews[$nodeView->get('type')] = $nodeView;
+			$this->nodeViews[$nodeView->get('nodeType')] = $nodeView;
 		}
 		parent::_initialize();
 	}
 	
-	function _renderEntry($entry) {
-		$nodeType = $entry['.nodeType'];
+	function _renderRow() {
+		unset($this->currentNode);
+		$nodeType = $this->currentValues['.nodeType'];
 		if(	$nodeType == '.HEADER'
-		&& $entry['.dataModelName'] == $this->dataModelName
-		&& $entry['.dataModelVersion'] == $this->dataModelVersion) {
+		&& $this->currentValues['.dataModelName'] == $this->dataModelName
+		&& $this->currentValues['.dataModelVersion'] == $this->dataModelVersion) {
 			$this->headerChecked = true;
 		}
 		if(!$this->headerChecked){
-			$this->_view($entry);
-			$this->_end('_renderEntry', 'Invalid header of data model.');
+			$this->_view($this->currentValues);
+			$this->_end('_renderRow', 'Invalid header of data model.');
 		}
 		switch($nodeType){
 			case '.HEADER':
 				break;
 			case '.LEVEL_BEGIN':
-				$row = $this->_renderLevelBegin($entry);
+				$row = $this->_renderLevelBegin();
 				break;
 			case '.LEVEL_END':
-				$row = $this->_renderLevelEnd($entry);
+				$row = $this->_renderLevelEnd();
 				break;
 			case '':
-				$this->_view($entry);
+				$this->_view($this->currentValues);
 				$this->_end('render', 'Empty nodeType');
 				break;
 			default:
 				if(!in_array($nodeType, array_keys($this->nodeViews))){
 					$this->_end('render', 'No nodeView for nodeType' . $nodeType);
 				} else {
-					$row = $this->nodeViews[$nodeType]->render($entry);
+					$this->currentNode =& $this->nodeViews[$nodeType];  // Here we set the important currentNode
+					$row = $this->currentNode->renderRow();
 				}
 				break;
 		}
 		return $row;
 	}
 
-	function _renderLevelBegin($current){
+	function _renderLevelBegin(){
 		$this->_end('_renderLevelBegin', 'This is an abstract class. Please overwrite this function in a derived class.');
 	}
 	
-	function _renderLevelEnd($current){
+	function _renderLevelEnd(){
 		$this->_end('_renderLevelEnd', 'This is an abstract class. Please overwrite this function in a derived class.');
 	}
 	

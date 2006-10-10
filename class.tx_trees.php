@@ -22,50 +22,153 @@
 *  This copyright notice MUST APPEAR in all copies of the script!
 ***************************************************************/
 
-class tx_trees{	
+class tx_trees{
 	
 	var $treeView;
 	
-	function selectWizard(&$input){
-		// JavaScript Key
-		$javaScriptKey = '_tx_trees_selectWizard';
-		
+	function selectFunction($input){
+
+		// Other classes are loaded by the configuration
+		require_once(t3lib_extMgm::extPath('trees', 'library/') . 'class.tx_trees_configuration.php');
+
 		// local configuration
-		$localConfiguration = $input['wConf']['parameters'];
+		$localConfiguration = $input['config']['parameters'];
+		
+		// check presence of allowed tables
+		if(!$localConfiguration['allowedTables'])	{
+			tx_trees_div::end('selectFunction', 'Please set the parameter "allowedTables" for the function in tca.php.');
+		}
+		$allowedTables = t3lib_div::trimExplode(',', $localConfiguration['allowedTables']);
+		
+		// Configure main table
+		$configuration  = t3lib_div::makeInstance('tx_trees_configuration');
+		$configuration->setFocus('tx_trees__selectFunction', $localConfiguration);
+		$table = $localConfiguration['nodeType'];
+		$configuration->set('setValue', (in_array($table, $allowedTables) || $allowedTables[0] == '*'));
+		
+		$treeModel 	= t3lib_div::makeInstance($configuration->get('treeModelClass'));	
+		$treeView 	= t3lib_div::makeInstance($configuration->get('treeViewClass'));
+		$treeView->setTreeModel($treeModel);
+		$treeView->configure($configuration);
+		$treeModel->configure($configuration);
+		
+		$nodeModel 	= t3lib_div::makeInstance($configuration->get('nodeModelClass'));
+		$nodeView 	= t3lib_div::makeInstance($configuration->get('nodeViewClass'));
+		
+		$nodeModel->configure($configuration);
+		$treeModel->addNodeModel($nodeModel);
+		
+		$nodeView->configure($configuration);		
+		$treeView->addNodeView($nodeView);
+		$treeView->presetLabelArray($input['items']);
+
+		
+		// Configure additional tables by overwriting main table settings
+		if(is_array($localConfiguration['additionalTablesOverwrite'])){
+			foreach($localConfiguration['additionalTablesOverwrite'] as $tableConfiguration){
+				
+				$tableConfiguration = t3lib_div::array_merge($localConfiguration, $tableConfiguration);
+				$configuration  = t3lib_div::makeInstance('tx_trees_configuration');
+				$configuration->setFocus('tx_trees__selectFunction', $tableConfiguration);
+				$table = $tableConfiguration['nodeType'];
+				$configuration->set('setValue', (in_array($table, $allowedTables) || $allowedTables[0] == '*'));
+				
+				$nodeModel 	= t3lib_div::makeInstance($configuration->get('nodeModelClass'));
+				$nodeView 	= t3lib_div::makeInstance($configuration->get('nodeViewClass'));				
+				
+				$nodeModel->configure($configuration);
+				$treeModel->addNodeModel($nodeModel);
+				$nodeView->configure($configuration);		
+				$treeView->addNodeView($nodeView);
+			}		
+		}		
+		
+		// render
+		$treeView->render();
+		$input['items'] = $treeView->getLabelArray();		
+	}
+	
+	
+	function groupWizard(&$input){
 		
 		// Other classes are loaded by the configuration
 		require_once(t3lib_extMgm::extPath('trees', 'library/') . 'class.tx_trees_configuration.php');
 
+		//		tx_trees_div::view($input);
+		
+		// JavaScript Key
+		$javaScriptKey = '_tx_trees_groupWizard';
+		$targetSelectId = 'tx_trees_groupWizard' . rand();
+		
+		// local configuration
+		$localConfiguration = $input['wConf']['parameters'];
+		
 		// construct
 		$localConfiguration['onChange'] = 'setFormValueFromBrowseWin'. $javaScriptKey .'(
 				\'' . $input['itemName'] . '\', 
 				 this.options[this.selectedIndex].value,
-				 escape(this.options[this.selectedIndex].text),
-				 escape(this.options[this.selectedIndex].title)
-			); ';		
+				 this.options[this.selectedIndex].className,
+				 escape(this.options[this.selectedIndex].title),
+				 escape(this.options[this.selectedIndex].text)
+			); ';
+		
+		// check presence of allowed tables
+		if(!$localConfiguration['allowedTables'])	{
+			tx_trees_div::end('groupWizard', 'Please set the parameter "allowedTables" for the wizard in tca.php. It has to be equal to the "allowed" parameter of the group element some lines above.');
+		}
+		$allowedTables = t3lib_div::trimExplode(',', $localConfiguration['allowedTables']);
 
+		// Configure main table
 		$configuration  = t3lib_div::makeInstance('tx_trees_configuration');
-		$configuration->setFocus('tx_trees->selectWizard', $localConfiguration);
+		$configuration->setFocus('tx_trees__groupWizard', $localConfiguration);
+		$table = $localConfiguration['nodeType'];
+		$configuration->set('setValue', (in_array($table, $allowedTables) || $allowedTables[0] == '*'));
 		
-		
-		$treeModel 	= t3lib_div::makeInstance($configuration->get('treeModelClass'));
+		$treeModel 	= t3lib_div::makeInstance($configuration->get('treeModelClass'));	
 		$treeView 	= t3lib_div::makeInstance($configuration->get('treeViewClass'));
-		$nodeModel 	= t3lib_div::makeInstance($configuration->get('nodeModelClass'));
-		$nodeView 	= t3lib_div::makeInstance($configuration->get('nodeViewClass'));
-		$treeView->addNodeView($nodeView);
 		$treeView->setTreeModel($treeModel);
-		$treeModel->addNodeModel($nodeModel);
-		
-		// configure
 		$treeView->configure($configuration);
 		$treeModel->configure($configuration);
+//		tx_trees_div::view($configuration);
+		
+		$nodeModel 	= t3lib_div::makeInstance($configuration->get('nodeModelClass'));
+		$nodeView 	= t3lib_div::makeInstance($configuration->get('nodeViewClass'));
+		
 		$nodeModel->configure($configuration);
-		$nodeView->configure($configuration);
+		$treeModel->addNodeModel($nodeModel);
+		
+		$nodeView->configure($configuration);		
+		$treeView->addNodeView($nodeView);
+		
+		// Configure additional tables by overwriting main table settings
+		if(is_array($localConfiguration['additionalTablesOverwrite'])){
+			foreach($localConfiguration['additionalTablesOverwrite'] as $tableConfiguration){
+				
+				$tableConfiguration = t3lib_div::array_merge($localConfiguration, $tableConfiguration);
+				$configuration  = t3lib_div::makeInstance('tx_trees_configuration');
+				$configuration->setFocus('tx_trees__groupWizard', $tableConfiguration);
+				$table = $tableConfiguration['nodeType'];
+				$configuration->set('setValue', (in_array($table, $allowedTables) || $allowedTables[0] == '*'));
+				
+				$nodeModel 	= t3lib_div::makeInstance($configuration->get('nodeModelClass'));
+				$nodeView 	= t3lib_div::makeInstance($configuration->get('nodeViewClass'));				
+				
+				$nodeModel->configure($configuration);
+				$treeModel->addNodeModel($nodeModel);
+				$nodeView->configure($configuration);		
+				$treeView->addNodeView($nodeView);
+			}		
+		}		
 		
 		// render
 		$out .= $treeView->render();
 		
-		// add title attribute to the given options
+		// add id to the given select
+		$pattern = '|<select|';
+		$replacement = '<select id="' . $targetSelectId . '" ';
+		$input['item'] = preg_replace($pattern, $replacement, $input['item']);
+		
+		// add attributes to the given options
 		$pattern = '|<option([^>]+value\s*=\s*"([^"]*)"[^>]*)>([^<]*</option>)|';
 		$GLOBALS['tx_trees']['selectWizard']['treeView'] = $treeView;
 		$input['item'] = preg_replace_callback(
@@ -81,30 +184,41 @@ class tx_trees{
 		$input['item'] = preg_replace($pattern, 'setFormValueManipulate' . $javaScriptKey, $input['item']);
 				
 		// set the javascript only once
-		if(!$GLOBALS['tx_trees']['selectWizard']['javaScriptIsSet']){
+		if(!$GLOBALS['tx_trees']['groupWizard']['javaScriptIsSet']){
 			$out = tx_trees::_createJavaScript($javaScriptKey) . $out;
-			$GLOBALS['tx_trees']['selectWizard']['javaScriptIsSet'] = true;
+			$GLOBALS['tx_trees']['groupWizard']['javaScriptIsSet'] = true;
 		}
-				
+		
+		// add css styles
+		$out = chr(10) . $treeView->getStyles($targetSelectId) . $out;
+		$out = chr(10) . $treeView->getStyles() . $out;
+		
 		// return
 		return $out;
 	}
+
 	
 	function _selectWizardOption($matches){
-		if($title = $GLOBALS['tx_trees']['selectWizard']['treeView']->getBreadcrumb($matches[2])){
-			$title = ' title="' . $title .'"'; 
+		if($title = $GLOBALS['tx_trees']['selectWizard']['treeView']->getBreadcrumbById($matches[2])){
+			$title = ' title="' . htmlspecialchars($title) .'"'; 
 		} else {
 			$title = ' title="[no title]"'; 
 		}
-		return '<option ' . $matches[1] . $title . '>' . $matches[3];
-	}
+		if($class = $GLOBALS['tx_trees']['selectWizard']['treeView']->getRowClassAttributeById($matches[2])){
+			$class = ' class="' . $class .'"'; 
+		} 
+		return '<option ' . $matches[1] . $title . $class . '>' . $matches[3];
+	}	
 	
 	function _createJavaScript($key){		
 		return '
 		<script type="text/javascript">
 			/*<![CDATA[*/
 	
-			function setFormValueFromBrowseWin'. $key .'(fName,value,label,title)	{	//
+			function setFormValueFromBrowseWin'. $key .'(fName,value,className,title,label)	{	//
+				if(value == ""){
+					return false;
+				}
 				var formObj = setFormValue_getFObj(fName)
 				if (formObj && value!="--div--")	{
 					fObj = formObj[fName+"_list"];
@@ -119,10 +233,12 @@ class tx_trees{
 						}
 					}
 					if (setOK)	{
+
 						fObj.length++;
 						fObj.options[len].value = value;
-						fObj.options[len].text = unescape(label);
+						fObj.options[len].className = className;
 						fObj.options[len].title = unescape(title);
+						fObj.options[len].text = unescape(label);
 
 							// Traversing list and set the hidden-field
 						setHiddenFromList(fObj,formObj[fName]);
@@ -130,10 +246,12 @@ class tx_trees{
 					}
 				}
 			}	
+
 			function setFormValueManipulate'. $key .'(fName,type)	{	//
 				var formObj = setFormValue_getFObj(fName)
 				if (formObj)	{
 					var localArray_V = new Array();
+					var localArray_C = new Array();
 					var localArray_L = new Array();
 					var localArray_T = new Array();
 					var localArray_S = new Array();
@@ -145,6 +263,7 @@ class tx_trees{
 							for (a=0;a<l;a++)	{
 								if (fObjSel.options[a].selected==1)	{
 									localArray_V[c]=fObjSel.options[a].value;
+									localArray_C[c]=fObjSel.options[a].className;
 									localArray_L[c]=fObjSel.options[a].text;
 									localArray_T[c]=fObjSel.options[a].title;
 									localArray_S[c]=1;
@@ -155,6 +274,7 @@ class tx_trees{
 						for (a=0;a<l;a++)	{
 							if (fObjSel.options[a].selected!=1)	{
 								localArray_V[c]=fObjSel.options[a].value;
+								localArray_C[c]=fObjSel.options[a].className;
 								localArray_L[c]=fObjSel.options[a].text;
 								localArray_T[c]=fObjSel.options[a].title;
 								localArray_S[c]=0;
@@ -165,6 +285,7 @@ class tx_trees{
 							for (a=0;a<l;a++)	{
 								if (fObjSel.options[a].selected==1)	{
 									localArray_V[c]=fObjSel.options[a].value;
+									localArray_C[c]=fObjSel.options[a].className;
 									localArray_L[c]=fObjSel.options[a].text;
 									localArray_T[c]=fObjSel.options[a].title;
 									localArray_S[c]=1;
@@ -181,6 +302,7 @@ class tx_trees{
 							if (fObjSel.options[a].selected!=1)	{
 									// Add non-selected element:
 								localArray_V[c]=fObjSel.options[a].value;
+								localArray_C[c]=fObjSel.options[a].className;
 								localArray_L[c]=fObjSel.options[a].text;
 								localArray_T[c]=fObjSel.options[a].title;
 								localArray_S[c]=0;
@@ -190,6 +312,7 @@ class tx_trees{
 								if (tA.length > 0)	{
 									for (aa=0;aa<tA.length;aa++)	{
 										localArray_V[c]=fObjSel.options[tA[aa]].value;
+										localArray_C[c]=fObjSel.options[tA[aa]].className;
 										localArray_L[c]=fObjSel.options[tA[aa]].text;
 										localArray_T[c]=fObjSel.options[tA[aa]].title;
 										localArray_S[c]=1;
@@ -208,6 +331,7 @@ class tx_trees{
 						if (tA.length > 0)	{
 							for (aa=0;aa<tA.length;aa++)	{
 								localArray_V[c]=fObjSel.options[tA[aa]].value;
+								localArray_C[c]=fObjSel.options[tA[aa]].className;
 								localArray_L[c]=fObjSel.options[tA[aa]].text;
 								localArray_T[c]=fObjSel.options[tA[aa]].title;
 								localArray_S[c]=1;
@@ -225,6 +349,7 @@ class tx_trees{
 
 									// Add non-selected element:
 								localArray_V[c]=fObjSel.options[a].value;
+								localArray_C[c]=fObjSel.options[a].className;
 								localArray_L[c]=fObjSel.options[a].text;
 								localArray_T[c]=fObjSel.options[a].title;
 								localArray_S[c]=0;
@@ -234,6 +359,7 @@ class tx_trees{
 								if (tA.length > 0)	{
 									for (aa=0;aa<tA.length;aa++)	{
 										localArray_V[c]=fObjSel.options[tA[aa]].value;
+										localArray_C[c]=fObjSel.options[tA[aa]].className;
 										localArray_L[c]=fObjSel.options[tA[aa]].text;
 										localArray_T[c]=fObjSel.options[tA[aa]].title;
 										localArray_S[c]=1;
@@ -252,6 +378,7 @@ class tx_trees{
 						if (tA.length > 0)	{
 							for (aa=0;aa<tA.length;aa++)	{
 								localArray_V[c]=fObjSel.options[tA[aa]].value;
+								localArray_C[c]=fObjSel.options[tA[aa]].className;
 								localArray_L[c]=fObjSel.options[tA[aa]].text;
 								localArray_T[c]=fObjSel.options[tA[aa]].title;
 								localArray_S[c]=1;
@@ -265,6 +392,7 @@ class tx_trees{
 					fObjSel.length = c;
 					for (a=0;a<c;a++)	{
 						fObjSel.options[a].value = localArray_V[a];
+						fObjSel.options[a].className = localArray_C[a];
 						fObjSel.options[a].text = localArray_L[a];
 						fObjSel.options[a].title = localArray_T[a];
 						fObjSel.options[a].selected = localArray_S[a];

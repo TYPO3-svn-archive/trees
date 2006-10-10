@@ -27,7 +27,7 @@ require_once(t3lib_extMgm::extPath('trees', 'library/abstractClasses/') . 'class
 class tx_trees_nodeModelAbstract extends tx_trees_commonAbstract{
 	
 	var $tree = null;
-	var $requiredSettings = 'type';
+	var $requiredSettings = 'nodeType';
 	
 	//---------------------------------------------------------------------------
 	// public functions

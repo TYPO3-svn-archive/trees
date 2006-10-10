@@ -30,6 +30,7 @@ class tx_trees_configuration extends tx_trees_configurationAbstract {
 	var $currentFocusMethod = null;
 	var $localConfiguration = array();
 	var $currentConfiguration = array();
+	var $isConfigured = false;
 	
 	//--------------------------------------------------------------------------
 	// Public functions
@@ -44,8 +45,8 @@ class tx_trees_configuration extends tx_trees_configurationAbstract {
 		}		
 	}
 	
-	function setFocus($classMethod, $localConfiguration = array()){
-		$method = '_' . str_replace('->', '__', $classMethod) . 'Get';
+	function setFocus($focusKey, $localConfiguration = array()){
+		$method = '_' . $focusKey . 'Get';
 		if(method_exists($this, $method)){
 			$this->currentConfiguration = array(); // clear it
 			$this->currentFocusMethod = $method;
@@ -60,38 +61,37 @@ class tx_trees_configuration extends tx_trees_configurationAbstract {
 	//--------------------------------------------------------------------------
 	// Protected functions
 	//--------------------------------------------------------------------------
- 
-	function _tx_trees__selectWizardGet($key){
-		if(empty($this->currentConfiguration)) {
+
+	function _tx_trees__selectFunctionGet($key){
+		return $this->_tx_trees__groupWizardGet($key);
+	}
+		
+	function _tx_trees__groupWizardGet($key){
+		if(!$this->isConfigured) {
+			$this->isConfigured = true;
+
 			// load classes
 			require_once(t3lib_extMgm::extPath('trees', 'library/') . 'class.tx_trees_nodeModelForTables.php');
 			require_once(t3lib_extMgm::extPath('trees', 'library/') . 'class.tx_trees_treeModelForTables.php');
 			require_once(t3lib_extMgm::extPath('trees', 'library/') . 'class.tx_trees_nodeViewForSelects.php');
-			require_once(t3lib_extMgm::extPath('trees', 'library/') . 'class.tx_trees_treeViewForSelects.php');
-			// get defaults
+			require_once(t3lib_extMgm::extPath('trees', 'library/') . 'class.tx_trees_treeViewForSelects.php');	
+			
+			// set defaults
 			$defaultsList = '
-				nodeModelClass 		= tx_trees_nodeModelForTables 
-				treeModelClass 		= tx_trees_treeModelForTables
-				nodeViewClass 		= tx_trees_nodeViewForSelects 
-				treeViewClass 		= tx_trees_treeViewForSelects 
-				cssLevel			= few
-				listClassAttribute	= pageTree
-				rowClassAttribute	= pageList
-				rootNodeType 		= pages
-				indentMargin		= .&nbsp;
-				indentCharacter		= .&nbsp;
-				indentPadding  		= &nbsp; 
-				onChange			=
-				onClick				=
-				type				= pages
-				table 				= pages
-				fields				= title
-				idField				= uid
-				titleField			= title
-				parentTable			= pages
-				parentIdField		= pid
-				parentTableField 	=
-				orderBy				=
+					nodeModelClass 		= tx_trees_nodeModelForTables 
+					treeModelClass 		= tx_trees_treeModelForTables
+					nodeViewClass 		= tx_trees_nodeViewForSelects 
+					treeViewClass 		= tx_trees_treeViewForSelects 
+					cssLevel			= few
+					listClassAttribute  = 
+					rowClassAttribute	= 
+					indentMargin		= .&nbsp;
+					indentCharacter		= .&nbsp;
+					indentPadding  		= &nbsp; 
+					onChange			=
+					onClick				=
+					orderBy				=
+					style				= 
 			';
 			$defaults = tx_trees_div::list2array($defaultsList);
 			$defaults = t3lib_div::array_merge(
@@ -99,23 +99,40 @@ class tx_trees_configuration extends tx_trees_configurationAbstract {
 				array(
 					'inputSize'			=> 10,
 					'selectedValues'    => array(),
-					'rootId'			=> 0,
 					'limit'				=> 1000,
 				)
 			);
+			
+			// for the table pages we preset more values
+			if($this->localConfiguration['nodeType'] == 'pages'){			
+				$pagesList = '
+					listClassAttribute	= pageTree
+					rootNodeType 		= pages
+					nodeType			= pages
+					fields				= title
+					idField				= uid
+					titleField			= title
+					parentTable			= pages
+					parentIdField		= pid
+					parentTableField 	=
+				';
+				$defaults = t3lib_div::array_merge(	$defaults, tx_trees_div::list2array($pagesList));
+				$defaults = t3lib_div::array_merge(
+					$defaults,
+					array(
+						'rootId'			=> 0,
+					)
+				);
+			} 
 			
  			// merge with give local configuration
 			$results = t3lib_div::array_merge((array) $defaults, (array) $this->localConfiguration);
 	
 			// evaluate the rest
-			$results['rootNodeType'] = $results['table'];
-			$results['parentTable'] = $results['table'];
-			$results['type'] = $results['table'];
-			$results['fields'] = $results['titleField'];
-			$results['inputId'] =$results['inputName'] = rand();
+			$results['inputId'] = $results['inputName'] = 'sourceSelect_' . rand();
 
 			// store to current configuration 
-			$this->currentConfiguration = $results;
+			$this->currentConfiguration =  t3lib_div::array_merge((array) $this->currentConfiguration, $results);
 		}
 		return $this->currentConfiguration[$key];
 	}

@@ -5,15 +5,8 @@ if (!defined ('TYPO3_MODE'))     die ('Access denied.');
 // Regularly used classes
 //------------------------------------------------------------------------------------- 
 
+require_once(t3lib_extMgm::extPath('trees') . 'class.tx_trees.php');
 require_once(t3lib_extMgm::extPath('trees', 'library/') . 'class.tx_trees_div.php');
-
-//------------------------------------------------------------------------------------- 
-// Tutor Module
-//------------------------------------------------------------------------------------- 
-
-if (TYPO3_MODE=="BE")	{	
-	t3lib_extMgm::addModule('help','txtreesTreesDemo','',t3lib_extMgm::extPath($_EXTKEY) . 'treesDemoModule');
-}
 
 //------------------------------------------------------------------------------------- 
 // Tree Mounts for BE users and BE groups
@@ -23,7 +16,6 @@ $TCA["tx_trees_mounts"] = Array (
     "ctrl" => Array (
         'title' => 'LLL:EXT:trees/locallang_db.xml:tx_trees_mounts',        
         'label' => 'mountpoint',
-		'label_alt'  =>  'uid',
         'tstamp' => 'tstamp',
         'crdate' => 'crdate',
         'cruser_id' => 'cruser_id',
@@ -151,6 +143,23 @@ t3lib_extMgm::addToAllTCAtypes("be_users","tx_trees_mounts;;;;1-1-1");
 // Tables for the examples
 //------------------------------------------------------------------------------------- 
 
+$TCA["tx_trees_examples"] = Array (
+    "ctrl" => Array (
+        'title' => 'LLL:EXT:trees/locallang_db.xml:tx_trees_examples',        
+        'label' => 'title',    
+        'tstamp' => 'tstamp',
+        'crdate' => 'crdate',
+        'cruser_id' => 'cruser_id',
+		'rootLevel' => '1',
+		"default_sortby" => "ORDER BY crdate",    
+        "dynamicConfigFile" => t3lib_extMgm::extPath($_EXTKEY)."tca.php",
+        "iconfile" => t3lib_extMgm::extRelPath($_EXTKEY)."icon_tx_trees_examples.gif",
+    ),
+    "feInterface" => Array (
+        "fe_admin_fieldList" => "title, singleselect, multiselect",
+    )
+);
+
 $TCA["tx_trees_examples_regions"] = Array (
     "ctrl" => Array (
         'title' => 'LLL:EXT:trees/locallang_db.xml:tx_trees_examples_regions',        
@@ -158,16 +167,13 @@ $TCA["tx_trees_examples_regions"] = Array (
         'tstamp' => 'tstamp',
         'crdate' => 'crdate',
         'cruser_id' => 'cruser_id',
-        "default_sortby" => "ORDER BY crdate",    
-        "delete" => "deleted",    
-        "enablecolumns" => Array (        
-            "disabled" => "hidden",
-        ),
+		'rootLevel' => '1',
+		"default_sortby" => "ORDER BY crdate",    
         "dynamicConfigFile" => t3lib_extMgm::extPath($_EXTKEY)."tca.php",
         "iconfile" => t3lib_extMgm::extRelPath($_EXTKEY)."icon_tx_trees_examples_regions.gif",
     ),
     "feInterface" => Array (
-        "fe_admin_fieldList" => "hidden, parentid, parenttable, title",
+        "fe_admin_fieldList" => "parentid, parenttable, title",
     )
 );
 
@@ -178,59 +184,63 @@ $TCA["tx_trees_examples_entities"] = Array (
         'tstamp' => 'tstamp',
         'crdate' => 'crdate',
         'cruser_id' => 'cruser_id',
-        "default_sortby" => "ORDER BY crdate",    
-        "delete" => "deleted",    
-        "enablecolumns" => Array (        
-            "disabled" => "hidden",
-        ),
+		'rootLevel' => '1',
+		"default_sortby" => "ORDER BY crdate",    
         "dynamicConfigFile" => t3lib_extMgm::extPath($_EXTKEY)."tca.php",
         "iconfile" => t3lib_extMgm::extRelPath($_EXTKEY)."icon_tx_trees_examples_entities.gif",
     ),
     "feInterface" => Array (
-        "fe_admin_fieldList" => "hidden, parentid, parenttable, title",
+        "fe_admin_fieldList" => "parentid, parenttable, title",
     )
 );
+
+
 
 $TCA["tx_trees_examples_products"] = Array (
     "ctrl" => Array (
         'title' => 'LLL:EXT:trees/locallang_db.xml:tx_trees_examples_products',        
-        'label' => 'uid',    
+        'label' => 'header',    
         'tstamp' => 'tstamp',
         'crdate' => 'crdate',
         'cruser_id' => 'cruser_id',
-        'type' => 'header',    
+		'rootLevel' => '1',
+		'type' => 'header',    
         "default_sortby" => "ORDER BY crdate",    
-        "delete" => "deleted",    
-        "enablecolumns" => Array (        
-            "disabled" => "hidden",
-        ),
-        "dynamicConfigFile" => t3lib_extMgm::extPath($_EXTKEY)."tca.php",
+       "dynamicConfigFile" => t3lib_extMgm::extPath($_EXTKEY)."tca.php",
         "iconfile" => t3lib_extMgm::extRelPath($_EXTKEY)."icon_tx_trees_examples_products.gif",
     ),
     "feInterface" => Array (
-        "fe_admin_fieldList" => "hidden, parentid, parenttable, header",
+        "fe_admin_fieldList" => "parentid, parenttable, header",
     )
 );
 
+
+
 $TCA["tx_trees_examples_buildings"] = Array (
     "ctrl" => Array (
-        'title' => 'LLL:EXT:trees/locallang_db.xml:tx_trees_examples_buildings',        
+        'title' => 'LLL:EXT:trees/locallang_db.xml:tx_trees_examples_buildings',
         'label' => 'header',    
         'tstamp' => 'tstamp',
         'crdate' => 'crdate',
         'cruser_id' => 'cruser_id',
         "default_sortby" => "ORDER BY crdate",    
-        "delete" => "deleted",    
-        "enablecolumns" => Array (        
-            "disabled" => "hidden",
-        ),
         "dynamicConfigFile" => t3lib_extMgm::extPath($_EXTKEY)."tca.php",
         "iconfile" => t3lib_extMgm::extRelPath($_EXTKEY)."icon_tx_trees_examples_buildings.gif",
     ),
     "feInterface" => Array (
-        "fe_admin_fieldList" => "hidden, parentid, parenttable, header",
+        "fe_admin_fieldList" => "parentid, parenttable, header",
     )
 );
+
+
+
+//------------------------------------------------------------------------------------- 
+// Tutor Module
+//------------------------------------------------------------------------------------- 
+
+if (TYPO3_MODE=="BE")	{	
+	t3lib_extMgm::addModule('help','txtreesTreesDemo','',t3lib_extMgm::extPath($_EXTKEY) . 'treesDemoModule');
+}
 
 
 ?>

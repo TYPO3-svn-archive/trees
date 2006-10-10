@@ -6,29 +6,34 @@
 	</meta>
 	<data type="array">
 		<languageKey index="default" type="array">
-			<label index="tx_trees_examples_regions">Trunk 1</label>
+            <label index="tx_trees_examples">Trees Examples</label>
+			<label index="tx_trees_examples.title">Title</label>
+            <label index="tx_trees_examples.multiselect">Mixed Select From 4 Different Nested Tables</label>
+            <label index="tx_trees_examples.singleselect">Singleselect Example</label>
+            <label index="tx_trees_examples_regions">Trees Example Regions</label>
 			<label index="tx_trees_examples_regions.parentid">Parent Id</label>
 			<label index="tx_trees_examples_regions.parenttable">Parent Table</label>
 			<label index="tx_trees_examples_regions.title">Title</label>
-			<label index="tx_trees_examples_buildings">Trunk 2</label>
-			<label index="tx_trees_examples_buildings.parentid">Parent Id</label>
-			<label index="tx_trees_examples_buildings.parenttable">Parent Table</label>
-			<label index="tx_trees_examples_buildings.title">Title</label>
-			<label index="tx_trees_examples_products">Leaf 1</label>
+			<label index="tx_trees_examples_entities">Trees Example Entities</label>
+			<label index="tx_trees_examples_entities.parentid">Parent Id</label>
+			<label index="tx_trees_examples_entities.parenttable">Parent Table</label>
+			<label index="tx_trees_examples_entities.title">Title</label>
+			<label index="tx_trees_examples_products">Trees Example Products</label>
 			<label index="tx_trees_examples_products.parentid">Parent Id</label>
 			<label index="tx_trees_examples_products.parenttable">Parent Table</label>
 			<label index="tx_trees_examples_products.header">Header</label>
-			<label index="tx_trees_examples_buildings">Leaf 2</label>
+			<label index="tx_trees_examples_buildings">Trees Example Buildings</label>
 			<label index="tx_trees_examples_buildings.parentid">Parent Id</label>
 			<label index="tx_trees_examples_buildings.parenttable">Parent Table</label>
 			<label index="tx_trees_examples_buildings.header">Header</label>
-            <label index="tx_trees_mounts">Tree mounts</label>
+            <label index="tx_trees_mounts">Trees Mounts</label>
             <label index="tx_trees_mounts.title">Title</label>
             <label index="tx_trees_mounts.type.I.0">example 1</label>
             <label index="tx_trees_mounts.type.I.1">example 2</label>
             <label index="tx_trees_mounts.type">Table type</label>
             <label index="tx_trees_mounts.mountpoint">Mountpoint</label>
             <label index="be_groups.tx_trees_treemounts">Tree mounts</label>
-            <label index="be_users.tx_trees_treemounts">Tree mounts</label>		</languageKey>
+            <label index="be_users.tx_trees_treemounts">Tree mounts</label>		
+		</languageKey>
 	</data>
 </T3locallang>

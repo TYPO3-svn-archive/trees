@@ -50,14 +50,6 @@ class tx_trees_treeViewForSimpleLists extends tx_trees_treeViewAbstract {
 		$nodeModel4 = t3lib_div::makeInstance('tx_trees_nodeModelForTables');
 		$nodeView4 = t3lib_div::makeInstance('tx_trees_nodeViewForSimpleLists');		
 		$treeView->setTreeModel($treeModel);
-		$treeModel->addNodeModel($nodeModel1);
-		$treeModel->addNodeModel($nodeModel2);
-		$treeModel->addNodeModel($nodeModel3);
-		$treeModel->addNodeModel($nodeModel4);
-		$treeView->addNodeView($nodeView1);
-		$treeView->addNodeView($nodeView2);
-		$treeView->addNodeView($nodeView3);
-		$treeView->addNodeView($nodeView4);
 
 		// tree model configuration
 		
@@ -76,44 +68,54 @@ class tx_trees_treeViewForSimpleLists extends tx_trees_treeViewAbstract {
 		$nodeModelConfiguration->set('parentTable', false);
 		$nodeModelConfiguration->set('limit', 1000);
 		$nodeModelConfiguration->set('orderBy', '');
-		$nodeModelConfiguration->set('table', 'tx_trees_examples_regions');
+		$nodeModelConfiguration->set('nodeType', 'tx_trees_examples_regions');
 		$nodeModelConfiguration->set('idField', 'uid');
 		$nodeModelConfiguration->set('parentTableField', 'parenttable');
 		$nodeModelConfiguration->set('parentIdField', 'parentid');
 		$nodeModelConfiguration->set('fields', 'title');		
 		$nodeModel1->configure($nodeModelConfiguration);
 		
-		$nodeModelConfiguration->set('table', 'tx_trees_examples_entities');
+		$nodeModelConfiguration->set('nodeType', 'tx_trees_examples_entities');
 		$nodeModel2->configure($nodeModelConfiguration);
 		
-		$nodeModelConfiguration->set('table', 'tx_trees_examples_products');
+		$nodeModelConfiguration->set('nodeType', 'tx_trees_examples_products');
 		$nodeModelConfiguration->set('fields', 'header');		
 		$nodeModel3->configure($nodeModelConfiguration);
 		
-		$nodeModelConfiguration->set('table', 'tx_trees_examples_buildings');
+		$nodeModelConfiguration->set('nodeType', 'tx_trees_examples_buildings');
 		$nodeModel4->configure($nodeModelConfiguration);
 		
 		// node view configuration
 
 		$nodeViewConfiguration->set('emptyTitle', '[no title]');		
-		$nodeViewConfiguration->set('type', 'tx_trees_examples_regions');
+		$nodeViewConfiguration->set('nodeType', 'tx_trees_examples_regions');
 		$nodeViewConfiguration->set('cssLevel', 'few');		
 		$nodeViewConfiguration->set('titleField', 'title');
 		$nodeViewConfiguration->set('rowClassAttribute', 'region');
 		$nodeView1->configure($nodeViewConfiguration); 		
 
-		$nodeViewConfiguration->set('type', 'tx_trees_examples_entities');
+		$nodeViewConfiguration->set('nodeType', 'tx_trees_examples_entities');
 		$nodeViewConfiguration->set('rowClassAttribute', 'entity');
 		$nodeView2->configure($nodeViewConfiguration); 		
 
-		$nodeViewConfiguration->set('type', 'tx_trees_examples_products');
+		$nodeViewConfiguration->set('nodeType', 'tx_trees_examples_products');
 		$nodeViewConfiguration->set('titleField', 'header');
 		$nodeViewConfiguration->set('rowClassAttribute', 'product');
 		$nodeView3->configure($nodeViewConfiguration); 		
 		
-		$nodeViewConfiguration->set('type', 'tx_trees_examples_buildings');
+		$nodeViewConfiguration->set('nodeType', 'tx_trees_examples_buildings');
 		$nodeViewConfiguration->set('rowClassAttribute', 'building');
 		$nodeView4->configure($nodeViewConfiguration); 		
+		
+		// now we can add the configured nodes
+		$treeModel->addNodeModel($nodeModel1);
+		$treeModel->addNodeModel($nodeModel2);
+		$treeModel->addNodeModel($nodeModel3);
+		$treeModel->addNodeModel($nodeModel4);
+		$treeView->addNodeView($nodeView1);
+		$treeView->addNodeView($nodeView2);
+		$treeView->addNodeView($nodeView3);
+		$treeView->addNodeView($nodeView4);
 		
 		$styles .= '<style type="text/css" >' . chr(10);
 		$styles .= '/*<![CDATA[*/' . chr(10);
@@ -143,12 +145,15 @@ class tx_trees_treeViewForSimpleLists extends tx_trees_treeViewAbstract {
 		$nodeModel = t3lib_div::makeInstance('tx_trees_nodeModelForTables');
 		$nodeView = t3lib_div::makeInstance('tx_trees_nodeViewForSimpleLists');
 		$treeView->setTreeModel($treeModel);
-		$treeModel->addNodeModel($nodeModel);
-		$treeView->addNodeView($nodeView);
 		$treeModel->configure($configuration);
 		$treeView->configure($configuration);
 		$nodeModel->configure($configuration);
 		$nodeView->configure($configuration);
+
+		// now we can add the configured nodes
+		$treeModel->addNodeModel($nodeModel);
+		$treeView->addNodeView($nodeView);
+
 		foreach($mounts as $mount){
 			$treeModel->addMount('webMount', 'pages', $mount);
 		}		
@@ -174,7 +179,8 @@ class tx_trees_treeViewForSimpleLists extends tx_trees_treeViewAbstract {
 		parent::_initialize();
 	}
 	
-	function _renderLevelBegin($current){
+	function _renderLevelBegin(){
+		$current = $this->currentValues;
 		if($this->cssLevel == 'many'){
 			$classes[] = 'level_' . $current['.level'];
 		} 
@@ -188,7 +194,7 @@ class tx_trees_treeViewForSimpleLists extends tx_trees_treeViewAbstract {
 		return $out;
 	}
 	
-	function _renderLevelEnd($current){
+	function _renderLevelEnd(){
 		$out .= '</ul>' . chr(10);
 		return $out;	
 	}	

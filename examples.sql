@@ -45,8 +45,8 @@ REPLACE INTO `tx_trees_examples_entities` (`uid`, `parentid`, `parenttable`, `ti
 REPLACE INTO `tx_trees_examples_entities` (`uid`, `parentid`, `parenttable`, `title`) VALUES (507, 19, 'tx_trees_examples_entities', 'Rome');
 REPLACE INTO `tx_trees_examples_entities` (`uid`, `parentid`, `parenttable`, `title`) VALUES (508, 21, 'tx_trees_examples_entities', 'Baghdad');
 REPLACE INTO `tx_trees_examples_entities` (`uid`, `parentid`, `parenttable`, `title`) VALUES (509, 23, 'tx_trees_examples_entities', 'Asmara');
-REPLACE INTO `tx_trees_examples_entities` (`uid`, `parentid`, `parenttable`, `title`) VALUES (510, 25, 'tx_trees_examples_entities', 'Lomé');
-REPLACE INTO `tx_trees_examples_entities` (`uid`, `parentid`, `parenttable`, `title`) VALUES (511, 27, 'tx_trees_examples_entities', 'Brasília');
+REPLACE INTO `tx_trees_examples_entities` (`uid`, `parentid`, `parenttable`, `title`) VALUES (510, 25, 'tx_trees_examples_entities', 'Lome');
+REPLACE INTO `tx_trees_examples_entities` (`uid`, `parentid`, `parenttable`, `title`) VALUES (511, 27, 'tx_trees_examples_entities', 'Brasilia');
 REPLACE INTO `tx_trees_examples_entities` (`uid`, `parentid`, `parenttable`, `title`) VALUES (512, 5, 'tx_trees_examples_entities', 'Havana');
 
 #city regions

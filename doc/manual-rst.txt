@@ -478,6 +478,21 @@ See file ChangeLog
 Plannning
 =========
 
+Realtions
+=========
+
+* The tree itself consits of 1:M relations. 
+* MM relations are not planned for now to construct the tree.
+* By default one MM table per relation type from an entry to the tree is needed.
+* There can be multiple relation types between an entry table and a tree table, 
+  each with one MM relation table. 
+* The asymmetric MM realtions point from the entry table to the tree table.
+* The CCF will use a bidirectional form of this relations (i.e. mmforeign) to
+  point back from the tree to the entry.
+* By using mmforeign it is possible to set an additional type field to an MM 
+  relation table, so that only on table is needed to carry all MM relation types.
+* This requires enhanced selects that, that evaluate the type for the selected fields.
+
 Mount Configuration
 ===================
 

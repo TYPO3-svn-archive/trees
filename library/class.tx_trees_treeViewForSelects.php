@@ -27,39 +27,71 @@ require_once(t3lib_extMgm::extPath('trees', 'library/abstractClasses/') . 'class
 class tx_trees_treeViewForSelects extends tx_trees_treeViewAbstract {	
 
 	var $requiredSettings = 'cssLevel, listClassAttribute, selectedValues,
-			inputName, 	inputId, inputSize, onChange';
+			inputName, 	inputId, inputSize, onChange ';
 	var $titleStack = array();
-	var $currentTitle = '';
+	var $lastTitle = '';
 	var $entries;
+	var $labelArray = array();
 
 	//---------------------------------------------------------------------------
 	// public functions
 	//---------------------------------------------------------------------------
 	
-	function getBreadcrumb($typeId){
+	function getBreadcrumbById($id){
 		if(empty($this->entries)){
 			$this->render();
 		}
-		return $this->entries[$typeId]['.breadcrumb'];
+		return $this->entries[$id]['.breadcrumb'];
 	}
 
 	function getCurrentBreadcrumb(){
-		return join(' > ', $this->titleStack) . ' > ' . $this->currentTitle;
+		return join(' > ', $this->titleStack) . ' > ' . $this->currentNode->getTitle();
 	}
 	
+	function getLabelArray(){
+		return $this->labelArray;
+	}
+
+	function getRowClassAttributeById($id){
+		if(empty($this->entries)){
+			$this->render();
+		}
+		return $this->entries[$id]['.rowClassAttribute'];
+	}
+
+	function getStyles($superId = ''){
+		$superId = $superId ? $superId : $this->get('inputId');
+		foreach($this->nodeViews as $nodeView){
+			$styles .= $nodeView->getStyle($superId);
+		}
+		$out = '<style type="text/css">' . chr(10);
+		$out .= $styles;
+		$out .= '</style>' . chr(10);
+		return $out;		
+	}
+	
+	function presetLabelArray($array){
+		$this->labelArray = $array;
+	}
+
 	function render(){
 		$this->_initialize();
 		for($this->treeModel->rewind(); $this->treeModel->valid(); $this->treeModel->next()){
-			$current = $this->treeModel->current();
-			$rows[] =  $current['.row'] = $this->_renderEntry($current);
-			if(isset($current[$current['.idField']])){
-				$current['.breadcrumb'] = $this->getCurrentBreadcrumb();
-				$this->entries[$current['.nodeType'] . '_' . $current[$current['.idField']]] = $current;
+			$this->currentValues = $this->treeModel->current();
+			$rows[] =  $this->currentValues['.row'] = $this->_renderRow();
+			if($this->currentNode){
+				$this->lastTitle = $this->currentNode->getTitle();
+				$this->currentValues['.breadcrumb'] = $this->getCurrentBreadcrumb();
+				$this->currentValues['.rowClassAttribute'] = $this->currentNode->get('rowClassAttribute');
+				$this->entries[$this->currentValues['.nodeType'] . '_' 
+					. $this->currentValues[$this->currentValues['.idField']]] = $this->currentValues;
+				$this->labelArray[] = $this->currentNode->getLabelArray();
 			}
 		}
 		return $this->_renderList($rows);
-	}	
-		
+	}
+
+	
 	function usageExample($mounts = array(0)){
 		require_once(t3lib_extMgm::extPath('trees', 'library/') . 'class.tx_trees_genericConfiguration.php');
 		require_once(t3lib_extMgm::extPath('trees', 'library/') . 'class.tx_trees_nodeModelForTables.php');
@@ -77,8 +109,7 @@ class tx_trees_treeViewForSelects extends tx_trees_treeViewAbstract {
 			indentPadding  		= &nbsp;&nbsp;
 			onChange			=
 			onClick				=
-			type				= pages
-			table 				= pages
+			nodeType			= pages
 			fields				= title
 			idField				= uid
 			titleField			= title
@@ -86,6 +117,8 @@ class tx_trees_treeViewForSelects extends tx_trees_treeViewAbstract {
 			parentIdField		= pid
 			parentTableField 	=
 			orderBy				=
+			setValue			= 
+			style				= 
 		';
 		$configuration->setByList($configurationList);
 		$configuration->set('inputSize', 10);
@@ -116,11 +149,12 @@ class tx_trees_treeViewForSelects extends tx_trees_treeViewAbstract {
 	//---------------------------------------------------------------------------
 	// protected functions to overwrite in inherited classes
 	//---------------------------------------------------------------------------
-
-	function _renderLevelBegin($current){
-		array_push($this->titleStack, $this->currentTitle);
+	
+	
+	function _renderLevelBegin(){
+		array_push($this->titleStack, $this->lastTitle);
 	}
-	function _renderLevelEnd($current){
+	function _renderLevelEnd(){
 		array_pop($this->titleStack);		
 	}
 
@@ -139,7 +173,7 @@ class tx_trees_treeViewForSelects extends tx_trees_treeViewAbstract {
 			$break, $break, $name, $id, $size, $onChange, $rows, $break, $break
 		 );
 		return $out;
-	}	
+	}
 	
 	function _initialize(){
 		if($this->isInitialized){
@@ -155,7 +189,7 @@ class tx_trees_treeViewForSelects extends tx_trees_treeViewAbstract {
 			$this->_end('_initialize', 'selectedValues must be an array.');
 		}		
 		parent::_initialize();
-	}	
+	}
 	
 }
 

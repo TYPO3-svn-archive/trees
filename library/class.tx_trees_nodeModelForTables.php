@@ -28,7 +28,7 @@ class tx_trees_nodeModelForTables extends tx_trees_nodeModelAbstract {
 	
 	// Order matters: fields MUST come after parentIdField, parentTableField 
 	// to include them automatically in the set function
-	var $requiredSettings = 'table, idField, parentIdField, parentTable, 
+	var $requiredSettings = 'nodeType, idField, parentIdField, parentTable, 
 		parentTableField, fields, limit, orderBy';  
 	
 	function tx_trees_nodeModelForTables(){}
@@ -46,11 +46,11 @@ class tx_trees_nodeModelForTables extends tx_trees_nodeModelAbstract {
 		*/
 		$return = array();
 		$this->_findTableArray(&$tableArray);
-		$table = $this->get('table');
+		$nodeType = $this->get('nodeType');
 		$idField = $this->get('idField');		
 		if(is_array($array = $tableArray['.parentIndex'][$parentNodeType][$parentId])){
 			foreach($array as $id){
-				$current['.nodeType'] = $table;
+				$current['.nodeType'] = $nodeType;
 				$current['.idField'] = $idField;
 				$return[] = t3lib_div::array_merge((array) $tableArray[$id], (array) $current);
 			}
@@ -63,20 +63,11 @@ class tx_trees_nodeModelForTables extends tx_trees_nodeModelAbstract {
 		$return = array(); 
 		$this->_findTableArray(&$tableArray);
 		if(!empty($tableArray[$id])){   // Root ID => 0 is empty
-			$current['.nodeType'] = $this->get('table');
+			$current['.nodeType'] = $this->get('nodeType');
 			$current['.idField'] = $this->get('idField');
 			$return = t3lib_div::array_merge((array) $tableArray[$id],  (array) $current);
 		}
 		return $return;
-	}
-	
-	function get($key){
-		switch($key){
-			case 'type': 
-				$key = 'table';
-			break;
-		}
-		return parent::get($key);
 	}
 	
 	//---------------------------------------------------------------------------
@@ -84,9 +75,9 @@ class tx_trees_nodeModelForTables extends tx_trees_nodeModelAbstract {
 	//---------------------------------------------------------------------------
 	
 	function _buildQuery(){
-		$deleteClause = ' ' . t3lib_BEfunc::deleteClause($this->settings['table']) . ' ';
+		$deleteClause = ' ' . t3lib_BEfunc::deleteClause($this->settings['nodeType']) . ' ';
 		$fields = join(',', $this->settings['fields']);
-		$table = $this->settings['table'];
+		$table = $this->settings['nodeType'];
 		$where = '1=1 ' . $deleteClause;
 		$groupBy;
 		$orderBy = $this->settings['orderBy'];
@@ -96,11 +87,11 @@ class tx_trees_nodeModelForTables extends tx_trees_nodeModelAbstract {
 	}
 
 	function _findTableArray(&$array){
-		$array = $this->tree->loadFromSingleton($this->settings['table']);
+		$array = $this->tree->loadFromSingleton($this->settings['nodeType']);
 		if($array === null){
 			$array = array();
 			$this->_loadFromDatabase($array);
-			$this->tree->storeAsSingleton($this->settings['table'], $array);
+			$this->tree->storeAsSingleton($this->settings['nodeType'], $array);
 		}
 	}
 	
@@ -140,13 +131,13 @@ class tx_trees_nodeModelForTables extends tx_trees_nodeModelAbstract {
 		$parentTableField = $this->settings['parentTableField'];
 		$query = $this->_buildQuery();
 		$result = $GLOBALS['TYPO3_DB']->sql(TYPO3_db, $query);
-		$this->_tt('Pre query "' . $this->settings['table'] .'"');
+		$this->_tt('Pre query "' . $this->settings['nodeType'] .'"');
 		while($row = $GLOBALS['TYPO3_DB']->sql_fetch_assoc($result)){
 			$tempParentTable = $parentTable	? $parentTable : $row[$parentTableField];
 			$array['.parentIndex'][$tempParentTable][$row[$parentIdField]][$row[$idField]] = $row[$idField];
 			$array[$row[$idField]] = $row;
 		}
-		$this->_tt('Post query "' . $this->settings['table'] .'"');
+		$this->_tt('Post query "' . $this->settings['nodeType'] .'"');
 	}	
 	
 }

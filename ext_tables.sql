@@ -1,3 +1,7 @@
+# --------------------------------------------------------
+#  Mounts
+# --------------------------------------------------------
+
 #
 # Table structure for table 'tx_trees_mounts'
 #
@@ -59,6 +63,23 @@ CREATE TABLE be_users (
 
 
 #
+# Table structure for table 'tx_trees_examples'
+#
+CREATE TABLE tx_trees_examples (
+    uid int(11) NOT NULL auto_increment,
+    pid int(11) DEFAULT '0' NOT NULL,
+    tstamp int(11) DEFAULT '0' NOT NULL,
+    crdate int(11) DEFAULT '0' NOT NULL,
+    cruser_id int(11) DEFAULT '0' NOT NULL,
+	title tinytext NOT NULL,
+    multiselect int(11) DEFAULT '0' NOT NULL,
+    singleselect tinytext NOT NULL,
+        
+    PRIMARY KEY (uid),
+    KEY parent (pid)
+);
+
+#
 # Table structure for table 'tx_trees_examples_regions'
 #
 CREATE TABLE tx_trees_examples_regions (
@@ -67,8 +88,6 @@ CREATE TABLE tx_trees_examples_regions (
 	tstamp int(11) DEFAULT '0' NOT NULL,
 	crdate int(11) DEFAULT '0' NOT NULL,
 	cruser_id int(11) DEFAULT '0' NOT NULL,
-	deleted tinyint(4) DEFAULT '0' NOT NULL,
-	hidden tinyint(4) DEFAULT '0' NOT NULL,
 	parentid int(11) DEFAULT '0' NOT NULL,
 	parenttable tinytext NOT NULL,
 	title tinytext NOT NULL,
@@ -88,8 +107,6 @@ CREATE TABLE tx_trees_examples_entities (
 	tstamp int(11) DEFAULT '0' NOT NULL,
 	crdate int(11) DEFAULT '0' NOT NULL,
 	cruser_id int(11) DEFAULT '0' NOT NULL,
-	deleted tinyint(4) DEFAULT '0' NOT NULL,
-	hidden tinyint(4) DEFAULT '0' NOT NULL,
 	parentid int(11) DEFAULT '0' NOT NULL,
 	parenttable tinytext NOT NULL,
 	title tinytext NOT NULL,
@@ -109,8 +126,6 @@ CREATE TABLE tx_trees_examples_products (
 	tstamp int(11) DEFAULT '0' NOT NULL,
 	crdate int(11) DEFAULT '0' NOT NULL,
 	cruser_id int(11) DEFAULT '0' NOT NULL,
-	deleted tinyint(4) DEFAULT '0' NOT NULL,
-	hidden tinyint(4) DEFAULT '0' NOT NULL,
 	parentid int(11) DEFAULT '0' NOT NULL,
 	parenttable tinytext NOT NULL,
 	header tinytext NOT NULL,
@@ -118,8 +133,6 @@ CREATE TABLE tx_trees_examples_products (
 	PRIMARY KEY (uid),
 	KEY parent (pid)
 );
-
-
 
 #
 # Table structure for table 'tx_trees_examples_buildings'
@@ -130,8 +143,6 @@ CREATE TABLE tx_trees_examples_buildings (
 	tstamp int(11) DEFAULT '0' NOT NULL,
 	crdate int(11) DEFAULT '0' NOT NULL,
 	cruser_id int(11) DEFAULT '0' NOT NULL,
-	deleted tinyint(4) DEFAULT '0' NOT NULL,
-	hidden tinyint(4) DEFAULT '0' NOT NULL,
 	parentid int(11) DEFAULT '0' NOT NULL,
 	parenttable tinytext NOT NULL,
 	header tinytext NOT NULL,
@@ -139,4 +150,18 @@ CREATE TABLE tx_trees_examples_buildings (
 	PRIMARY KEY (uid),
 	KEY parent (pid)
 );
+
+#
+# Table structure for table 'tx_trees_examples_multiselect_mm'
+# 
+#
+CREATE TABLE tx_trees_examples_multiselect_mm (
+  uid_local int(11) DEFAULT '0' NOT NULL,
+  uid_foreign int(11) DEFAULT '0' NOT NULL,
+  tablenames varchar(30) DEFAULT '' NOT NULL,
+  sorting int(11) DEFAULT '0' NOT NULL,
+  KEY uid_local (uid_local),
+  KEY uid_foreign (uid_foreign)
+);
+
 

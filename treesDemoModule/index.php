@@ -116,8 +116,7 @@ class  tx_trees_treesDemoModule extends t3lib_SCbase {
 				$this->errors[] = 'Unknown controller.';
 			}
 		}
-		$durationMessage = tx_trees_div::tt('Controller end');
-		
+		$durationMessage = tx_trees_div::tt('Controller end');		
 		
 		// View
 		$out .= $this->headerView();
@@ -203,48 +202,26 @@ class  tx_trees_treesDemoModule extends t3lib_SCbase {
 	function selectController(){
 		require_once(t3lib_extMgm::extPath('trees', 'library/') . 'class.tx_trees_treeViewForSelects.php');
 		require_once(t3lib_extMgm::extPath('trees') . 'class.tx_trees.php');
-		if($this->MOD_SETTINGS['webmounts'] != 'none') {
-			$mounts = ($this->MOD_SETTINGS['webmounts'] == 'all') 
-				? $GLOBALS['WEBMOUNTS'] : array($this->MOD_SETTINGS['webmounts']) ;
-			$out .= $this->doc->spacer(10);
-			$out .= $this->doc->section('Archetype', tx_trees_treeViewForSelects::usageExample($mounts));
-			$out .= $this->doc->sectionEnd();
-			$out .= $this->doc->spacer(10);
-
-			//---------------------------------------------------------------------------------------
-			//  Singleselect
-			//---------------------------------------------------------------------------------------
-			$array = array('parameters'=> array('inputSize' => 1));
-			$out .= $this->doc->section('TCE Form Single Select', tx_trees::selectWizard($array));
-			$out .= $this->doc->sectionEnd();
-			
-			//---------------------------------------------------------------------------------------
-			//  Multiselect
-			//---------------------------------------------------------------------------------------
-
-			$parameters['fieldConf']['config']['inputSize'] = 10;
-			
-			$post = t3lib_div::_POST('SET');
-			$parameters['itemFormElValue'] = $post['multiSelectExample'];			
-			$parameters['itemFormElName'] = 'SET[multiSelectExample]';
-			$id = t3lib_div::_GET('id');
-			$parameters['fieldChangeFunc'] = array(	); 
-			$array = array();
-			$out .= $this->doc->section('TCE Form Multiselect', tx_trees::selectWizard($array));
-			$out .= '<input type="submit">';
-			$out .= '<br><select name="name1" id="name1" multiple="multiple">';
-			for($i=0; $i<15; $i++) {
-				$label = 'Option ' . $i;
-				$out .= '<option value="'. $i . '" onClick="document.getElementsByName(\'name2\')[0].appendChild(this);">' . $label . '</option>';	
-			}
-			$out .= '</select>';		
-			$out .= '<select name="name2" id="name2" multiple="multiple">';
-			$out .= '</select>';
-
-			$out .= $this->doc->sectionEnd();
-			
-			
-		}
+		
+		$params= '&edit[tx_trees_examples][0]=new';
+		$onClick = htmlspecialchars(t3lib_BEfunc::editOnClick($params, $GLOBALS['BACK_PATH']));
+		$new = '<p><a href="#" onClick="'. $onClick . '">New Example</a></p>';
+		
+		$fields = '*';
+		$table = 'tx_trees_examples';
+		$query = $GLOBALS['TYPO3_DB']->SELECTquery($fields, $table, $where, $groupBy, $orderBy, $limit);
+		$result = $GLOBALS['TYPO3_DB']->sql(TYPO3_db, $query);
+		while($row = $GLOBALS['TYPO3_DB']->sql_fetch_assoc($result)){	
+			$params= '&edit[tx_trees_examples][' . $row['uid'] . ']=edit';
+			$onClick = htmlspecialchars(t3lib_BEfunc::editOnClick($params, $GLOBALS['BACK_PATH']));
+//			print $onClick;
+			$list .= '<li><a href="#" onClick="'. $onClick . '">' . $row['title'] . '</a></li>';
+		}		
+		$list = '<ul>' . $list . '</ul>';
+		$out .= $this->doc->spacer(10);
+		$out .= $this->doc->section('Show off', $new . $list);
+		$out .= $this->doc->sectionEnd();
+		$out .= $this->doc->spacer(10);
 		return $out;
 	}
 	
