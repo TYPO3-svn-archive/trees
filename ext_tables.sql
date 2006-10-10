@@ -73,7 +73,9 @@ CREATE TABLE tx_trees_examples (
     cruser_id int(11) DEFAULT '0' NOT NULL,
 	title tinytext NOT NULL,
     multiselect int(11) DEFAULT '0' NOT NULL,
+    pagemultiselect int(11) DEFAULT '0' NOT NULL,
     singleselect tinytext NOT NULL,
+    pagesingleselect tinytext NOT NULL,
         
     PRIMARY KEY (uid),
     KEY parent (pid)
@@ -164,4 +166,16 @@ CREATE TABLE tx_trees_examples_multiselect_mm (
   KEY uid_foreign (uid_foreign)
 );
 
+#
+# Table structure for table 'tx_trees_examples_pagemultiselect_mm'
+# 
+#
+CREATE TABLE tx_trees_examples_pagemultiselect_mm (
+  uid_local int(11) DEFAULT '0' NOT NULL,
+  uid_foreign int(11) DEFAULT '0' NOT NULL,
+  tablenames varchar(30) DEFAULT '' NOT NULL,
+  sorting int(11) DEFAULT '0' NOT NULL,
+  KEY uid_local (uid_local),
+  KEY uid_foreign (uid_foreign)
+);
 

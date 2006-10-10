@@ -2,17 +2,25 @@
 
 06-10-10 Elmar Hinz  <elmar.hinz@team-red.net>
 	
+	* release 0.0.8	
+	* select examples with pagetree
+
+06-10-10 Elmar Hinz  <elmar.hinz@team-red.net>
+	
+	* release 0.0.8	
 	* example table with singleselect and multiselect
 	* singleselects
 	* multiselects fully stylable
 
 06-10-06 Elmar Hinz  <elmar.hinz@team-red.net>
 
+	* release 0.0.7
 	* improved javascript of select
 	* compiled actual manual.rst to manual.sxw
 
 06-10-04 Elmar Hinz  <elmar.hinz@team-red.net>
 
+	* release 0.0.6
 	* fixed some bugs
 	* added numberOfChildes to data model
 	* "breadcrumb" creation for selectView
@@ -20,6 +28,7 @@
 
 06-10-03 Elmar Hinz  <elmar.hinz@team-red.net>
 
+	* release 0.0.5
 	* restructuring of the folders and classes
 	* moving abstratct classes to own directory
 	* making abstract classes "behaving" abstract for PHP4
@@ -29,6 +38,7 @@
 
 06-10-02 Elmar Hinz  <elmar.hinz@team-red.net>
 
+	* release 0.0.4
 	* fixed bugs with some PHP4 versions
 	* added more documentation in manual.rst
 	* all configuration done by configuration objects
@@ -36,15 +46,17 @@
 
 06-10-01 Elmar Hinz  <elmar.hinz@team-red.net>
 
+	* release 0.0.3
 	* Configuration object
 	* Speed improvement for PHP4
 	* Some snippets of documentation
 
 06-09-27 Elmar Hinz  <elmar.hinz@team-red.net>
 
+	* release 0.0.2
 	* Enabling PHP4
 	
 06-09-27 Elmar Hinz  <elmar.hinz@team-red.net>
 
-	* Initial release
+	* release 0.0.1
 	

@@ -42,7 +42,7 @@ $TCA['tx_trees_mounts'] = Array (
 $TCA['tx_trees_examples'] = Array (
     'ctrl' => $TCA['tx_trees_examples']['ctrl'],
     'interface' => Array (
-        'showRecordFieldList' => 'singleselect, multiselect'
+        'showRecordFieldList' => 'singleselect, pagesingleselect, multiselect, pagemultiselect'
     ),
     'feInterface' => $TCA['tx_trees_examples']['feInterface'],
     'columns' => Array (
@@ -61,7 +61,7 @@ $TCA['tx_trees_examples'] = Array (
             'config' => Array (
                 'type' => 'select',
                 'items' => Array (
-                    Array('[no selection]', ''),
+                    Array('LLL:EXT:trees/locallang_db.xml:noSelection', ''),
                 ),
                 'itemsProcFunc' => 'tx_trees->selectFunction',
                 'parameters' => array(
@@ -91,6 +91,50 @@ $TCA['tx_trees_examples'] = Array (
                 'maxitems' => 1,
             )
         ),
+        'pagesingleselect' => Array (        
+            'exclude' => 0,        
+            'label' => 'LLL:EXT:trees/locallang_db.xml:tx_trees_examples.pagesingleselect',        
+            'config' => Array (
+                'type' => 'select',
+                'items' => Array (
+                    Array('LLL:EXT:trees/locallang_db.xml:noSelection', ''),
+                ),
+                'itemsProcFunc' => 'tx_trees->selectFunction',
+                'parameters' => array(
+			                'allowedTables' => '*',    
+							'nodeType' => 'pages',	
+                ),
+                'size' => 1,    
+                'maxitems' => 1,
+            )
+        ),
+		'pagemultiselect' => Array (        
+            'exclude' => 0,        
+            'label' => 'LLL:EXT:trees/locallang_db.xml:tx_trees_examples.pagemultiselect',        
+            'config' => Array (
+                'type' => 'group',    
+                'internal_type' => 'db',    
+                'allowed' => 'pages',    
+                'size' => 20,    
+                'minitems' => 0,
+                'maxitems' => 99,    
+                'MM' => 'tx_trees_examples_pagemultiselect_mm',
+				'prepend_tname' => 1,
+				'wizards' => array(
+					'_POSITION' => 'left',
+					'_VALIGN' => top,
+					'select' => array(
+						'type' => 'userFunc',
+						'userFunc' => 'tx_trees->groupWizard',
+						'parameters' => array(
+			                'allowedTables' => 'pages',    
+							'nodeType' => 'pages',
+			                'inputSize' => 20,
+						),						
+					),
+				),
+			),
+		),
 		'multiselect' => Array (        
             'exclude' => 0,        
             'label' => 'LLL:EXT:trees/locallang_db.xml:tx_trees_examples.multiselect',        
@@ -158,7 +202,7 @@ $TCA['tx_trees_examples'] = Array (
     ),
     'types' => Array (
 //        '0' => Array('showitem' => 'title;;;;1-1-1, multiselect')
-        '0' => Array('showitem' => 'title;;;;1-1-1, singleselect, multiselect')
+        '0' => Array('showitem' => 'title;;;;1-1-1, singleselect, multiselect, pagesingleselect, pagemultiselect')
     ),
 );
 

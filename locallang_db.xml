@@ -6,10 +6,13 @@
 	</meta>
 	<data type="array">
 		<languageKey index="default" type="array">
+            <label index="noSelection">[no selection]</label>
             <label index="tx_trees_examples">Trees Examples</label>
 			<label index="tx_trees_examples.title">Title</label>
-            <label index="tx_trees_examples.multiselect">Mixed Select From 4 Different Nested Tables</label>
+            <label index="tx_trees_examples.multiselect">Mixed Select from 4 Different Nested Tables</label>
             <label index="tx_trees_examples.singleselect">Singleselect Example</label>
+            <label index="tx_trees_examples.pagemultiselect">Multi Select of Pages</label>
+            <label index="tx_trees_examples.pagesingleselect">Singleselect of Pages</label>
             <label index="tx_trees_examples_regions">Trees Example Regions</label>
 			<label index="tx_trees_examples_regions.parentid">Parent Id</label>
 			<label index="tx_trees_examples_regions.parenttable">Parent Table</label>
