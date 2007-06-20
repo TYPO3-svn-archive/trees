@@ -144,13 +144,13 @@ class tx_trees_treeViewForSimpleLists extends tx_trees_treeViewAbstract {
 		$treeView = t3lib_div::makeInstance('tx_trees_treeViewForSimpleLists');
 		$nodeModel = t3lib_div::makeInstance('tx_trees_nodeModelForTables');
 		$nodeView = t3lib_div::makeInstance('tx_trees_nodeViewForSimpleLists');
-		$treeView->setTreeModel($treeModel);
 		$treeModel->configure($configuration);
 		$treeView->configure($configuration);
 		$nodeModel->configure($configuration);
 		$nodeView->configure($configuration);
 
 		// now we can add the configured nodes
+		$treeView->setTreeModel($treeModel);
 		$treeModel->addNodeModel($nodeModel);
 		$treeView->addNodeView($nodeView);
 

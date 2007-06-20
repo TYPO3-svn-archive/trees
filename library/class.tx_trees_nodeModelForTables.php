@@ -75,6 +75,7 @@ class tx_trees_nodeModelForTables extends tx_trees_nodeModelAbstract {
 	//---------------------------------------------------------------------------
 	
 	function _buildQuery(){
+		require_once(PATH_t3lib . 'class.t3lib_befunc.php');
 		$deleteClause = ' ' . t3lib_BEfunc::deleteClause($this->settings['nodeType']) . ' ';
 		$fields = join(',', $this->settings['fields']);
 		$table = $this->settings['nodeType'];

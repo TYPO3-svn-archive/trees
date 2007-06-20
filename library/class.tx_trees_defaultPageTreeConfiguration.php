@@ -30,14 +30,14 @@ class tx_trees_defaultPageTreeConfiguration extends tx_trees_configurationAbstra
 	
 	function tx_trees_defaultPageTreeConfiguration(){}
 	
-	function get($key){
+	function get($key) {
 		if(!$this->isInitialized){
 			$this->_initialize();
 		}
 		return $this->currentConfiguration[$key];
 	}
 	
-	function _initialize(){
+	function _initialize() {
 		$configurationList = '
 			emptyTitle 			= [no title]
 			cssLevel 			= few
