@@ -33,10 +33,6 @@ class tx_trees_nodeViewAbstract extends tx_trees_commonAbstract {
 	// public functions
 	//---------------------------------------------------------------------------
 
-	function renderRow(){	
-		$this->_end('renderRow', ' This is an abstract class. Please use a derived class.');
-	}
-	
 	function setTree(&$object){
 		$this->tree =& $object;
 	}	

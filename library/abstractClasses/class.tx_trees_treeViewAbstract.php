@@ -29,7 +29,7 @@ class tx_trees_treeViewAbstract extends tx_trees_commonAbstract{
 	var $treeModel = null;
 	var $nodeViews = array();
 	var $dataModelName = 'Linearized Tree by Elmar Hinz';
-	var $dataModelVersion = '1.0';
+	var $dataModelVersion = '1.1.0';
 	var $headerChecked = false;
 	var $currentValues = null;
 	var $currentNode = null;
@@ -118,8 +118,13 @@ class tx_trees_treeViewAbstract extends tx_trees_commonAbstract{
 				if(!in_array($nodeType, array_keys($this->nodeViews))){
 					$this->_end('render', 'No nodeView for nodeType' . $nodeType);
 				} else {
-					$this->currentNode =& $this->nodeViews[$nodeType];  // Here we set the important currentNode
-					$row = $this->currentNode->renderRow();
+					$this->currentNode =& $this->nodeViews[$nodeType];  // Here we set the important currentNode.
+					if($this->currentValues['.beginOfNode'] && method_exists($this->currentNode, 'renderRow')) 
+						$row = $this->currentNode->renderRow();
+					if($this->currentValues['.beginOfNode'] && method_exists($this->currentNode, 'renderRowBegin')) 
+						$row = $this->currentNode->renderRowBegin();
+					if($this->currentValues['.endOfNode'] && method_exists($this->currentNode, 'renderRowEnd')) 
+						$row = $this->currentNode->renderRowEnd();
 				}
 				break;
 		}

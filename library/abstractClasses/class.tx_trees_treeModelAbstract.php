@@ -137,6 +137,7 @@ class tx_trees_treeModelAbstract  extends tx_trees_commonAbstract{
 		for($key = 0; $key < count($treeArray); $key++){ // foreach would make  copies in PHP4
 			if(isset($treeArray[$key])){
 				$entry = $treeArray[$key];
+				$tmp['.beginOfNode'] = 1;
 				$tmp['.level'] = $level;
 				$tmp['.position'] = $position++;
 				$tmp['.numberOfChildren'] = count($treeArray[$key . '.']);
@@ -146,11 +147,18 @@ class tx_trees_treeModelAbstract  extends tx_trees_commonAbstract{
 				if($tmp['.numberOfChildren'] > 0) {
 					$this->_linearizeTreeArray(&$treeArray[$key . '.'], &$listArray, ($level + 1));
 				}
-				array_push($listArray, array('.nodeType' => '.NODE_END', '.level' => $level));
+				unset($entry['.beginOfNode']);
+				$tmp2['.endOfNode'] = 1;
+				$entry = t3lib_div::array_merge((array) $entry, (array) $tmp2);
+				array_push($listArray, $entry);
+				$lastEnd = count($listArray) - 1;
 			}
 		}
 		if(!empty($last)){
 			$listArray[$last] = t3lib_div::array_merge((array) $listArray[$last], array('.isLastSibling' => true));
+		}
+		if(!empty($lastEnd)){
+			$listArray[$lastEnd] = t3lib_div::array_merge((array) $listArray[$lastEnd], array('.isLastSibling' => true));
 		}
 		array_push($listArray, array('.nodeType' => '.LEVEL_END', '.level' => $level));
 	}
