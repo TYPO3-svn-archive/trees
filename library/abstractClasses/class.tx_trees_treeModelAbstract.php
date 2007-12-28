@@ -32,9 +32,9 @@ class tx_trees_treeModelAbstract  extends tx_trees_commonAbstract{
 	var $singleton = array();
 	var $nodeModels = array();
 	var $nestedTreeModel = 'Nested Tree by Elmar Hinz';
-	var $nestedTreeVersion = '1.0';
+	var $nestedTreeVersion = '1.0.0';
 	var $linearizedTreeModel = 'Linearized Tree by Elmar Hinz';
-	var $linearizedTreeVersion = '1.0';
+	var $linearizedTreeVersion = '1.1.0';
 	
 	//---------------------------------------------------------------------------
 	// public functions
@@ -146,6 +146,7 @@ class tx_trees_treeModelAbstract  extends tx_trees_commonAbstract{
 				if($tmp['.numberOfChildren'] > 0) {
 					$this->_linearizeTreeArray(&$treeArray[$key . '.'], &$listArray, ($level + 1));
 				}
+				array_push($listArray, array('.nodeType' => '.NODE_END', '.level' => $level));
 			}
 		}
 		if(!empty($last)){
